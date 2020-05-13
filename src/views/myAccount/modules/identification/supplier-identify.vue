@@ -1,5 +1,5 @@
 <template>
-  <div>我的关注</div>
+  <div class='suplier'></div>
 </template>
 
 <script>
@@ -8,6 +8,6 @@ export default {
 }
 </script>
 
-<style>
+<style lang='less'>
 
 </style>

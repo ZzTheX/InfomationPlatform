@@ -102,9 +102,9 @@ const routes = [
      },
      //  发布页面
      {
-       path: 'myPublished',
-       name: 'myPublished',
-       component: () => import('../views/myPublished/index.vue')
+       path: 'post',
+       name: 'post',
+       component: () => import('../views/post/index.vue')
      },
      // 个人中心
      {
@@ -116,7 +116,7 @@ const routes = [
        children: [
         //  个人主页
          {
-           path: 'my-home-page',
+           path: 'my-homepage',
            name: 'myHomePage',
            component: () => import('../views/myAccount/modules/myHomePage'),
            redirect: {name: 'myPosts'},
@@ -134,35 +134,59 @@ const routes = [
            name: 'myCart',
            component: () => import('../views/myAccount/modules/myCart')
          },
+        //  我的订单
          {
            path: 'my-order',
            name: 'myOrder',
            component: () => import('../views/myAccount/modules/myOrder')
          },
+         // 我的团购
          {
            path: 'my-groupon',
            name: 'myGroupon',
            component: () => import('../views/myAccount/modules/myGroupon')
          },
+         // 浏览历史
          {
           path: 'browsing-history',
           name: 'browsingHistory',
           component: () => import('../views/myAccount/modules/browsingHistory')
         },
+        // 我的关注
         {
-          path: 'myIntrest',
-          name: 'my-intrest',
+          path: 'my-intrest',
+          name: 'myIntrest',
           component: () => import('../views/myAccount/modules/myIntrest')
         },
+        // 钱包
         {
           path: 'wallet',
           name: 'wallet',
           component: () => import('../views/myAccount/modules/wallet')
         },
+        // 认证
         {
           path: 'identification',
           name: 'identification',
           component: () => import('../views/myAccount/modules/identification')
+        },
+        // 采购认证
+        {
+          path: 'purchase-identify',
+          name: 'purchaseIdentify',
+          component: () => import('../views/myAccount/modules/identification/purchase-identify.vue')
+        },
+        // 供应商认证
+        {
+          path: 'supplier-identify',
+          name: 'supplierIdentify',
+          component: () => import('../views/myAccount/modules/identification/supplier-identify.vue')
+        },
+        // 实名认证
+        {
+          path: 'real-name-identify',
+          name:'realNameIdentify',
+          component: () => import('../views/myAccount/modules/identification/real-name-identify.vue')
         },
         {
           path: 'message',
@@ -192,7 +216,15 @@ const routes = [
         {
           path: 'settings',
           name: 'settings',
-          component: () => import('../views/myAccount/modules/settings')
+          component: () => import('../views/myAccount/modules/settings'),
+          redirect: {name:'personal-info'},
+          children: [
+            {
+              path: 'personal-info',
+              name: 'personal-info',
+              component: () => import('../views/myAccount/modules/settings/personal-info.vue')
+            }
+          ]
         }
        ]
      }

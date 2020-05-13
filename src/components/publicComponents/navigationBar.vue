@@ -12,7 +12,7 @@
             <span>用户名</span>
           </div>
           <div class="navList">
-            <span v-for="item in navList" :key='item'>{{item}}</span>
+            <span v-for="(item, index) in navList" :key='index' @click='goToRouter(item.link)'>{{item.title}}</span>
           </div>
         </div>
        </div>
@@ -22,18 +22,25 @@
 export default {
   data () {
     return{
+      value: '',
       dropDown: [
         '四川成都',
         []
       ],
       navList:[
-        '关注',
-        '个人中心',
-        '购物车',
-        '我的订单',
-        '浏览记录',
-        '我的发布',
-        '信息中心'
+        {link: 'my-intrest', title: '关注'},
+        {link: 'my-homepage', title: '个人中心'},
+        {link: 'my-cart', title: '购物车'},
+        {link: 'browsing-history', title: '浏览记录'},
+        {link: 'my-homepage', title: '我的发布'},
+        {link: 'message', title: '信息中心'}
+        // '关注',
+        // '个人中心',
+        // '购物车',
+        // '我的订单',
+        // '浏览记录',
+        // '我的发布',
+        // '信息中心'
       ],
       citiesList: [
         {
@@ -55,6 +62,15 @@ export default {
           label: '北京'
         }
       ]
+    }
+  },
+  methods: {
+    goToRouter (path) {
+      console.log(path)
+      this.$router.push({path: '/my-account/' + path})
+    },
+    handleChange () {
+
     }
   }
 }
@@ -80,6 +96,10 @@ export default {
 }
 }
 .navList{
+  height: 32px;
+  padding: 9px 0 8px 0;
+  color: #333;
+  font-family: Microsoft Yahei;
   span {
     cursor: pointer;
     &::after {

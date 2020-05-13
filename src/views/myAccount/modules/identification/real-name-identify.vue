@@ -1,5 +1,5 @@
 <template>
-  <div>我的关注</div>
+  <div class='real_name'>实名</div>
 </template>
 
 <script>

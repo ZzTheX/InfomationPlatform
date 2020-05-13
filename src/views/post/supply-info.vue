@@ -1,5 +1,7 @@
 <template>
-  <div>我的关注</div>
+  <div class='supply_info'>
+      
+  </div>
 </template>
 
 <script>

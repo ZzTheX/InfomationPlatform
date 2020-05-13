@@ -27,7 +27,11 @@
 
         <!-- 个人中心左侧导航栏 -->
         <div class='my_homepage_nav'>
-          <li v-for='(item, index) in tabList' :key='index' :class="{active: index === 0}">{{item}}</li>
+          <li 
+            @click='jumpToRouter(index, item.link)'
+            v-for='(item, index) in tabList' 
+            :key='index' 
+            :class="{active: currentTabIndex === index}">{{item.title}}</li>
         </div>
       </div>
       <!-- 个人主页右侧 -->
@@ -42,6 +46,7 @@
 export default {
   data () {
     return {
+      currentTabIndex: 0,
       activeTab: 'myHomepage',
       myInfo: {
         avatarLink: '',
@@ -54,8 +59,30 @@ export default {
         fans: 90,
         id: 'id:12345678'
       },
-      tabList: ['个人主页', '购物车', '我的订单', '我的拼团','浏览记录', '我的关注', '钱包', '认证', '消息中心', '问题反馈', '需求调研', '任务中心', '平台公约', '设置'],
+      tabList: [
+        {link: 'my-homepage', title: '个人主页'},
+        {link: 'my-cart', title: '购物车'},
+        {link: 'my-order', title: '我的订单'},
+        {link: 'my-groupon', title: '我的拼团'},
+        {link: 'browsing-history', title: '浏览记录'},
+        {link: 'my-intrest', title: '我的关注'},
+        {link: 'wallet', title: '钱包'},
+        {link: 'identification', title: '认证'},
+        {link: 'message', title: '消息中心'},
+        {link: 'feedback', title: '问题反馈'},
+        {link: 'require-survey', title: '需求调研'},
+        {link: 'assignment', title: '任务中心'},
+        {link: 'agreement', title: '平台公约'},
+        {link: 'settings', title: '设置'}
+      ],
+      // ['个人主页', '购物车', '我的订单', '我的拼团','浏览记录', '我的关注', '钱包', '认证', '消息中心', '问题反馈', '需求调研', '任务中心', '平台公约', '设置'],
       isMyHomepage: true
+    }
+  },
+  methods: {
+    jumpToRouter (index, path) {
+      this.currentTabIndex = index
+      this.$router.replace('/my-account/' + path)
     }
   }
 }
@@ -208,7 +235,6 @@ export default {
     .my_homepage_main {
       width: 100%;
       min-height: 1200px;
-      border: 1px solid cyan;
       background-color: #fff;
     }
   }

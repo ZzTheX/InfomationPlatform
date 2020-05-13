@@ -1,5 +1,7 @@
 <template>
-  <div>我的关注</div>
+  <div class='documentation'>
+      帮助文档
+  </div>
 </template>
 
 <script>

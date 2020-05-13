@@ -5,7 +5,7 @@
         <div class="space">
           <!-- 顶部导航栏下边信息搜索栏 -->
           <div class="log">
-            <div class="yellow-box"></div>
+            <div class="yellow-box" @click='goToIndexPage'></div>
             <span @click="goToIndexPage">信息平台</span>
           </div>
           <div class="search-bar">
@@ -13,18 +13,9 @@
               <div></div>
             </div>
             <div class="search-box">
-              <el-input
-                placeholder="搜索商品/店铺..."
-                v-model="input3"
-                class="input-box input-with-select"
-              >
-                <el-select class="select-list" v-model="select" slot="prepend" placeholder="商品">
-                  <el-option label="餐厅名" value="1"></el-option>
-                  <el-option label="订单号" value="2"></el-option>
-                  <el-option label="用户电话" value="3"></el-option>
-                </el-select>
-                <el-button class="yellow-bu" slot="append">搜索</el-button>
-              </el-input>
+              <el-select></el-select>
+              <input type="text" placeholder="搜索商品店铺">
+              <button>搜索</button>
             </div>
             <div class="get-add">
               <button class="click-b">发布</button>
@@ -48,7 +39,7 @@ export default {
   },
   methods: {
     goToIndexPage() {
-      this.$router.push({ path: "index" });
+      this.$router.push({ path: "/index" });
       console.log("goTo");
     }
   }
@@ -87,23 +78,49 @@ export default {
     background-color: #ffc90f;
     margin-right: 5px;
     border: 2px solid rgba(245.245, 245, 1);
+    cursor: pointer;
   }
   > span {
     cursor: pointer;
   }
 }
 .search-box {
+  display: flex;
   width: 725px;
-  // height: 52px;
-  > .input-box {
-    border: 2px solid rgba(255, 201, 15, 1);
-    height: 52px;
+  height:52px;
+  background:rgba(255,255,255,1);
+  border:2px solid rgba(255,201,15,1);
+  border-radius:5px;
+  .el-select {
+    height: 50px;
+    .el-input {
+      height: 52px;
+    }
   }
+  input {
+    // width: 100%;
+    background-color: #fff;
+    flex-grow: 1;
+    outline: none;
+    border: none;
+    padding-left: 6px;
+  }
+  button {
+    width: 69px;
+    background-color: #fff;
+    outline: none;
+    border: 2px solid rgba(255,201,15,1);
+    border-radius: 5px;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+  }
+
 }
 .el-input-group__append {
   .yellow-bu {
     color: #ffc90f;
-    background-color: #ffffff;
+    background-color: #FFC90F;
     border: 1px solid #ffc90f;
     height: 52px;
     border-right: none;
@@ -135,5 +152,10 @@ export default {
   height: 52px;
   background-color: rgba(255, 201, 15, 1);
   margin-right: 27px;
+  background-image: url('../../../src/assets/index/more.png');
+  background-repeat: no-repeat;
+  background-size: 28px 23px;
+  background-position: 11px 14px;
+  cursor: pointer;
 }
 </style>
