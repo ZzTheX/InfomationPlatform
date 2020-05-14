@@ -14,8 +14,11 @@
             </div>
             <div class="search-box">
               <el-select></el-select>
-              <input type="text" placeholder="搜索商品店铺">
-              <button>搜索</button>
+              <input 
+                type="text" 
+                placeholder="搜索商品店铺"
+                v-model="keyword">
+              <button @click='handleSearch'>搜索</button>
             </div>
             <div class="get-add">
               <button class="click-b">发布</button>
@@ -31,6 +34,7 @@
 export default {
   data() {
     return {
+      keyword: "",
       input1: "",
       input2: "",
       input3: "",
@@ -40,7 +44,10 @@ export default {
   methods: {
     goToIndexPage() {
       this.$router.push({ path: "/index" });
-      console.log("goTo");
+      // console.log("goTo");
+    },
+    handleSearch () {
+      // if(this.keyword === )
     }
   }
 };

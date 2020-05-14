@@ -1,5 +1,5 @@
 <template>
-  <div class='product_card'>
+  <div class='product_card' :style="{marginRight: (prodCardIndex + 1) % 4 === 0 ? '0' : '24px' }">
     <img class='product_card_img' :src="prodData.src" alt="">
     <div class='product_info'>
       <p class='product_description'>
@@ -24,10 +24,19 @@ export default {
 
     }
   },
+  created () {
+      setTimeout(() => {
+          console.log(this.prodCardIndex)
+      }, 1000)
+  },
   props: {
     prodData: {
       type: Object,
       required: true
+    },
+    prodCardIndex: {
+        type: Number,
+        required: true
     }
   },
   filters: {
@@ -49,6 +58,7 @@ export default {
   width: 282px;
   height: 365px;
   margin-bottom: 38px;
+  margin-right: 24px;
   display: flex;
   flex-direction: column;
   .product_card_img {

@@ -59,9 +59,9 @@ const routes = [
      },
      // 文章列表
      {
-       path: 'passage-list',
-       name: 'passageList',
-       component: () => import('../views/passageList/index.vue')
+       path: 'article-list',
+       name: 'articleList',
+       component: () => import('../views/articleList/index.vue')
      },
     //  文章详情
      {
