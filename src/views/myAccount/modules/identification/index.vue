@@ -1,14 +1,18 @@
 <template>
   <div class='identify'>
-     <p class='active'>采购商认证</p>
-     <p>供应商认证</p>
-     <p>实人认证</p>
+     <p @click='handleClick()' class='active'>采购商认证</p>
+     <p @click='handleClick()' >供应商认证</p>
+     <p @click='handleClick()' >实人认证</p>
   </div>
 </template>
 
 <script>
 export default {
-
+  methods: {
+    handleClick (){
+      this.$router.push({})
+    }
+  }
 }
 </script>
 

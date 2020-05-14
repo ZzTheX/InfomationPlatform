@@ -1,6 +1,6 @@
 import Mock from 'mockjs'
 Mock.setup({
-  timeout: 1000
+  timeout: 500
 })
 // {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'},
 Mock.mock('/prodData',

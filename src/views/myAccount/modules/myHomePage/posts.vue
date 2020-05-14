@@ -72,10 +72,10 @@ export default {
   .goods_card_list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    align-content: flex-start;
     width: 100%;
     height: 800px;
-    padding: 17px 17px 26px 17px;
+    padding: 17px 0 26px 17px;
   }
 }
 </style>

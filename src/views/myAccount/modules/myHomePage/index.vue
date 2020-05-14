@@ -1,10 +1,10 @@
 <template>
   <div class='my_homepage'>
     <div class='homepage_nav'>
-      <span @click='handClick(0)' :class='{active: tabIndex === 0}' >我发布的</span>
-      <span @click='handClick(1)' :class='{active: tabIndex === 1}' >评论</span>
-      <span @click='handClick(2)' :class='{active: tabIndex === 2}' >帖子</span>
-      <span @click='handClick(3)' :class='{active: tabIndex === 3}' >动态</span>
+      <span @click="handClick(0, 'my-posts')" :class='{active: tabIndex === 0}' >我发布的</span>
+      <span @click="handClick(1, 'comments')" :class='{active: tabIndex === 1}' >评论</span>
+      <span :class='{active: tabIndex === 2}' >帖子</span>
+      <span :class='{active: tabIndex === 3}' >动态</span>
     </div>
     <div class='my_homepage_main'>
       <router-view></router-view>
@@ -13,7 +13,6 @@
 </template>
 
 <script>
-// import goodsCard from '../../../../components/goodsComponents/goods-card'
 
 export default {
   data () {
@@ -22,13 +21,13 @@ export default {
     }
   },
   methods: {
-    handClick (index) {
+    handClick (index, path) {
       console.log(index)
       this.tabIndex = index
+      this.$router.push(path)
     }
   },
   components: {
-    // goodsCard
   }
 }
 </script>

@@ -1,10 +1,10 @@
 <template>
   <div class='product_card'>
-    <img class='product_card_img' alt="">
+    <img class='product_card_img' :src="require('../../>../../assets/index/bestsell.png')">
     <div class='product_info'>
       <p class='product_description'>
-        <span>{{prodData.brand}}|</span>
-        <span>{{prodData.des | ommit}}</span>
+        <span>{{"商品名称"}}|</span>
+        <span>{{"商品描述商品描述".repeat(2)}}</span>
       </p>
       <p class='store_info'>
         <span class='store_number'>可售总数量: {{prodData.inventory}}</span>
@@ -51,24 +51,25 @@ export default {
 </script>
 <style lang="less" scoped>
 .product_card {
+  box-sizing: content-box;
   width: 218px;
   height: 314px;
-  overflow: hidden;
-  margin-bottom: 38px;
+  border-right: 19px solid #fff;
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
   .product_card_img {
-    width: 282px;
-    height: 258px;
+    width: 218px;
   }
   .product_info {
     margin-top: 5px;
     .product_description {
-      height: 62px;
+      height: 45px;
       color: #333;
-      font-size: 16px;
-      line-height: 26px;
+      font-size: 14px;
+      line-height: 21px;
       font-weight: 400;
+      margin-bottom: 5px;
     }
     .store_info {
       height: 12px;
@@ -82,7 +83,7 @@ export default {
       display: flex;
       justify-content: space-between;
       .prod_price {
-        font-size: 20px;
+        font-size: 18px;
         color: #FF4040;
       }
       .prod_origin {

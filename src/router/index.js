@@ -121,10 +121,17 @@ const routes = [
            component: () => import('../views/myAccount/modules/myHomePage'),
            redirect: {name: 'myPosts'},
            children: [
+            //  我发布的
              {
                path: 'my-posts',
                name: 'myPosts',
                component: () => import('../views/myAccount/modules/myHomePage/posts.vue')
+             },
+             // 评论
+             {
+              path: "comments",
+              name: 'comments',
+              component: () => import('../views/myAccount/modules/myHomePage/comment.vue')
              }
            ]
          },
