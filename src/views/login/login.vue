@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class='to_regist'>
-      <span>注册</span>
+      <span @click='goToRegister'>注册</span>
       <span>忘记密码?</span>
     </div>
     <button class='login_buttton'>登录</button>
@@ -41,6 +41,9 @@ export default {
   methods: {
     toggleLoginType (loginType) {
       this.loginType = loginType
+    },
+    goToRegister () {
+      this.$router.push({name: 'register'})
     }
   }
 }
