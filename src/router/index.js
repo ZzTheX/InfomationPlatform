@@ -59,9 +59,9 @@ const routes = [
      },
      // 文章列表
      {
-       path: 'passage-list',
-       name: 'passageList',
-       component: () => import('../views/passageList/index.vue')
+       path: 'article-list',
+       name: 'articleList',
+       component: () => import('../views/articleList/index.vue')
      },
     //  文章详情
      {
@@ -104,7 +104,34 @@ const routes = [
      {
        path: 'post',
        name: 'post',
-       component: () => import('../views/post/index.vue')
+       component: () => import('../views/post/index.vue'),
+       redirect: {name: 'type'},
+       children: [
+         // 选择发布类型
+         {
+          path: 'type',
+          name: 'type',
+          component: () => import('../views/post/type.vue')
+         },
+         // 供应信息表单
+         {
+          path: 'supply-form',
+          name: 'supplyForm',
+          component: () => import('../views/post/supply-info.vue')
+         },
+         // 需求信息表单
+         {
+          path: 'require-form',
+          name: 'requireForm',
+          component: () => import('../views/post/require-info.vue')
+         },
+         // 推文
+         {
+          path: 'post-essay',
+          name: 'postEssay',
+          component: () => import('../views/post/post-essay.vue')
+         }
+       ]
      },
      // 个人中心
      {
@@ -148,6 +175,7 @@ const routes = [
            component: () => import('../views/myAccount/modules/myOrder')
          },
          // 我的团购
+        //  消息
          {
            path: 'my-groupon',
            name: 'myGroupon',
@@ -195,20 +223,54 @@ const routes = [
           name:'realNameIdentify',
           component: () => import('../views/myAccount/modules/identification/real-name-identify.vue')
         },
+        // 消息
         {
           path: 'message',
           name: 'message',
-          component: () => import('../views/myAccount/modules/message')
+          component: () => import('../views/myAccount/modules/message'),
+          children: [
+            //  通知消息
+            {
+              path: 'notification',
+              name: 'notification',
+              component: () => import('../views/myAccount/modules/message/notification.vue')
+            },
+            // 互动消息
+            {
+              path: 'interaction',
+              name: 'interaction',
+              component: () => import('../views/myAccount/modules/message/interaction.vue')
+            },
+            // 聊聊
+            {
+              path: 'chat',
+              name: 'chat',
+              component: () => import('../views/myAccount/modules/message/chat.vue')
+            },
+            // 聊聊详情   对话页面
+            {
+              path: 'chat-detail',
+              name: 'chat-detail',
+              component: () => import('../views/myAccount/modules/message/chat-detail.vue')
+            }
+          ]
         },
         {
           path: 'feedback',
           name: 'feedback',
           component: () => import('../views/myAccount/modules/feedback')
         },
+        // 需求调研页面（选择类型）
         {
           path: 'require-survey',
           name: 'requireSurvey',
           component: () => import('../views/myAccount/modules/requireSurvey')
+        },
+        // 需求调研页面（调研表格）
+        {
+          path: 'survey-form',
+          name: 'surveyForm',
+          component: () => import('../views/myAccount/modules/requireSurvey/survey-form.vue')
         },
         {
           path: 'assignment',

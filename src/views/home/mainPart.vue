@@ -40,7 +40,7 @@
           <p class='best_sell_head_right'>查看更多 ></p>
         </div>
         <div class='best_sell_cardsList'>
-            <product-card v-for='(item, index) in bestSellList' :key='index' :prodData='item'></product-card>
+            <product-card v-for='(item, index) in bestSellList' :key='index' :prodData='item' :prodCardIndex='index'></product-card>
         </div>
       </div>
       <!--今日主推  -->
@@ -67,16 +67,14 @@
           @click='handleClick(index, item.routerPath)'
           >{{item.title}}</p>
         </div>
-        <!-- <div class='router_view'> -->
-          <router-view></router-view>
-        <!-- </div> -->
+        <router-view></router-view>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import productCard from './productCard.vue'
+import productCard from '../../components/goodsComponents/prod-card'
 // import { Swipper, SwipperSlide } from 'vue-awesome-swiper'
 export default {
   data () {

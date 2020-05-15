@@ -12,12 +12,14 @@
             <div class="downList" @click='toChooseCategory'>
             </div>
             <div class="search-box">
-              <!-- <el-select></el-select> -->
-              <input type="text" placeholder="搜索商品店铺">
-              <button>搜索</button>
+              <input
+                type="text"
+                placeholder="搜索商品"
+                v-model="keyword">
+              <button @click='handleSearch'>搜索</button>
             </div>
             <div class="get-add">
-              <button class="click-b">发布</button>
+              <button class="click-b" @click="toPost">发布</button>
             </div>
           </div>
         </div>
@@ -30,7 +32,7 @@
             <li>一级分类1</li>
           </div>
           <div class='popup_right'>
-            <div v-for='i in 12' :key='i'>
+            <div v-for='i in 12' :key='i' @click="handleClick">
               <img src='../../assets/category.png' alt="">
               <span>{{'二级分类' + i}}</span>
             </div>
@@ -46,6 +48,7 @@ export default {
   data() {
     return {
       isShowCategory: false,
+      keyword: "",
       input1: "",
       input2: "",
       input3: "",
@@ -59,6 +62,14 @@ export default {
     },
     toChooseCategory () {
       this.isShowCategory = !this.isShowCategory
+    },
+    handleSearch () {
+    },
+    handleClick () {
+      this.isShowCategory = false
+    },
+    toPost () {
+      this.$router.push({name: 'post'})
     }
   }
 };
@@ -89,7 +100,7 @@ export default {
       background-color: #fffaec;
       font-size: 20px;
       border: 1px solid #FFF5F5F5;
-
+      z-index: 999999;
       .popup_sidebar {
         width: 174px;
         text-align: center;
@@ -118,27 +129,28 @@ export default {
           >img {
             width: 104px;
             background-image: url('../../assets/category.png');
+            cursor: pointer;
           }
           >span {
             text-align: center;
             height: 65px;
             line-height: 65px;
+            cursor: pointer;
           }
         }
       }
     }
     .category_popup::after {
       position: absolute;
-      top: -50px;
+      top: -25px;
       left: 297px;
       content: '';
       display: block;
       // border: 56px solid #FFF5F5F5;
-      border-top: 28px solid transparent;
+      // border-top: 28px solid transparent;
       border-right: 28px solid transparent;
       border-left: 28px solid transparent;
       border-bottom: 28px solid #FFFAEC;
-      // z-index: 9;
     }
   }
 }
@@ -168,6 +180,11 @@ export default {
   background:rgba(255,255,255,1);
   border:2px solid rgba(255,201,15,1);
   border-radius:5px;
+  >input::-webkit-input-placeholder {
+    color: #999;
+   /* 字体大小直接写样式即可 */
+    font-size: 16px;
+}
   .el-select {
     height: 50px;
     .el-input {
@@ -214,6 +231,7 @@ export default {
       background: rgba(255, 201, 15, 1);
       border-radius: 5px;
       border: none;
+      outline: none;
     }
   }
 }

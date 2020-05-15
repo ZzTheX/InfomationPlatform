@@ -12,7 +12,7 @@
       <img :src="passageData.prodImg" alt="">
       <img :src="passageData.prodImg" alt="">
     </div>
-    <goods-brief-info :prod-info='prodInfo'></goods-brief-info>
+    <goods-brief-info></goods-brief-info>
     <!-- <div class='prod_info'>
       <img class='prod_img_mini' :src="passageData.imgMini">
       <div class='prod_desc'>
@@ -30,9 +30,7 @@ export default {
   name: 'passageCard',
   data () {
     return {
-      prodInfo: {
 
-      }
     }
   },
   filters: {
