@@ -1,5 +1,5 @@
 <template>
-  <div class='product_card'>
+  <div class='product_card' @click='goToProdDetail'>
     <img class='product_card_img' :src="require('../../>../../assets/index/bestsell.png')">
     <div class='product_info'>
       <p class='product_description'>
@@ -45,6 +45,11 @@ export default {
     },
     priceFilter (price) {
       return '￥' + price
+    }
+  },
+  methods: {
+    goToProdDetail () {
+      this.$router.push('prod-detail')
     }
   }
 }

@@ -95,6 +95,7 @@ export default {
                     background-repeat: no-repeat;
                     background-size: 18px 17px;
                     background-position: 0px 13px;
+                    cursor: pointer;
                 }
             }
             .order_item_body {

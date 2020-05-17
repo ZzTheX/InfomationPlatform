@@ -1,11 +1,11 @@
 <template>
   <div class='survey'>
     <p>选择类型</p>
-    <div @click='goToSurveyFormPage'>供应商相关服务调研</div>
-    <div @click='goToSurveyFormPage'>采购商相关服务调研</div>
-    <div @click='goToSurveyFormPage'>同城配送需求调研</div>
-    <div @click='goToSurveyFormPage'>金融相关服务调研</div>
-    <div @click='goToSurveyFormPage'>意见及建议反馈</div>
+    <div @click='goToSurveyFormPage(false, "供应商相关服务调研")'>供应商相关服务调研</div>
+    <div @click='goToSurveyFormPage(false, "采购商相关服务调研")'>采购商相关服务调研</div>
+    <div @click='goToSurveyFormPage(true, "同城配送需求调研")'>同城配送需求调研</div>
+    <div @click='goToSurveyFormPage(true, "金融相关服务调研")'>金融相关服务调研</div>
+    <div @click='goToSurveyFormPage(true, "意见及建议反馈")'>意见及建议反馈</div>
   </div>
 </template>
 
@@ -17,8 +17,15 @@ export default {
     }
   },
   methods: {
-    goToSurveyFormPage () {
-      this.$router.push({name: 'surveyForm'})
+    goToSurveyFormPage (isShowIdSelect, title) {
+      this.$router.push(
+        {
+          path: 'survey-form',
+          query: {
+            isShowIdSelect,
+            title
+          }
+        })
     }
   }
 }

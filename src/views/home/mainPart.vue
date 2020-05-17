@@ -149,9 +149,6 @@ export default {
       height: 500px;
       overflow: hidden;
       margin-bottom: 2px;
-      .imgList {
-
-      }
     }
     .prod_classify {
       box-sizing: border-box;

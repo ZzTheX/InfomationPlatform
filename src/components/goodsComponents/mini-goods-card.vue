@@ -40,15 +40,14 @@ export default {
     padding-top: 6px;
 
     .product_description {
-      height: 55px;
       line-height: 21px;
+      margin-bottom: 5px;
     }
     .store_info {
       display: flex;
       height: 13px;
       font-size: 12px;
       line-height: 12px;
-      background-color: #eee;
       justify-content: space-between;
       margin-bottom: 12px;
     }

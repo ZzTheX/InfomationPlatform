@@ -1,5 +1,8 @@
 <template>
-  <div class='product_card' :style="{marginRight: (prodCardIndex + 1) % 4 === 0 ? '0' : '24px' }">
+  <div 
+    class='product_card' 
+    :style="{marginRight: (prodCardIndex + 1) % 4 === 0 ? '0' : '24px' }"
+    @click='goToDetailPage'>
     <img class='product_card_img' :src="prodData.src" alt="">
     <div class='product_info'>
       <p class='product_description'>
@@ -49,6 +52,11 @@ export default {
     },
     priceFilter (price) {
       return '￥' + price
+    }
+  },
+  methods: {
+    goToDetailPage () {
+      this.$router.push('/prod-detail')
     }
   }
 }
