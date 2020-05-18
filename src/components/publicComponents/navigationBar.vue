@@ -1,28 +1,28 @@
 <template>
    <div class="nav">
      <div class="center">
-        <div class="space">
-          <div class="select">
-            <el-cascader
-              placeholder="四川成都"
-              v-model="value"
-              :options="citiesList"
-              :props="{ expandTrigger: 'hover' }"
-              @change="handleChange"></el-cascader>
-            <span>用户名</span>
-          </div>
-          <div class="navList">
-            <span v-for="(item, index) in navList" :key='index' @click='goToRouter(item.link)'>{{item.title}}</span>
-          </div>
+        <div class="select">
+          <span v-if='isChooseManually'>四川成都</span>
+          <el-cascader
+            v-else
+            v-model="value"
+            :options="citiesList"
+            :props="{ expandTrigger: 'hover' }"
+            @change="handleChange"></el-cascader>
+          <span>moon five</span>
         </div>
-       </div>
-    </div>
+        <div class="navList">
+          <span v-for="(item, index) in navList" :key='index' @click='goToRouter(item.link)'>{{item.title}}</span>
+        </div>
+      </div>
+  </div>
 </template>
 <script>
 export default {
   data () {
     return{
-      value: '',
+      isChooseManually: true,
+      value: '四川成都',
       dropDown: [
         '四川成都',
         []
@@ -54,6 +54,10 @@ export default {
             {
               value: 'chengdu',
               label: '成都'
+            },
+            {
+              value: 'minayang',
+              label: '绵阳'
             }
           ]
         },
@@ -77,45 +81,45 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nav{
-  display: flex;
-  // justify-content: center;
-  align-items: center;
+.nav {
   width: 100%;
   height: 32px;
-  // max-width: 1900px;
-  background: rgba(245,245,245,1);
+  line-height: 32px;
+  background-color: #F5F5F5;
   font-size: 14px;
-  >.center{
-  margin: 0 auto;
-  width: 1200px;
-  >.space{
+  color: #333;
+  .center {
+    width: 1200px;
+    margin: auto;
     display: flex;
     justify-content: space-between;
-  }
-}
-}
-.navList{
-  height: 32px;
-  padding: 9px 0 8px 0;
-  color: #333;
-  font-family: Microsoft Yahei;
-  span {
-    cursor: pointer;
-    &::after {
-      content: '|';
-      margin: 0 5px;
+    .select {
+      width: 150px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .navList {
+      >span {
+        padding-left: 12px;
+        position: relative;
+        margin-right: 12px;
+        cursor: pointer;
+        &::before {
+          content: '|';
+          color: #CCCCCC;
+          position: absolute;
+          left: 0;
+        }
+      }
+      span:first-child {
+        &::before {
+          content: ''
+        }
+      }
+      span:last-child {
+        margin-right: 0;
+      }
     }
   }
-}
- .el-dropdown-link {
-    cursor: pointer;
-    color: #333333;
-  }
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
-.el-icon--right{
-  margin-left: 0px;
 }
 </style>

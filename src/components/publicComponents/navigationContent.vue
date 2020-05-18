@@ -192,7 +192,7 @@ export default {
       height: 52px;
     }
   }
-  input {
+  > input {
     // width: 100%;
     background-color: #fff;
     flex-grow: 1;
@@ -200,11 +200,11 @@ export default {
     border: none;
     padding-left: 6px;
   }
-  button {
+  > button {
     width: 69px;
     background-color: #fff;
     outline: none;
-    border: 2px solid rgba(255,201,15,1);
+    border-left: 2px solid rgba(255,201,15,1);
     border-radius: 5px;
     border-top: none;
     border-right: none;
