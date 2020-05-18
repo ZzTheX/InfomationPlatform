@@ -12,20 +12,19 @@
       <img :src="passageData.prodImg" alt="">
       <img :src="passageData.prodImg" alt="">
     </div>
-    <goods-brief-info></goods-brief-info>
-    <!-- <div class='prod_info'>
+    <div class='prod_info'>
       <img class='prod_img_mini' :src="passageData.imgMini">
       <div class='prod_desc'>
-        <p class='prod_name'></p>
-        <p class='prod_price'></p>
-        <p class='prod_time'></p>
+        <p class='prod_name'>商品名字商品名字商品名字商品名字商品名字...</p>
+        <p class='prod_price'>￥799.99</p>
+        <p class='prod_time'>时间：2020.02.02-2020.03.13</p>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-import goodsBriefInfo from './goodsBriefIntro.vue'
+// import goodsBriefInfo from './goodsBriefIntro.vue'
 export default {
   name: 'passageCard',
   data () {
@@ -44,7 +43,10 @@ export default {
   },
   props:['passageData'],
   components: {
-    goodsBriefInfo
+    // goodsBriefInfo
+  },
+  created (){
+
   }
 };
 
@@ -97,6 +99,33 @@ export default {
     img {
       width: 170px;
       height: 170px;
+    }
+  }
+  .prod_info {
+    display: flex;
+    height: 120px;
+    background-color: #eee;
+    .prod_img_mini {
+      width: 120px;
+      height: 120px;
+      margin-right: 15px;
+    }
+    .prod_desc {
+      padding-top: 15px;
+      .prod_name {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 16px;
+      }
+      .prod_price {
+        font-size: 24px;
+        color: #C90C22;
+        margin-bottom: 8px;
+      }
+      .prod_time {
+        font-size: 16px;
+        color: #808080;
+      }
     }
   }
 }

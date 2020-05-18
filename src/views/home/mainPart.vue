@@ -2,26 +2,23 @@
   <div class='main_part'>
     <div class='inner'>
       <!-- 轮播图 -->
-        <div class='carousel'>
-          <ul class='img_list'>
-            <li v-for='(item, index) in imgList' :key='index' class='img_item'>
-              <img :src='item.url' alt="">
-            </li>
-          </ul>
-          <!-- <Swipper ref='mySwiper' :option='swiperOptions'>
-            <SwipperSlide v-for='(item, index) in imgList' :key='index'>
-               <img :src='item.url' alt="">
-            </SwipperSlide>
-            <div class='swipper-pagination' slot='pagination'></div>
-          </Swipper> -->
+      <div class="swiper-container" ref="slider">
+        <div class="swiper-wrapper">
+          <img class='swiper-slide' width='1200' height="500" src="../../assets/index/banner.png" alt="">
+          <img class='swiper-slide' width='1200' height="500" src="../../assets/index/swiper1.jpg" alt="">
+          <img class='swiper-slide' width='1200' height="500" src="../../assets/index/swiper2.jpg" alt="">
+          <img class='swiper-slide' width='1200' height="500" src="../../assets/index/swiper3.jpg" alt="">
+          <img class='swiper-slide' width='1200' height="500" src="../../assets/index/swiper4.jpg" alt="">
         </div>
+        <div class="swiper-pagination"></div>
+		  </div>
       <!-- 商品分类 -->
       <div class='prod_classify'>
         <div class="prod_classify_card" v-for='(item, index) in classifyDataList' :key='index'>
           <img :src="item.link" alt="">
           <p>{{item.category}}</p>
         </div>
-      </div>
+      </div><!--  -->
       <!-- 首页banner -->
       <div class='banner'>
         <img src="" alt="">
@@ -32,6 +29,11 @@
         <div class='hot_sale_cardsList'>
           <img class='hot_sale_card' v-for="(item, index) in hotSaleList"  :key='index' :src='item.src' :style="{marginBottom: index > 2 ? 0 : '35px'}">
         </div>
+      </div>
+      <!-- 查看更多  => 转文章列表 -->
+      <div class='more_passages'>
+        <p>与品质生活不期而遇献给聪明可爱的你活不期而遇献给聪...</p>
+        <span @click='goToPassageList'>查看更多 ></span>
       </div>
       <!-- 热销产品 -->
       <div class='best_sell'>
@@ -74,8 +76,9 @@
 </template>
 
 <script>
+import 'swiper/css/swiper.css'
+import Swiper from 'swiper';
 import productCard from '../../components/goodsComponents/prod-card'
-// import { Swipper, SwipperSlide } from 'vue-awesome-swiper'
 export default {
   data () {
     return {
@@ -119,9 +122,28 @@ export default {
         {routerPath: '/index/promotion', title: '特惠促销'},
         {routerPath: '/index/require-info', title: '需求信息'}
       ],
-      // routerNavList: [ '当季热门', '产业园直供', '精选好货', '特惠促销', '需求信息'],
       routerNavIndex: 0
     }
+  },
+  created () {
+
+  },
+  mounted () {
+    var swiper = new Swiper('.swiper-container', {
+        speed: 300,
+        width: 1200*5,
+        height: 500,
+        initialSlide: 1,
+        autoplay: true,
+				slidesPerView: 5,
+				freeMode: true,
+        loop:true,
+        pagination: {
+          el: '.swiper-pagination'
+          // clickable: true
+        },
+        // autoplayDisableOnInteraction: false
+			})
   },
    components: {
     productCard
@@ -131,6 +153,9 @@ export default {
        this.routerNavIndex = index
        console.log(path)
        this.$router.replace({ path })
+     },
+     goToPassageList () {
+       this.$router.push('/article-list')
      }
    }
 }
@@ -145,6 +170,15 @@ export default {
   .inner {
     width: 1200px;
     margin: auto;
+    background-color: #fff;
+    .swiper-wrapper {
+      width: 1200px;
+      .swiper-slide {
+        width: 1200px;
+        height: 500px;
+      }
+    }
+
     .carousel {
       height: 500px;
       overflow: hidden;
@@ -202,6 +236,25 @@ export default {
           background-color: #eee;
         }
       }
+    }
+    .more_passages {
+      width: 1200px;
+      height: 80px;
+      padding-left: 77px;
+      padding-right: 25px;
+      line-height: 80px;
+      font-size: 24px;
+      color: #333;
+      border: 1px solid #E6E6E6;
+      margin-bottom: 45px;
+      display: flex;
+      justify-content: space-between;
+
+      span:last-child {
+        color: #999999;
+        cursor: pointer;
+      }
+
     }
      // 热销产品
     .best_sell {

@@ -64,6 +64,7 @@ export default {
       this.isShowCategory = !this.isShowCategory
     },
     handleSearch () {
+      this.$router.push({name: 'prodList'})
     },
     handleClick () {
       this.isShowCategory = false

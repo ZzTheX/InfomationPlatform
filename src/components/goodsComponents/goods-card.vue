@@ -1,10 +1,13 @@
 <template>
-  <div class='product_card' @click='goToProdDetail'>
-    <img class='product_card_img' :src="require('../../>../../assets/index/bestsell.png')">
+  <div
+    class='product_card'
+    :style="{marginRight: (prodCardIndex + 1) % 4 === 0 ? '0' : '24px' }"
+    @click='goToDetailPage'>
+    <img class='product_card_img' :src="prodData.src" alt="">
     <div class='product_info'>
       <p class='product_description'>
-        <span>{{"商品名称"}}|</span>
-        <span>{{"商品描述商品描述".repeat(2)}}</span>
+        <span>{{prodData.brand}}|</span>
+        <span>{{prodData.des | ommit}}</span>
       </p>
       <p class='store_info'>
         <span class='store_number'>可售总数量: {{prodData.inventory}}</span>
@@ -25,22 +28,26 @@ export default {
     }
   },
   created () {
-    console.log('goodsCard')
-    console.log('goodcard组件中的数据' , this.prodData)
+      setTimeout(() => {
+          console.log(this.prodCardIndex)
+      }, 1000)
   },
   props: {
     prodData: {
       type: Object,
       required: true
+    },
+    prodCardIndex: {
+        type: Number,
+        required: true
     }
   },
   filters: {
     ommit (text) {
-      let a = text || ""
-      if(a.length > 17) {
-        return  a.slice(0, 17) + '...'
+      if(text.length > 17) {
+        return  text.slice(0, 17) + '...'
       } else {
-        return a
+        return text
       }
     },
     priceFilter (price) {
@@ -48,33 +55,32 @@ export default {
     }
   },
   methods: {
-    goToProdDetail () {
-      this.$router.push('prod-detail')
+    goToDetailPage () {
+      this.$router.push('/prod-detail')
     }
   }
 }
 </script>
 <style lang="less" scoped>
 .product_card {
-  box-sizing: content-box;
-  width: 218px;
-  height: 314px;
-  border-right: 19px solid #fff;
-  margin-bottom: 30px;
+  width: 282px;
+  height: 365px;
+  margin-bottom: 38px;
+  margin-right: 24px;
   display: flex;
   flex-direction: column;
   .product_card_img {
-    width: 218px;
+    width: 282px;
+    height: 258px;
   }
   .product_info {
     margin-top: 5px;
     .product_description {
-      height: 45px;
+      height: 62px;
       color: #333;
-      font-size: 14px;
-      line-height: 21px;
+      font-size: 16px;
+      line-height: 26px;
       font-weight: 400;
-      margin-bottom: 5px;
     }
     .store_info {
       height: 12px;
@@ -88,7 +94,7 @@ export default {
       display: flex;
       justify-content: space-between;
       .prod_price {
-        font-size: 18px;
+        font-size: 20px;
         color: #FF4040;
       }
       .prod_origin {
