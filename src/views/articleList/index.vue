@@ -1,16 +1,17 @@
 <template>
   <div class='passageList'>
     <div class='pagination'>
-      <!-- <el-pagination
+      <el-pagination
         background
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="6"
+        :pager-count='13'
         layout="total, sizes, prev, pager, next, jumper"
         :total="400">
-      </el-pagination> -->
+      </el-pagination>
     </div>
     <div class='card_list'>
       <passage-card v-for='(item, index) in cardList' :key='index' :passage-data='item'></passage-card>
@@ -75,6 +76,14 @@ export default {
   },
   created () {
     // this.$http.get('')
+  },
+  methods: {
+    getPassageList () {
+      let para = {
+      }
+      this.loading = true
+      
+    }
   },
   components: {
     passageCard

@@ -1,9 +1,9 @@
 <template>
    <div class="nav">
      <div class="center">
-        <div class="city_select">
+        <div class="city_select" id='city_select'>
           <!-- <span v-if='isChooseManually'>四川成都</span> -->
-          <el-select v-model="value" filterable placeholder="请选择">
+          <el-select v-model="value" filterable placeholder="请输入城市">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -44,28 +44,38 @@ export default {
         // '我的发布',
         // '信息中心'
       ],
-      citiesList: [
+      options: [
         {
           value: 'sichuan',
-          label: '四川',
-          children: [
-            {
-              value: 'bazhong',
-              label: '巴中',
-            },
-            {
-              value: 'chengdu',
-              label: '成都'
-            },
-            {
-              value: 'minayang',
-              label: '绵阳'
-            }
-          ]
+          label: '成都',
         },
         {
           value: 'beijing',
           label: '北京'
+        },
+        {
+          value: 'bazhong',
+          label: '巴中',
+        },
+        {
+          value: 'neimenggu',
+          label: '内蒙古'
+        },
+        {
+          value: 'minayang',
+          label: '绵阳'
+        },
+        {
+          value: 'wuhan',
+          label: '武汉'
+        },
+        {
+          value: 'hangzhou',
+          label: '杭州'
+        },
+        {
+          value: 'qingdao',
+          label: '青岛'
         }
       ]
     }
@@ -84,12 +94,7 @@ export default {
   }
 }
 </script>
-<style>
-/* .city_city_select .el-input__inner {
-  border: none;
-  background-color: #f5f5f5;
-} */
-</style>
+
 <style lang="less" scoped>
 .nav {
   width: 100%;
@@ -103,14 +108,14 @@ export default {
     margin: auto;
     display: flex;
     justify-content: space-between;
-    .city_city_select {
-      width: 150px;
-      display: flex;
-      justify-content: space-between;
-      /deep/.el-input__inner {
-        border: none;
-        background-color: #f5f5f5;
-      }
+    .city_select /deep/ .el-input__inner {
+      border: none;
+      width: 100px;
+      height: 32px;
+      background-color: #f5f5f5;
+    }
+    .city_select /deep/.el-input__icon {
+      line-height: 32px;
     }
     .navList {
       >span {

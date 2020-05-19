@@ -1,5 +1,5 @@
 <template>
-  <div class='passage_card'>
+  <div class='passage_card' @click='goToDetailPage'>
     <p class='passage_title'>{{passageData.passageTitle | textOmit}}</p>
     <div class='user_info'>
        <img :src='passageData.userAvatar' class='user_avatar'>
@@ -47,6 +47,11 @@ export default {
   },
   created (){
 
+  },
+  methods: {
+    goToDetailPage () {
+      this.$router.push('/passage-detail')
+    }
   }
 };
 
@@ -58,6 +63,7 @@ export default {
   padding: 15px 19px 22px;
   background-color: #fff;
   margin-bottom: 24px;
+  cursor: pointer;
   .passage_title {
     height: 55px;
     line-height: 27px;

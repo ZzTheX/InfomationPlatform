@@ -18,7 +18,7 @@
           <img :src="item.link" alt="">
           <p>{{item.category}}</p>
         </div>
-      </div><!--  -->
+      </div>
       <!-- 首页banner -->
       <div class='banner'>
         <img src="" alt="">
@@ -130,10 +130,10 @@ export default {
   },
   mounted () {
     var swiper = new Swiper('.swiper-container', {
-        speed: 300,
+        speed: 600,
         width: 1200*5,
         height: 500,
-        initialSlide: 1,
+        initialSlide: 0,
         autoplay: true,
 				slidesPerView: 5,
 				freeMode: true,
