@@ -4,7 +4,7 @@
       <div class="center">
         <div class="space">
           <!-- 顶部导航栏下边信息搜索栏 -->
-          <div class="log">
+          <div class="logo">
             <div class="yellow-box" @click='goToIndexPage'></div>
             <span @click="goToIndexPage">信息平台</span>
           </div>
@@ -147,20 +147,22 @@ export default {
       left: 297px;
       content: '';
       display: block;
-      // border: 56px solid #FFF5F5F5;
-      // border-top: 28px solid transparent;
-      border-right: 28px solid transparent;
+
+
+
+ border-right: 28px solid transparent;
       border-left: 28px solid transparent;
       border-bottom: 28px solid #FFFAEC;
     }
   }
 }
 
-.log {
+.logoo {
   display: flex;
   align-items: center;
   font-size: 18px;
   color: #333333;
+  // background-image: url('../../assets/logoo.png');
   > .yellow-box {
     // display: inline-block;
     width: 42px;
