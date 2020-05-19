@@ -1,14 +1,16 @@
 <template>
    <div class="nav">
      <div class="center">
-        <div class="select">
-          <span v-if='isChooseManually'>四川成都</span>
-          <el-cascader
-            v-else
-            v-model="value"
-            :options="citiesList"
-            :props="{ expandTrigger: 'hover' }"
-            @change="handleChange"></el-cascader>
+        <div class="city_select">
+          <!-- <span v-if='isChooseManually'>四川成都</span> -->
+          <el-select v-model="value" filterable placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+          </el-select>
           <span>moon five</span>
         </div>
         <div class="navList">
@@ -68,6 +70,9 @@ export default {
       ]
     }
   },
+  mounted () {
+    console.log(window.navigator.geolocation.getCurrentPosition())
+  },
   methods: {
     goToRouter (path) {
       console.log(path)
@@ -79,7 +84,12 @@ export default {
   }
 }
 </script>
-
+<style>
+/* .city_city_select .el-input__inner {
+  border: none;
+  background-color: #f5f5f5;
+} */
+</style>
 <style lang="less" scoped>
 .nav {
   width: 100%;
@@ -93,10 +103,14 @@ export default {
     margin: auto;
     display: flex;
     justify-content: space-between;
-    .select {
+    .city_city_select {
       width: 150px;
       display: flex;
       justify-content: space-between;
+      /deep/.el-input__inner {
+        border: none;
+        background-color: #f5f5f5;
+      }
     }
     .navList {
       >span {
