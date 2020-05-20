@@ -1,16 +1,16 @@
 <template>
   <div class='identify'>
-     <p @click='handleClick()' class='active'>采购商认证</p>
-     <p @click='handleClick()' >供应商认证</p>
-     <p @click='handleClick()' >实人认证</p>
+     <p @click='handleClick("purchase-identify")' class='active'>采购商认证</p>
+     <p @click='handleClick("supplier-identify")' >供应商认证</p>
+     <p @click="handleClick('real-name-identify')">实人认证</p>
   </div>
 </template>
 
 <script>
 export default {
   methods: {
-    handleClick (){
-      this.$router.push({})
+    handleClick (path){
+      this.$router.push({path})
     }
   }
 }

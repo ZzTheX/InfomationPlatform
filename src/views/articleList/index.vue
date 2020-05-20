@@ -16,6 +16,19 @@
     <div class='card_list'>
       <passage-card v-for='(item, index) in cardList' :key='index' :passage-data='item'></passage-card>
     </div>
+    <div class='pigination_bottom'>
+       <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage4"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="6"
+        :pager-count='13'
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -82,7 +95,7 @@ export default {
       let para = {
       }
       this.loading = true
-      
+
     }
   },
   components: {
@@ -123,6 +136,15 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+  }
+  .pigination_bottom {
+    height:80px;
+    padding-top: 20px;
+    background:rgba(255,255,255,1);
+    .el-pagination {
+      width: 1200px;
+      margin: auto;
+    }
   }
 }
 
