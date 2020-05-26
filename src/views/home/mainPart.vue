@@ -132,7 +132,7 @@ export default {
     var swiper = new Swiper('.swiper-container', {
         speed: 600,
         width: 1200*5,
-        height: 500,
+        // height: 500,
         initialSlide: 0,
         autoplay: true,
 				slidesPerView: 5,

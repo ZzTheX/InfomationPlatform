@@ -48,12 +48,35 @@
               <div class='company_logo'>
                 <img src="../../assets/company.png" width="80" height="80">
               </div>
+              <div class='company_info'>
+                <p class='company_name'>河北纺织有限公司</p>
+                <p class='credit_level'>信誉等级：<span>1</span></p>
+                <p class='company_des'>商家描述: <span>{{'商家描述'.repeat(5)}}</span></p>
+                <p class='contact_me'>联系: <span>和我联系</span></p>
+                <p>实名认证<span>已认证</span></p>
+                <p>商家认证<span>已认证</span></p>
+                <p>芝麻认证<span>已认证</span></p>
+                <div>进入商家主页</div>
+              </div>
             </div>
             <div class='prod_description'>
               <div class='description_head'>
                 <span @click='toggle' class='active'>宝贝详情</span>
                 <span @click='toggle'>宝贝留言</span>
               </div>
+              <div class='description_detail'>
+                <p>发布日期：2020-02-01</p>
+                <p>商品描述：OLAY菁醇青春密集修护面膜Olay/玉兰油OLAY菁醇青春是否为特殊用途化，妆品OLAY菁醇青春密集修护面膜Olay/玉兰油 OLAY菁醇青春是否为特殊用途化妆品OLAY菁醇青春密集修护面膜Olay/玉兰油 OLAY菁醇青春是否为特殊用途化妆品OLAY菁醇青春密集修护面膜Olay/玉兰油，OLAY菁醇青春是否为特殊，用途化妆品OLAY菁醇青春密集，修护面膜Olay/玉兰油 OLAY菁醇青春是否为特殊用途化妆品OLAY菁醇青春密集修护面膜Olay/玉兰油 OLAY菁醇青春是否为特殊用途化妆品OLAY菁醇青春密集修护面膜Olay/玉兰油，OLAY菁醇青春是否为特殊用途化妆品OL。AY菁醇青春密集修护面膜Olay/玉兰油 OLAY菁醇青春是否为特殊用途化妆品</p>
+                <div class="img_list">
+                  <img 
+                    width="276"
+                    height="230"
+                    src="../../assets/prod_des.png"
+                    v-for='i in 9'
+                    :key='i'>
+                </div>
+              </div>
+              <div class='comment_board'></div>
             </div>
       </div>
     </div>
@@ -180,10 +203,31 @@ export default {
           }
 
         }
+        .company_info {
+          padding: 18px 14px 30px 17px;
+          font-size: 14px;
+          color: #333;
+          .company_name {
+            color: #333;
+            font-weight: 500;
+          }
+          .company_des {
+            margin-bottom: 15px;
+            >span {
+              color: #666;
+            }
+          }
+          .contact_me {
+            margin-bottom: 16px;
+            >span {
+              color: #10B4FE;
+              padding-left: 27px;
+            }
+          }
+        }
       }
       .prod_description {
         flex: 1;
-        height: 500px;
         background-color: #fff;
         .description_head {
           height: 49px;
@@ -211,6 +255,28 @@ export default {
             border-left: 10px solid transparent;
             bottom: -20px;
             left: 50px;
+          }
+        }
+        .description_detail {
+          padding: 36px 35px 40px 31px;
+          font-size: 16px;
+          color: #333;
+          p:first-child {
+            margin-bottom: 15px;
+          }
+          p:nth-child(2) {
+            margin-bottom: 15px;
+          }
+          .img_list {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            >img {
+              width: 276px;
+              height: 230px;
+              // margin-bottom: 33px;
+              padding-bottom: 33px;
+            }
           }
         }
       }
