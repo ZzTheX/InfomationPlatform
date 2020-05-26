@@ -139,6 +139,7 @@ const routes = [
        name: 'myAccount',
        component: () => import('../views/myAccount/index.vue'),
        redirect: {name: 'myHomePage'},
+       meta: { auth: true },
       //  个人中心
        children: [
         //  个人主页
@@ -174,12 +175,23 @@ const routes = [
            name: 'myOrder',
            component: () => import('../views/myAccount/modules/myOrder')
          },
+         // 下单
+         {
+          path: 'place-order',
+          name: 'placeOrder',
+          component: () => import('../views/myAccount/modules/myOrder/place-order.vue')
+         },
          // 我的团购
-        //  消息
          {
            path: 'my-groupon',
            name: 'myGroupon',
            component: () => import('../views/myAccount/modules/myGroupon')
+         },
+         // 拼团详情
+         {
+          path: 'groupon-detail',
+          name: 'grouponDetail',
+          component: () => import('../views/myAccount/modules/myGroupon/groupon-detail.vue'),
          },
          // 浏览历史
          {

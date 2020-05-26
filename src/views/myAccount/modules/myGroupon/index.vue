@@ -16,24 +16,25 @@
                   <p class='groupon_detail'>已拼团300000kg，还差<span style='color:#DD3232FF'>30000kg</span></p>
                   <p class='contact'>联系买家</p>
               </div>
-              <div class='order_item_body'>
-                  <div class='order_item_body_left'>
-                      <img :src="goodsImg" alt="">
-                      <div class='goods_intro'>
-                          <p>{{'商品名称'.repeat(6)}}</p>
-                          <p>可售时间段: 2020-05-22至2020-06-20</p>
-                      </div>
-                  </div>
-                  <div class='order_item_body_right'>
-                      <div class='order_detail'>
-                          <span>¥199.00</span>
-                          <span>999个</span>
-                          <span>¥199.00</span>
-                          <span>待成团</span>
-                          <span>已支付</span>
-                      </div>
-                      <p>最晚成团日期：2020-02-13</p>
-                  </div>
+              <div class='order_item_body'
+                   @click='goToGrouponDetail()'>
+                    <div class='order_item_body_left'>
+                        <img :src="goodsImg" alt="">
+                        <div class='goods_intro'>
+                            <p>{{'商品名称'.repeat(6)}}</p>
+                            <p>可售时间段: 2020-05-22至2020-06-20</p>
+                        </div>
+                    </div>
+                    <div class='order_item_body_right'>
+                        <div class='order_detail'>
+                            <span>¥199.00</span>
+                            <span>999个</span>
+                            <span>¥199.00</span>
+                            <span>待成团</span>
+                            <span>已支付</span>
+                        </div>
+                        <p>最晚成团日期：2020-02-13</p>
+                    </div>
               </div>
           </div>
       </div>
@@ -46,6 +47,11 @@ export default {
         return {
             goodsImg: require('../../../../assets/goods.png')
         }
+    },
+    methods: {
+      goToGrouponDetail () {
+        this.$router.push()
+      }
     }
 }
 </script>
@@ -91,7 +97,7 @@ export default {
                 .contact {
                     padding-left: 24px;
                     color: #3F99F4FF;
-                    background-image: url('../../../../assets/message.png'); 
+                    background-image: url('../../../../assets/message.png');
                     background-repeat: no-repeat;
                     background-size: 18px 17px;
                     background-position: 0px 13px;

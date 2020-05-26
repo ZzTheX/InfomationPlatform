@@ -8,8 +8,9 @@
       <div>
         <input type="text" placeholder="手机号">
       </div>
-      <div>
+      <div class='verify_code'>
         <input type="text" placeholder="请输入6位短信验证码">
+        <span>获取短信验证码</span>
       </div>
       <div>
         <input type="password" placeholder="输入密码">
@@ -69,6 +70,16 @@ export default {
       }
     }
     .form_main {
+      .verify_code {
+        position: relative;
+        > span {
+          position: absolute;
+          top: 50%;
+          right: 0;
+          color: #DA8A19;
+          cursor: pointer;
+        }
+      }
       >div {
         height: 80px;
         border-bottom: 1px solid #E6E6E6;
