@@ -1,7 +1,5 @@
 <template>
-  <div class='comment'>
-    pinglun
-  </div>
+  <div>下单</div>
 </template>
 
 <script>
