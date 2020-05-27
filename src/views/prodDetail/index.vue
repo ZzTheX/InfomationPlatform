@@ -96,13 +96,13 @@
                 <p>实名认证: <span class='tag'>已认证</span> </p>
                 <p>商家认证: <span class='tag'>已认证</span></p>
                 <p>芝麻认证: <span class='tag'>已认证</span></p>
-                <div class='button'>进入商家主页</div>
+                <div class='button' @click='goToMerchantHome'>进入商家主页</div>
               </div>
             </div>
             <div class='prod_description'>
               <div class='description_head'>
-                <span @click='toggle(0)' class='active'>宝贝详情</span>
-                <span @click='toggle(1)'>宝贝留言</span>
+                <span @click='toggle(0)' :class="{'active': num===0}">宝贝详情</span>
+                <span @click='toggle(1)' :class="{'active': num===1}">宝贝留言</span>
               </div>
               <router-view></router-view>
             </div>
@@ -113,8 +113,14 @@
 
 <script>
 export default {
+  data (){
+    return {
+      num: 0
+    }
+  },
   methods: {
     toggle (num) {
+      this.num = num
       if ( num ) {
         this.$router.push({
           path: 'prod-comment'
@@ -124,6 +130,12 @@ export default {
           path: 'prod-description'
         })
       }
+    },
+    //  路由跳转到商家主页
+    goToMerchantHome () {
+      this.$router.push({
+        name: 'merchantHome'
+      })
     }
   }
 }
@@ -332,12 +344,11 @@ export default {
             >span {
               padding-left: 24px;
               padding-right: 24px;
-              background-color: #efe;
               cursor: pointer;
+              position: relative;
             }
             span.active {
               background-color: #FFC90F;
-              position: relative;
             }
             .active::after {
               position: absolute;

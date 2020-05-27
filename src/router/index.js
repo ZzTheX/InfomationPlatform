@@ -94,7 +94,21 @@ const routes = [
          }
        ]
      },
-     // 下单页面
+    // 商家主页  用户查看其他商家主页
+     {
+      path: 'merchant-home',
+      name: 'merchantHome',
+      component: () => import('../views/merchantHome'),
+      redirect: { name: 'myPost' },
+      children: [
+        {
+          path: 'my-post',
+          name: 'myPost',
+          component: () => import('../views/merchantHome/my-post.vue')
+        }
+      ]
+     },
+     // 下单页面 消息
      {
        path: 'place-order',
        name: 'placeOrder',
@@ -240,6 +254,7 @@ const routes = [
           path: 'message',
           name: 'message',
           component: () => import('../views/myAccount/modules/message'),
+          redirect: {name: 'notification'},
           children: [
             //  通知消息
             {
@@ -258,6 +273,11 @@ const routes = [
               path: 'chat',
               name: 'chat',
               component: () => import('../views/myAccount/modules/message/chat.vue')
+            },
+            {
+              path: 'active',
+              name: 'active',
+              component: () => import('../views/myAccount/modules/message/active.vue')
             },
             // 聊聊详情   对话页面
             {
@@ -317,7 +337,13 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'hash',
-  routes
+  routes,
+  scrollBehavior (to, from, savedPosition) {
+    return {
+      x: 0,
+      y: 0
+    }
+  }
 })
 
 export default router

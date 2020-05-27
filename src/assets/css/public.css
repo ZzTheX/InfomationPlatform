@@ -9,7 +9,7 @@ list-style: none;
 li {
   list-style: none;
 }
-input {
+input, button {
   outline: none;
   border: none;
   background-color: #fff;
