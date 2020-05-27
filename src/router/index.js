@@ -3,12 +3,14 @@ import VueRouter from 'vue-router'
 import Home from '../views/home/home.vue'
 import MainPart from '../views/home/mainPart.vue'
 
+import getLoginState from '../auth'
 Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
     component: Home,
     redirect: { name: 'index' },
+    meta: { auth: false },
     children: [
       // 首页
      {
@@ -98,7 +100,8 @@ const routes = [
      {
        path: 'place-order',
        name: 'placeOrder',
-       component: () => import('../views/placeOrder/index.vue')
+       component: () => import('../views/placeOrder/index.vue'),
+       meta: { auth: true}
      },
      //  发布页面
      {
@@ -106,6 +109,7 @@ const routes = [
        name: 'post',
        component: () => import('../views/post/index.vue'),
        redirect: {name: 'type'},
+       meta: { auth: true},
        children: [
          // 选择发布类型
          {
@@ -148,12 +152,14 @@ const routes = [
            name: 'myHomePage',
            component: () => import('../views/myAccount/modules/myHomePage'),
            redirect: {name: 'myPosts'},
+           meta: { auth: true },
            children: [
             //  我发布的
              {
                path: 'my-posts',
                name: 'myPosts',
-               component: () => import('../views/myAccount/modules/myHomePage/posts.vue')
+               component: () => import('../views/myAccount/modules/myHomePage/posts.vue'),
+               meta: { auth: true }
              },
              // 评论
              {

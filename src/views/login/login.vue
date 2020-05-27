@@ -6,14 +6,14 @@
     </div>
     <div class='login_input_area'>
       <div class='phone_input_wrap'>
-        <input type="text" placeholder="手机号">
+        <input type="text" placeholder="手机号" v-model='userInfo.phone'>
       </div>
       <!-- v-if切换验证码登录与密码登录 -->
       <div v-if='loginType' class='password_input_wrap'>
-        <input class='password' type="password" placeholder="登录密码">
+        <input class='password' type="password" placeholder="登录密码" v-model='userInfo.password'>
       </div>
       <div class='code_input_wrap' v-else>
-        <input class='code' type="text" placeholder="请输入6位短信验证码">
+        <input class='code' type="text" placeholder="请输入6位短信验证码" v-model='userInfo.verifyCode'>
         <button class="get_code">获取验证码</button>
       </div>
     </div>
@@ -21,7 +21,7 @@
       <span @click='goToRegister'>注册</span>
       <span>忘记密码?</span>
     </div>
-    <button class='login_buttton'>登录</button>
+    <button class='login_buttton' @click='handleLogin'>登录</button>
     <p class='user_agreement'>用户协议</p>
     <div class='other_login_ways'>
      <p>其他登录方式</p>
@@ -35,6 +35,11 @@
 export default {
   data () {
     return {
+      userInfo: {
+        phone: '',
+        password: '',
+        verifyCode: ''
+      },
       loginType: 0
     }
   },
@@ -44,6 +49,13 @@ export default {
     },
     goToRegister () {
       this.$router.push({name: 'register'})
+    },
+    handleLogin () {
+      if(this.userInfo.phone && this.userInfo.password) {
+        localStorage.setItem('token','123456')
+      } else {
+        alert('请输入正确的手机号与密码')
+      }
     }
   }
 }
