@@ -74,6 +74,13 @@ export default {
     p {
       cursor: pointer;
     }
+    p:last-child {
+      padding-right: 25px;
+      background-image: url('../../assets/filtrate.png');
+      background-size: 16px 18px;
+      background-position: 100% 50%;
+      background-repeat: no-repeat;
+    }
   }
   .goods_list_mian {
     display: flex;

@@ -10,7 +10,7 @@
             </div>
             <!-- 此处商品详情需求描述与供应描述不一致 通过v-if切换 -->
             <!-- 供应描述 -->
-            <div class="prod_card_right">
+            <div class="prod_card_right" v-if='false'>
                 <p class='prod_title'>OLAY熬夜黄金酵母面膜菁醇青春密集修护面膜女补水保湿滋润烟酰胺OLAY熬夜黄金酵母面膜菁醇</p>
                 <div class='price_info'>
                     <p class='price'>预售价格<span>{{" ￥799.00"}}</span></p>
@@ -24,14 +24,15 @@
                       <span>最小起批数量：1</span>
                       <span>期望定金：￥5000</span>
                     </p>
-                    <hr style='color:#E6E6E6;margin-bottom:20px'/>
+                    <hr style='color:#E6E6E6;margin-bottom:18px'/>
                     <p class='groupon_info'>
                       <span>支持散装拼团</span>
                       <span>单人(地址)最小购买数量：2</span>
                       <span>最低成团数量：50000</span>
                     </p>
-                    <hr style='color:#E6E6E6;margin-bottom:14px'>
+                    
                     <p>最晚成团日期：2020.02.02</p>
+                    <hr style='background-color:#E6E6E6;margin-bottom:12px'/>
                     <div class='icons'>
                       <p>
                         <span>999人想要</span>
@@ -43,34 +44,30 @@
                     </div>
                 </div>
                 <div class="operation_bar">
-                  <div class="lanch_groupon">发起拼购</div>
-                  <div class='addto_cart'>加入购物车</div>
-                  <div class="order_now">立即下单</div>
+                  <div @click='handleLaunchGroupon' class="lanch_groupon">发起拼购</div>
+                  <div @click='handleAddToCart' class='addto_cart'>加入购物车</div>
+                  <div @click='handleToOrderNow' class="order_now">立即下单</div>
                 </div>
             </div>
             <!-- 需求描述 -->
-            <div class='prod_card_right' v-if='false'>
+            <div class='prod_card_right' v-if='true'>
               <p class='prod_title'>OLAY熬夜黄金酵母面膜菁醇青春密集修护面膜女补水保湿滋润烟酰胺OLAY熬夜黄金酵母面膜菁醇</p>
                 <div class='price_info'>
                     <p class='price'>预售价格<span>{{" ￥799.00"}}</span></p>
                     <p class='sell_time'>预售时间：2020-02-01至2020-3-12</p>
                     <p class='store_info'>
-                      <span>剩余数量:999</span>
-                      <span>已售数量：1000000</span>
-                      <span>总数量：10000</span>
+                      <span>采购总数量:999</span>
+                      <span>已支付定金: ￥5000</span>
+                      <span>最晚等待时间: 10000</span>
                     </p>
-                    <p class='earnest_money'>
-                      <span>最小起批数量：1</span>
-                      <span>期望定金：￥5000</span>
-                    </p>
-                    <hr style='color:#E6E6E6;margin-bottom:20px'/>
+                    <hr style='color:#E6E6E6;margin-top:30px;margin-bottom:30px'/>
                     <p class='groupon_info'>
-                      <span>支持散装拼团</span>
-                      <span>单人(地址)最小购买数量：2</span>
+                      <span>接受多家供应商一起供货</span>
+                      <span>每家供应商供货量需大于：2</span>
                       <span>最低成团数量：50000</span>
                     </p>
-                    <hr style='color:#E6E6E6;margin-bottom:14px'>
-                    <p>最晚成团日期：2020.02.02</p>
+                    <p>单笔采购数量需高于: 1</p>
+                    <hr style='color:#E6E6E6;margin-bottom:30px'>
                     <div class='icons'>
                       <p>
                         <span>999人想要</span>
@@ -79,6 +76,11 @@
                         <span>关注</span>
                       </p>
                       <p>四川成都</p>
+                    </div>
+                    <div class="operation_bar">
+                      <div @click='handleLaunchGroupon' class="lanch_groupon">发起拼购</div>
+                      <div @click='handleAddToCart' class='addto_cart'>加入购物车</div>
+                      <div  @click='handleToOrderNow' class="order_now">立即下单</div>
                     </div>
                 </div>
             </div>
@@ -96,13 +98,13 @@
                 <p>实名认证: <span class='tag'>已认证</span> </p>
                 <p>商家认证: <span class='tag'>已认证</span></p>
                 <p>芝麻认证: <span class='tag'>已认证</span></p>
-                <div class='button'>进入商家主页</div>
+                <div class='button' @click='goToMerchantHome'>进入商家主页</div>
               </div>
             </div>
             <div class='prod_description'>
               <div class='description_head'>
-                <span @click='toggle(0)' class='active'>宝贝详情</span>
-                <span @click='toggle(1)'>宝贝留言</span>
+                <span @click='toggle(0)' :class="{'active': num===0}">宝贝详情</span>
+                <span @click='toggle(1)' :class="{'active': num===1}">宝贝留言</span>
               </div>
               <router-view></router-view>
             </div>
@@ -113,8 +115,14 @@
 
 <script>
 export default {
+  data (){
+    return {
+      num: 0
+    }
+  },
   methods: {
     toggle (num) {
+      this.num = num
       if ( num ) {
         this.$router.push({
           path: 'prod-comment'
@@ -124,7 +132,25 @@ export default {
           path: 'prod-description'
         })
       }
+    },
+    //  路由跳转到商家主页
+    goToMerchantHome () {
+      this.$router.push({
+        name: 'merchantHome'
+      })
+    },
+    handleLaunchGroupon () {
+
+    }, 
+    handleAddToCart () {
+
+    },
+    handleToOrderNow () {
+      this.$router.push({
+        name: 'orderNow'
+      })
     }
+
   }
 }
 </script>
@@ -136,8 +162,7 @@ export default {
   padding-top: 22px;
   .prod_detail {
       width: 1200px;
-  height: 2000px;
-
+      padding-bottom: 20px;
       margin: auto;
       .prod_card {
           display: flex;
@@ -176,8 +201,8 @@ export default {
                   color: #333;
               }
               .price_info {
-                  margin-top: 24px;
-                  height: 354px;
+                  margin-top: 22px;
+                  height: 356px;
                   border: 1px dashed #DBDBDB;
                   padding: 20px 20px 22px 20px;
                   >p {
@@ -210,11 +235,36 @@ export default {
                     justify-content: space-between;
                     font-size: 12px;
                     color: #333;
-                    >p {
+                    >p:first-child {
                       >span {
                         margin-right: 46px;
                         padding-left: 18px;
+                        background-repeat: no-repeat;
+                        background-position: 0 50%;
                       }
+                      span:first-child {
+                        background-image: url('../../assets/heart_yellow.png');
+                        background-size: 16px 14px;
+                      }
+                      span:nth-child(2) {
+                        background-image: url('../../assets/thumb_yellow.png');
+                         background-size: 14px 14px;
+                      }
+                      span:nth-child(3) {
+                        background-image: url('../../assets/eye.png');
+                         background-size: 18px 10px;
+                      }
+                      span:nth-child(4) {
+                        background-image: url('../../assets/star_yellow.png');
+                        background-size: 16px 14px;
+                      }
+                    }
+                    >p:last-child {
+                      padding-left: 15px;
+                      background-repeat: no-repeat;
+                      background-image: url('../../assets/pin.png');
+                      background-size: 10px 13px;
+                      background-position: 0 50%;
                     }
                   }
               }
@@ -230,6 +280,7 @@ export default {
                   color: #fff;
                   background-color: #FFC733;
                   border-radius: 6px;
+                  cursor: pointer;
                 }
                 div:first-child {
                   width: 174px;
@@ -299,13 +350,14 @@ export default {
             }
             span.contact {
               color: #10B4FE;
-              background-image: url('../../assets/message.png');
+              background-image: url('../../assets/kf.png');
               background-size: 24px 18px;
               background-repeat: no-repeat;
               background-position: 0 50%;
               padding-left: 27px;
               padding-top: 2px;
               padding-bottom: 2px;
+              cursor: pointer;
             }
             .button {
               margin-top: 36px;
@@ -332,12 +384,11 @@ export default {
             >span {
               padding-left: 24px;
               padding-right: 24px;
-              background-color: #efe;
               cursor: pointer;
+              position: relative;
             }
             span.active {
               background-color: #FFC90F;
-              position: relative;
             }
             .active::after {
               position: absolute;

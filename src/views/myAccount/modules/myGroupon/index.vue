@@ -137,6 +137,9 @@ export default {
                     .order_detail {
                         display: flex;
                         justify-content: space-evenly;
+                        >span:last-child {
+                            color: #fff;
+                        }
                     }
                     p {
                         padding-left: 170px;

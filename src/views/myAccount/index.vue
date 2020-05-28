@@ -27,10 +27,10 @@
 
         <!-- 个人中心左侧导航栏 -->
         <div class='my_homepage_nav'>
-          <li 
+          <li
             @click='jumpToRouter(index, item.link)'
-            v-for='(item, index) in tabList' 
-            :key='index' 
+            v-for='(item, index) in tabList'
+            :key='index'
             :class="{active: currentTabIndex === index}">{{item.title}}</li>
         </div>
       </div>
@@ -234,7 +234,6 @@ export default {
     }
     .my_homepage_main {
       width: 100%;
-      min-height: 1200px;
       background-color: #fff;
     }
   }

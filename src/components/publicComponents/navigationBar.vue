@@ -81,7 +81,7 @@ export default {
     }
   },
   mounted () {
-    console.log(window.navigator.geolocation.getCurrentPosition())
+    // console.log(window.navigator.geolocation.getCurrentPosition())
   },
   methods: {
     goToRouter (path) {

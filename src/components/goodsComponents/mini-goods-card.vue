@@ -26,11 +26,13 @@ export default {
 
 <style lang='less' scoped>
 .product_card {
+  box-sizing: content-box;
   display: flex;
   width: 218px;
   flex-direction: column;
   font-size: 14px;
   margin-bottom: 39px;
+  border-right: 18px solid #fff;
   .product_card_img {
     width: 218px;
   }

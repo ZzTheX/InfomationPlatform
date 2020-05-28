@@ -29,7 +29,7 @@ export default {
   },
   created () {
       setTimeout(() => {
-          console.log(this.prodCardIndex)
+          // console.log(this.prodCardIndex)
       }, 1000)
   },
   props: {

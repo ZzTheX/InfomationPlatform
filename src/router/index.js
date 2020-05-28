@@ -96,12 +96,26 @@ const routes = [
          }
        ]
      },
-     // 下单页面
+      // 立即下单
      {
-       path: 'place-order',
-       name: 'placeOrder',
-       component: () => import('../views/placeOrder/index.vue'),
+       path: 'order-now',
+       name: 'orderNow',
+       component: () => import('../views/orderNow/index.vue'),
        meta: { auth: true}
+     },
+    // 商家主页  用户查看其他商家主页
+     {
+      path: 'merchant-home',
+      name: 'merchantHome',
+      component: () => import('../views/merchantHome'),
+      redirect: { name: 'myPost' },
+      children: [
+        {
+          path: 'my-post',
+          name: 'myPost',
+          component: () => import('../views/merchantHome/my-post.vue')
+        }
+      ]
      },
      //  发布页面
      {
@@ -235,6 +249,12 @@ const routes = [
           name: 'supplierIdentify',
           component: () => import('../views/myAccount/modules/identification/supplier-identify.vue')
         },
+        // 添加物流园区
+        {
+          path: 'add-field',
+          name: 'addField',
+          component: () => import('../views/myAccount/modules/identification/add-field.vue')
+        },
         // 实名认证
         {
           path: 'real-name-identify',
@@ -246,6 +266,7 @@ const routes = [
           path: 'message',
           name: 'message',
           component: () => import('../views/myAccount/modules/message'),
+          redirect: {name: 'notification'},
           children: [
             //  通知消息
             {
@@ -264,6 +285,11 @@ const routes = [
               path: 'chat',
               name: 'chat',
               component: () => import('../views/myAccount/modules/message/chat.vue')
+            },
+            {
+              path: 'active',
+              name: 'active',
+              component: () => import('../views/myAccount/modules/message/active.vue')
             },
             // 聊聊详情   对话页面
             {
@@ -323,7 +349,34 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'hash',
-  routes
+
+  routes,
+  scrollBehavior (to, from, savedPosition) {
+    return {
+      x: 0,
+      y: 0
+    }
+  }
 })
 
+
+//  路由守卫
+router.beforeEach((to, from, next) => {
+  let token = localStorage.getItem('token')
+  if( token ) {
+    console.log('token存在',token)
+    if(to.name === 'login') {
+      next('/')
+    } else {
+      next()
+    }
+  } else {
+    console.log('no token', token)
+    if(to.meta.auth === true) {
+      next('/login')
+    } else {
+      next()
+    }
+  }
+})
 export default router

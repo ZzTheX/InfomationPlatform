@@ -47,7 +47,12 @@
                     <span>99999</span>
                     <span>17450.00</span>
                     <span>待付款</span>
-                    <span>退款</span>
+                    <div class='operate_bar'>
+                        <span>查看</span>
+                        <span>订单修改</span>
+                        <span>立即付款</span>
+                        <span></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,6 +64,7 @@
 export default {
     data () {
         return {
+            value: 0,
             navTabIndex: 0,
             item: {
                 orderNum:195458495669
@@ -162,13 +168,20 @@ export default {
                     }
                     .goods_text {
                         flex: 1;
-                        p:first-child {
+                        >p:first-child {
                             font-size: 16px;
                             margin-bottom: 20px;
                             padding-right: 44px;
                         }
-                        p:last-child {
+                        >p:last-child {
                             font-size: 14px;
+                            >span:first-child {
+                                background-color: #FFC90F;
+                                color: #fff;
+                                padding: 2px;
+                                border-radius: 2px;
+                                margin-right: 8px;
+                            }
                         }
                     }
                 }
@@ -179,6 +192,15 @@ export default {
                     justify-content: space-between;
                     width: 491px;
                     height: 140px;
+                    .operate_bar {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-around;
+                        >span {
+                            color: #3F99F4;
+                            cursor: pointer;
+                        } 
+                    }
                 }
             }
         }

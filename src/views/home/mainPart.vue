@@ -3,7 +3,7 @@
     <div class='inner'>
       <!-- 轮播图 -->
       <div class="swiper-container" ref="slider">
-        <div class="swiper-wrapper">
+        <div class="swiper-wrapper" ref=carousel>
           <img class='swiper-slide' width='1200' height="500" src="../../assets/index/banner.png" alt="">
           <img class='swiper-slide' width='1200' height="500" src="../../assets/index/swiper1.jpg" alt="">
           <img class='swiper-slide' width='1200' height="500" src="../../assets/index/swiper2.jpg" alt="">
@@ -21,7 +21,7 @@
       </div>
       <!-- 首页banner -->
       <div class='banner'>
-        <img src="" alt="">
+        <img :src="require('../../assets/index/banner2.png')" alt="">
       </div>
       <!-- 热门分类 -->
       <div class='hot_sale'>
@@ -210,7 +210,7 @@ export default {
       }
     }
     .banner {
-      background-color: orange;
+      // background-color: orange;
       height: 286px;
       margin-bottom: 62px;
       >img {

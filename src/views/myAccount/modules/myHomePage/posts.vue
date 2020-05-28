@@ -11,13 +11,13 @@
      </el-select>
     </div>
     <div class='goods_card_list'>
-      <goods-card v-for='(item, index) in prodData' :prod-data="item" :key='index'></goods-card>
+      <goods-card v-for='i in 24' :key='i'></goods-card>
     </div>
   </div>
 </template>
 
 <script>
-import goodsCard from '../../../../components/goodsComponents/goods-card'
+import goodsCard from '../../../../components/goodsComponents/mini-goods-card'
 export default {
   data () {
     return {
@@ -46,6 +46,7 @@ export default {
 
 <style lang='less'>
 .my_posts {
+  width: 100%;
   .supply_info {
     display: flex;
     flex-direction: row-reverse;
@@ -72,9 +73,9 @@ export default {
   .goods_card_list {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     align-content: flex-start;
     width: 100%;
-    height: 800px;
     padding: 17px 0 26px 17px;
   }
 }

@@ -1,11 +1,12 @@
 <template>
   <div class='message'>
     <div class='message_nav'>
-      <p class='active'>通知消息</p>
-      <p>互动消息</p>
-      <p>聊聊</p>
-      <p>活动消息</p>
+      <p @click='handleRouter(0)' :class="{'active': currentIndex === 0}">通知消息</p>
+      <p @click='handleRouter(1)' :class="{'active': currentIndex === 1}">互动消息</p>
+      <p @click='handleRouter(2)' :class="{'active': currentIndex === 2}">聊聊</p>
+      <p @click='handleRouter(3)' :class="{'active': currentIndex === 3}">活动消息</p>
     </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -13,7 +14,17 @@
 export default {
   data () {
     return {
+      currentIndex: 0,
+      messageNavList: ['notification', 'interaction', 'chat', 'active']
 
+    }
+  },
+  methods: {
+    handleRouter (index) {
+      this.currentIndex = index
+      this.$router.replace({
+        name: this.messageNavList[index]
+      })
     }
   }
 }
@@ -32,6 +43,7 @@ export default {
     p {
       border-bottom: 6px solid #fff;
       margin-right: 102px;
+      cursor: pointer;
     }
     p.active {
       border-bottom: 6px solid #FFC733;

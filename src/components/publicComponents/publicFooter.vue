@@ -63,7 +63,7 @@ export default {
       .footer_right_items {
         display: flex;
         span {
-          width: 72px;
+          width: 90px;
           border-right: 2px solid #fff;
           margin-right: 16px;
           text-align: left;
