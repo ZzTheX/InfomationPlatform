@@ -8,13 +8,13 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './plugins/element.js'
 import './assets/css/public.css'
 import 'swiper/css/swiper.css'
-import axios from 'axios'
+import http from './api/index.js'
 //  mockjs 模拟数据
 require('./mock/mock.js')
 Vue.config.productionTip = false
 Vue.use(VueAwesomeSwiper)
 Vue.use(ElementUI)
-Vue.prototype.http = axios
+Vue.prototype.http = http
 
 new Vue({
   router,

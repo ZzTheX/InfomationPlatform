@@ -195,6 +195,12 @@ const routes = [
            name: 'myOrder',
            component: () => import('../views/myAccount/modules/myOrder')
          },
+        //  订单详情
+        {
+          path: 'order-detail',
+          name: 'orderDetail',
+          component: () => import('../views/myAccount/modules/myOrder/order-detail')
+        },
          // 下单
          {
           path: 'place-order',
@@ -361,22 +367,22 @@ const router = new VueRouter({
 
 
 //  路由守卫
-router.beforeEach((to, from, next) => {
-  let token = localStorage.getItem('token')
-  if( token ) {
-    console.log('token存在',token)
-    if(to.name === 'login') {
-      next('/')
-    } else {
-      next()
-    }
-  } else {
-    console.log('no token', token)
-    if(to.meta.auth === true) {
-      next('/login')
-    } else {
-      next()
-    }
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   let token = localStorage.getItem('token')
+//   if( token ) {
+//     console.log('token存在',token)
+//     if(to.name === 'login') {
+//       next('/')
+//     } else {
+//       next()
+//     }
+//   } else {
+//     console.log('no token', token)
+//     if(to.meta.auth === true) {
+//       next('/login')
+//     } else {
+//       next()
+//     }
+//   }
+// })
 export default router

@@ -40,10 +40,12 @@ export default {
     display: flex;
     width: 100%;
     height: 51px;
+    line-height: 51px;
     font-size: 20px;
     color: #333;
     padding-left: 40px;
     border-bottom: 1px solid #F0F0F0;
+    background-color: #fff;
     span {
       padding-bottom: 10px;
       margin-right: 124px;

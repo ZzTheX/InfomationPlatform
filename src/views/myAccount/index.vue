@@ -1,5 +1,5 @@
 <template>
-  <div class='my_homepage'>
+  <div class='my_account'>
     <div class='inner'>
       <!-- 个人主页左侧导航 -->
       <div class='my_homepage_sidebar'>
@@ -88,7 +88,7 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-.my_homepage {
+.my_account {
   // min-height: 1250px;
   background-color: #F5F5F5;
   padding-top: 22px;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class='home'>
     <navigation-bar></navigation-bar>
     <navigation-content></navigation-content>
     <router-view></router-view>
@@ -24,5 +24,5 @@ export default {
   }
 }
 </script>
-<style lang='less' scoped>
+<style lang='less'>
 </style>

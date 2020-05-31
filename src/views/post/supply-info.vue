@@ -46,6 +46,19 @@
       <el-form-item label="最晚成团数量">
         <el-select></el-select>
       </el-form-item>
+      <el-form-item label="添加产品图片">
+        <p>(不大于9张,第一张为默认产品图)</p>
+      </el-form-item>
+      <el-form-item label="'">
+        <img src='../../assets/upload.png' width="80px" height="80px">
+      </el-form-item>
+      <el-form-item label="添加详情描述">
+        <el-input type='textarea'></el-input>
+      </el-form-item>
+      <div class='btns_group'>
+        <p>保存商品</p>
+        <p>立即发布</p>
+      </div>
     </el-form>
   </div>
 </template>
@@ -67,5 +80,34 @@ export default {
   padding-bottom: 61px;
   background-color: #fff;
   border-bottom: 40px solid #F5F5F5;
+  .el-input {
+    width: 239px;
+  }
+  .el-textarea {
+    width: 454px;
+   
+    /deep/.el-textarea__inner {
+       height: 240px;
+
+    }
+  }
+  .btns_group {
+    display: flex;
+    p {
+      width:235px;
+      height:55px;
+      background:rgba(255,199,51,1);
+      border-radius:4px;
+      line-height: 55px;
+      font-size: 22px;
+      color: #333;
+      text-align: center;
+      cursor: pointer;
+    }
+    p:first-child {
+      margin-left: 120px;
+      margin-right: 70px;
+    }
+  }
 }
 </style>

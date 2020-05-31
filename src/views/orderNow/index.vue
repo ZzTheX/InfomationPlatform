@@ -268,7 +268,7 @@ export default {
   height: 45px;
 }
 .placeOderInputs > form > label, .placeOderInputs > .block>span{
-  width: 70px;
+  width: 76px;
   text-align: right;
   margin-right: 13px;
 }

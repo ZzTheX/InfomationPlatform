@@ -7,8 +7,22 @@
           :key='index'
           :class='{active: navTabIndex === index}' 
           @click='handleClick(index)'>{{item.title}}</p>
-          <el-select></el-select>
-          <el-select></el-select>
+          <el-select v-model="value1">
+              <el-option
+                v-for="item in options1"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+          </el-select>
+          <el-select v-model="value2">
+            <el-option
+                v-for="item in options2"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+            </el-option>
+          </el-select>
       </div>
       <!-- 订单表头 -->
       <div class='order_head'>
@@ -17,7 +31,7 @@
           </div>
           <div class='order_head_right'>
               <span>单价</span>
-              <span>剩余</span>
+              <span>定金</span>
               <span>小计</span>
               <span>状态</span>
               <span>操作</span>
@@ -26,7 +40,7 @@
     <!-- 订单列表 -->
       <div class='order_list_wrap'>
           <!-- 单个订单组件 -->
-          <div class='order_item' v-for='i in 10' :key='i'>
+          <div class='order_item' v-for='item in orderList' :key='item'>
             <div class='order_item_head'>
                 <p>订单编号: <span>{{item.orderNum}}</span></p>
                 <p>联系卖家</p>
@@ -35,7 +49,8 @@
                 <div class='item_body_left'>
                     <img class='goods_img' :src="require('../../../../assets/goods.png')">
                     <div class='goods_text'>
-                        <p>{{'商品名称'.repeat(5)}}</p>
+                        <p class='goods_text_name'>{{'商品名'.repeat(5) + ''}}</p>
+                        <p class='goods_text_num'>购买数量： 12</p>
                         <p>
                             <span>拼</span>
                             <span>可售时间段{{20180912}}至{{20190603}}</span>
@@ -48,14 +63,46 @@
                     <span>17450.00</span>
                     <span>待付款</span>
                     <div class='operate_bar'>
-                        <span>查看</span>
+                        <span @click='goToOrderDetail'>查看</span>
+                        <!-- <span v-for='k in availableOperateList()' :key='k'></span> -->
                         <span>订单修改</span>
                         <span>立即付款</span>
-                        <span></span>
+                        <span>取消订单</span>
                     </div>
                 </div>
             </div>
         </div>
+      </div>
+      <!-- 订单列表页弹窗 -->
+      <div class='modify_order' v-show='isVisible'>
+          <div>
+              <p>原有信息</p>
+              <p>购买数量<span>10个</span></p>
+              <p>商品价格<span>999</span></p>
+              <p>交易日期<span>20200529</span></p>
+              <div class='modify_to'>
+                  <p>修改为</p>
+                  <el-form label-position="left" label-width="80px">
+                      <el-form-item label="购买数量">
+                          <el-input></el-input>
+                      </el-form-item>
+                      <el-form-item label="商品价格">
+                          <el-input></el-input>
+                      </el-form-item>
+                      <el-form-item label="交易日期">
+                        <el-date-picker
+                          v-model="value1"
+                          type="date"
+                          placeholder="选择日期">
+                          </el-date-picker>
+                      </el-form-item>
+                  </el-form>
+              </div>
+              <div class='buttons'>
+                  <div @click='handleCancel'>取消</div>
+                  <div>提交</div>
+              </div>
+          </div>
       </div>
   </div>
 </template>
@@ -64,7 +111,10 @@
 export default {
     data () {
         return {
+            isVisible: false,
             value: 0,
+            value1: '',
+            value2: '',
             navTabIndex: 0,
             item: {
                 orderNum:195458495669
@@ -75,12 +125,69 @@ export default {
                 {title: '待发货'},
                 {title: '待收货'},
                 {title: '待评价'}
+            ],
+            orderList: [
+                {
+                    isReview: true,
+                    status: 1
+                },
+                {
+                    isReview: true,
+                    status: 2
+                },
+                {
+                    isReview: true,
+                    status: 3
+                },
+                {
+                    isReview: true,
+                    status: 4
+                },
+                {
+                    isReview: true,
+                    status: 5
+                },
+                {
+                    isReview: true,
+                    status: 6
+                }
+
+            ],
+            options1: [
+                {
+                    value: '我卖出的',
+                    label:' 我卖出的'
+                },
+                {
+                    value: '我购买的',
+                    label:' 我购买的'
+                }
+            ],
+            options2: [
+                {
+                    value: '拼购',
+                    label: '拼购'
+                },
+                {
+                    value: '立即下单',
+                    label: '立即下单'
+                }
             ]
         }
+    },
+    computed: {
     },
     methods: {
         handleClick (index) {
             this.navTabIndex = index
+        },
+        goToOrderDetail () {
+            this.$router.push({
+                name: 'orderDetail'
+            })
+        },
+        handleCancel () {
+            this.isVisible = false
         }
     }
 }
@@ -105,6 +212,9 @@ export default {
         p.active {
             color: #FFC90FFF;
             border-bottom: 2px solid #FFC90FFF;
+        }
+        .el-select {
+            width: 200px;
         }
     }
     .order_head {
@@ -168,10 +278,15 @@ export default {
                     }
                     .goods_text {
                         flex: 1;
-                        >p:first-child {
-                            font-size: 16px;
-                            margin-bottom: 20px;
+                        .goods_text_name {
+                            font-size: 15px;
+                            margin-bottom: 5px;
                             padding-right: 44px;
+                        }
+                        .goods_text_num {
+                            font-size: 14px;
+                            margin-bottom: 5px;
+                            margin-bottom: 14px;
                         }
                         >p:last-child {
                             font-size: 14px;
@@ -199,11 +314,62 @@ export default {
                         >span {
                             color: #3F99F4;
                             cursor: pointer;
+                            text-decoration: underline;
                         } 
                     }
                 }
             }
         }
+    }
+    .modify_order {
+       position: fixed;
+       top: 0;
+       right: 0;
+       left:0;
+       bottom: 0;
+       background-color: rgba(0, 0, 0, 0.4);
+       >div {
+            padding-left: 140px;
+           margin: 50px auto;
+           width: 600px;
+           height: 615px;
+           background-color: #fff;
+           padding-top: 57px;
+           color: #333;
+           >p:first-child {
+               font-weight: 600;
+               color: #000;
+           }
+           >p {
+               margin-bottom: 22px;
+           }
+           .modify_to {
+               margin-top: 50px;
+              >p:first-child {
+                  font-weight: 600;
+                  margin-bottom: 26px;
+              }
+              .el-form-item {
+                  /deep/ .el-input {
+                      width: 270px;
+                  }
+              }
+           }
+           .buttons {
+               display: flex;
+               >div {
+                   text-align: center;
+                   width: 170px;
+                   height: 48px;
+                   line-height: 48px;
+                   background-color: #FFC90F;
+                   margin-right: 20px;
+               }  
+               >div:first-child {
+                   background-color: #D9D9D9;
+               }
+           }
+       }
     }
    
 }

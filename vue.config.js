@@ -14,7 +14,15 @@ module.exports = {
   },
   devServer: {
     host: '0.0.0.0',
-    port: '8888'
-  }
+    port: '8888',
+      proxy: {
+          '/api': {
+            target: 'http://platform.taogoucloud.com',
+            changeOrigin: true,
+            pathRewrite: {
+              '^/api': ''
+            }
+          }
+      }
+    }
 }
-

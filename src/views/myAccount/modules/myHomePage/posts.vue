@@ -47,6 +47,7 @@ export default {
 <style lang='less'>
 .my_posts {
   width: 100%;
+  background-color: #fff;
   .supply_info {
     display: flex;
     flex-direction: row-reverse;

@@ -1,14 +1,16 @@
 <template>
   <div class='main_part'>
     <div class='inner'>
-      <!-- 轮播图 -->
       <div class="swiper-container" ref="slider">
         <div class="swiper-wrapper" ref=carousel>
-          <img class='swiper-slide' width='1200' height="500" src="../../assets/index/banner.png" alt="">
-          <img class='swiper-slide' width='1200' height="500" src="../../assets/index/swiper1.jpg" alt="">
-          <img class='swiper-slide' width='1200' height="500" src="../../assets/index/swiper2.jpg" alt="">
-          <img class='swiper-slide' width='1200' height="500" src="../../assets/index/swiper3.jpg" alt="">
-          <img class='swiper-slide' width='1200' height="500" src="../../assets/index/swiper4.jpg" alt="">
+          <img 
+            v-for='(item, index) in bannerList'
+            :key='index'
+            class='swiper-slide'
+            width='1200' 
+            height='500' 
+            :src='item'
+           >
         </div>
         <div class="swiper-pagination"></div>
 		  </div>
@@ -27,6 +29,7 @@
       <div class='hot_sale'>
         <p class='hot_sale_head'>热门分类</p>
         <div class='hot_sale_cardsList'>
+          <!-- {{bannerList}} -->
           <img class='hot_sale_card' v-for="(item, index) in hotSaleList"  :key='index' :src='item.src' :style="{marginBottom: index > 2 ? 0 : '35px'}">
         </div>
       </div>
@@ -85,6 +88,9 @@ export default {
       imgList: [
         {url: require('../../assets/index/banner.png')}
       ],
+      bannerList: [
+       
+      ],
       classifyDataList: [
         {category: '商品分类', link: require('../../assets/index/category1.png')},
         {category: '商品分类', link: require('../../assets/index/category2.png')},
@@ -126,33 +132,43 @@ export default {
     }
   },
   created () {
-
+   this.getAllHomePageData()
   },
   mounted () {
     var swiper = new Swiper('.swiper-container', {
         speed: 600,
-        width: 1200*5,
+        width: 1200*4,
         // height: 500,
         initialSlide: 0,
         autoplay: true,
-				slidesPerView: 5,
+				slidesPerView: 4,
 				freeMode: true,
         loop:true,
         pagination: {
-          el: '.swiper-pagination'
-          // clickable: true
+          el: '.swiper-pagination',
+          clickable: true
         },
         // autoplayDisableOnInteraction: false
-			})
+      })
   },
    components: {
     productCard
    },
    methods: {
+     getAllHomePageData () {
+       this.http.get('/api/product/getProductHome','', (res) => {
+         console.log('首页数据:', res)
+         let imgList = res.data.result.home_banner
+         imgList.forEach(item => {
+           this.bannerList.push(item.image)
+         })
+         
+       })
+     },
      handleClick (index, path) {
        this.routerNavIndex = index
-       console.log(path)
-       this.$router.replace({ path })
+      //  console.log(path)
+      //  this.$router.replace({ path })
      },
      goToPassageList () {
        this.$router.push('/article-list')
@@ -164,6 +180,7 @@ export default {
 <style lang="less" scoped>
 .main_part {
   // height: 5244px;
+  min-height: 1000px;
   width: 1200px;
   margin: auto;
   background-color: rgba(245, 245, 245, .5);
@@ -331,7 +348,7 @@ export default {
 
     }
     .best_in_season {
-      height: 1612px;
+      // height: 1612px;
       .router_nav {
         display: flex;
         justify-content: space-around;
