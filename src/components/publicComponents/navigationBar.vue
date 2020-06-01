@@ -108,9 +108,10 @@ export default {
     margin: auto;
     display: flex;
     justify-content: space-between;
+
     .city_select /deep/ .el-input__inner {
       border: none;
-      width: 100px;
+      width: 108px;
       height: 32px;
       background-color: #f5f5f5;
     }

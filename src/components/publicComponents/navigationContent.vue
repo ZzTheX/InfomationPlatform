@@ -4,9 +4,9 @@
       <div class="center">
         <div class="space">
           <!-- 顶部导航栏下边信息搜索栏 -->
-          <div class="logo">
-            <div class="yellow-box" @click='goToIndexPage'></div>
-            <span @click="goToIndexPage">信息平台</span>
+          <div class="logo" @click="goToIndexPage">
+            <!-- <div class="yellow-box" @click='goToIndexPage'></div>
+            <span >信息平台</span> -->
           </div>
           <div class="search-bar">
             <div class="downList" @click='toChooseCategory'>
@@ -157,12 +157,16 @@ export default {
   }
 }
 
-.logoo {
+.logo {
   display: flex;
   align-items: center;
+  width: 200px;
   font-size: 18px;
   color: #333333;
-  // background-image: url('../../assets/logoo.png');
+  background-image: url('../../assets/index/logo.png');
+  background-size: 170px 50px;
+  background-repeat: no-repeat;
+  cursor: pointer;
   > .yellow-box {
     // display: inline-block;
     width: 42px;

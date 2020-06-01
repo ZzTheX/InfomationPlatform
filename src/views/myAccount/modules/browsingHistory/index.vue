@@ -3,7 +3,7 @@
     <div class='record_list' v-for='i in 3' :key='i'>
       <p class='date'>03.14</p>
       <div class='goods_card_list'>
-        <mini-goods-card v-for='i in 5' :key='i'></mini-goods-card>
+        <mini-goods-card v-for='i in 6' :key='i'></mini-goods-card>
       </div>
     </div>
   </div>

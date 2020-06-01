@@ -96,7 +96,7 @@ export default {
         {category: '商品分类', link: require('../../assets/index/category2.png')},
         {category: '商品分类', link: require('../../assets/index/category3.png')},
         {category: '商品分类', link: require('../../assets/index/category3.png')},
-        {category: '商品分类', link: require('../../assets/index/category5.png')}
+        {category: '', link: require('../../assets/index/category5.png')}
       ],
       hotSaleList: [
         {src: require('../../assets/index/hotsale1.png')},
@@ -137,7 +137,7 @@ export default {
   mounted () {
     var swiper = new Swiper('.swiper-container', {
         speed: 600,
-        width: 1200*4,
+        width: 4800,
         // height: 500,
         initialSlide: 0,
         autoplay: true,
