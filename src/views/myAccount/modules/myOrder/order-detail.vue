@@ -1,6 +1,6 @@
 <template>
     <div class='order_detail'>
-        <div class='order_status'>&lt; 待付款</div>
+        <div class='order_status'>&lt; {{$route.query.status | statusFilter}}</div>
         <div class='order_detail_goods_info'>
             <div class='goods_info_nav'>
                 <span>商品</span>
@@ -47,19 +47,112 @@
             <p>付款时间: 2019-09-08 09:09</p>
         </div>
         <div class='buttons_group'>
-            <!-- <div>待确认</div>
-            <div>去发货</div>
-            <div>去评价</div>
+            <div class='buttons_wrap'>
+                <div v-if='status === 1' @click='isShoWModify=true'>修改订单</div>
+                <div v-if='status === 1'>立即付款</div>
+                <!-- <div v-if='status === 2'>待确认</div> -->
+            </div>
+           
+            <!-- <div v-if=''>去发货</div> -->
+            <!-- <div>去评价</div>
             <div>确认收货</div>
             <div>修改订单</div>
             <div>申请提款</div> -->
         </div>
+         <div class='modify_order' v-show='isShoWModify'>
+          <div>
+              <p>原有信息</p>
+              <p>购买数量: <span>10个</span></p>
+              <p>商品价格: <span>999</span></p>
+              <p>交易日期: <span>2020-05-29</span></p>
+              <div class='modify_to'>
+                  <p>修改为</p>
+                  <el-form label-position="left" label-width="80px">
+                      <el-form-item label="购买数量">
+                          <el-input></el-input>
+                      </el-form-item>
+                      <el-form-item label="商品价格">
+                          <el-input></el-input>
+                      </el-form-item>
+                      <el-form-item label="交易日期">
+                        <el-date-picker
+                          v-model="value1"
+                          type="date"
+                          toPlaceOrder="选择日期">
+                          </el-date-picker>
+                      </el-form-item>
+                  </el-form>
+              </div>
+              <div class='buttons'>
+                  <div @click='handleCancel'>取消</div>
+                  <div @click='handleModifyOrder'>提交</div>
+              </div>
+          </div>
+         </div>
+         <div class='choose_deliver' v-show='isShowDeliver'>
+             <div class='deliver_pop'>
+                 <p>物流信息<span @click='hideDeliverPop'>×</span></p>
+                <div class='deliver_company'>
+                    <span>快递公司:</span>
+                    <input type="text">
+                </div>
+                <div class='deliver_num'>
+                    <span>快递单号:</span>
+                    <input type="text">
+                </div>
+                <div class='submit_btn' @click='submitDeliverInfo'>提交</div>
+             </div>
+         </div>
+         <div class='refuse_popout' v-show='isShowRefuse'>
+             <div class='k'></div>
+         </div>
     </div>
 </template>
 
 <script>
 export default{
-
+    data () {
+        return {
+            isShoWModify: '',
+            status: '',
+            isShowDeliver: true,
+            isShowRefuse: false
+        }
+    },
+    created () {
+        this.status = this.$route.query.status
+    },
+    methods: {
+        handleCancel () {
+            this.isShoWModify = false
+        },
+        handleModifyOrder () {
+            this.isShoWModify = false
+        },
+        hideDeliverPop () {
+            this.isShowDeliver = false
+        },
+        submitDeliverInfo () {
+            this.isShowDeliver = false
+        }
+    },
+    filters: {
+        statusFilter (value) {
+            if(value === 1) {
+                return '待付款'
+            } else if(value === 2) {
+                return '待确认'
+            } else if (value === 3) {
+                return '待发货'
+            } else if(value === 4) {
+                return '待收货'
+            } else if(value === 5) {
+                return '待评价'
+            } else if(value === 6) {
+                return '交易关闭'
+            }
+        }
+    }
 }
 </script>
 
@@ -88,9 +181,6 @@ export default{
                 display: flex;
                 width: 496px;
                 justify-content: space-around;
-              >span {
-
-              }
             }
          }
          .goods_info_detail {
@@ -177,17 +267,141 @@ export default{
      .buttons_group {
          margin-top: 97px;
          height: 50px;
-         display: flex;
          justify-content: space-between;
          padding: 16px 50px;
-
-         >div {
+        .buttons_wrap {
+            display: flex;
+            margin: auto;
+            justify-content: center;
+            align-items: center;
+            >div {
              width: 180px;
              height: 50px;
              background-color: #FFC90F;
              line-height: 50px;
              text-align: center;
+             margin-right: 20px;
+             cursor: pointer;
          }
+        }
+         
+     }
+     .modify_order {
+       position: fixed;
+       top: 0;
+       right: 0;
+       left:0;
+       bottom: 0;
+       background-color: rgba(0, 0, 0, 0.4);
+       >div {
+           padding-left: 140px;
+           margin: 50px auto;
+           width: 600px;
+           height: 615px;
+           background-color: #fff;
+           padding-top: 57px;
+           color: #333;
+           >p:first-child {
+               font-weight: 600;
+               color: #000;
+           }
+           >p {
+               margin-bottom: 22px;
+           }
+           .modify_to {
+               margin-top: 50px;
+              >p:first-child {
+                  font-weight: 600;
+                  margin-bottom: 26px;
+              }
+              .el-form-item {
+                  /deep/ .el-input {
+                      width: 270px;
+                  }
+              }
+           }
+           .buttons {
+               display: flex;
+               >div {
+                   text-align: center;
+                   width: 170px;
+                   height: 48px;
+                   line-height: 48px;
+                   background-color: #FFC90F;
+                   margin-right: 20px;
+                   cursor: pointer;
+               }  
+               >div:first-child {
+                   background-color: #D9D9D9;
+               }
+           }
+       }
+     }
+     .choose_deliver {
+       position: fixed;
+       top: 0;
+       right: 0;
+       left:0;
+       bottom: 0;
+       background-color: rgba(0, 0, 0, 0.4);
+       .deliver_pop {
+           margin: auto;
+           margin-top: 150px;
+        //    transform: translateX(50%);
+           width: 585px;
+           height: 435px;
+           background-color: #fff;
+           font-size: 18px;
+           >p {
+               height: 84px;
+               padding-left: 73px;
+               padding-right: 40px;
+               border-bottom: 1px solid #E6E6E6;
+               color: #333;
+               font-weight: 600;
+               line-height: 84px;
+               overflow: hidden;
+               margin-bottom: 60px;
+               >span {
+                   float: right;
+                   font-size: 22px;
+                   cursor: pointer;
+               }
+           }
+           input {
+               width: 300px;
+               height: 46px;
+               border: 1px solid #eee;
+               margin-left: 14px;
+               padding-left: 10px;
+           }
+           .deliver_company {
+               margin-left: 72px;
+               margin-bottom: 37px;
+           }
+           .deliver_num {
+               margin-left: 72px;
+               margin-bottom: 37px;
+           }
+           .submit_btn {
+               margin: auto;
+                width:180px;
+                height:50px;
+                line-height: 50px;
+                text-align: center;
+                background:rgba(255,201,15,1);
+                border-radius:4px;
+                cursor: pointer;
+           }
+       }
+     }
+     .refuse_popout {
+       position: fixed;
+       top: 0;
+       right: 0;
+       left:0;
+       bottom: 0;
+       background-color: rgba(0, 0, 0, 0.4);
      }
  }
 </style>

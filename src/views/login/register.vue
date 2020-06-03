@@ -6,37 +6,103 @@
     </div>
     <div class='form_main'>
       <div>
-        <input type="text" placeholder="手机号">
+        <input type="text" placeholder="手机号" v-model.number="registerData.mobile">
       </div>
       <div class='verify_code'>
-        <input type="text" placeholder="请输入6位短信验证码">
-        <span>获取短信验证码</span>
+        <input type="text" placeholder="请输入6位短信验证码" v-model.number="registerData.code">
+        <span @click='getSMSCode' v-show='isShowGetCode'>获取验证码</span>
+        <span v-show="!isShowGetCode">{{count + '秒后重新获取'}}</span>
       </div>
       <div>
-        <input type="password" placeholder="输入密码">
+        <input type="password" placeholder="输入密码" v-model.number="registerData.password">
       </div>
       <div>
         <input type="password" placeholder='确认密码'>
       </div>
       <div>
-        <input type="text" placeholder="选择地区">
+        <input type="text" placeholder="选择地区" v-model="registerData.address">
       </div>
-      <button>注册</button>
+      <button @click='handleRegister'>注册</button>
       <span @click='goToLoginPage'>已有账号, 立即登录</span>
     </div>
   </div>
 </div>
 </template>
 <script>
+import validate from '../../auth/validate'
 export default {
   data () {
     return {
-
+      from: '',
+      isShowGetCode: true,
+      SMSCode: '',
+      count: 60,
+      registerData: {
+        address: '20,2500,2522',
+        code: '',
+        mobile: '',
+        password: ''
+     
+      }
     }
+  },
+  computed: {
+    
+  },
+  created () {
+    this.getCitiesList()
+    // 保存登录注册之前的页面路由路径
+    this.from = this.$route.query.from || '/'
   },
   methods: {
     goToLoginPage () {
       this.$router.push({name: 'login'})
+    },
+    handleRegister () {
+      this.http.post('/api/member/register', this.registerData, (res) => {
+        console.log(res)
+        // localStorage.setItem('token', '123456')
+        this.$router.replace({
+          path: this.from
+        })
+      })
+    },
+    getSMSCode () {
+      let phone = this.registerData.mobile
+      // 验证合法手机号
+      if(validate.isPhone(phone)) {
+        // 1 开启定时器  获取验证码倒计时
+          let timer = setInterval(() => {
+          this.isShowGetCode = false
+          if(this.count <= 0) {
+            clearInterval(timer)
+            this.isShowGetCode = true
+            this.count = 60
+            return 
+          }
+          this.count --
+        },1000)
+      // 2手机号验证通过 发送验证码
+        this.http.get('/api/member/sendRegisterCode', {mobile: this.registerData.mobile}, (res) => {
+        if(res.data.code === 200) {
+          localStorage.setItem('token', '123456')
+        }
+        console.log('验证码接口返回数据：', res)
+      })
+
+      } else {
+        this.$message({
+          message: '请输入正确的手机号',
+          type: 'warning'
+        })
+      }
+      
+      
+    },
+    getCitiesList () {
+      this.http.get('/api/member/option/getAddressOption','', res => {
+        console.log('城市列表：',res)
+      })
     }
   }
 }
@@ -88,7 +154,8 @@ export default {
           width: 100%;
           height: 54px;
           font-size: 18px;
-          color: #77828D;
+          // color: #77828D;
+          color: #333;
           outline: none;
           border: none;
           padding-left: 5px;

@@ -7,7 +7,10 @@
       </div>
       <div class="footer_right">
         <div class='footer_right_items'>
-          <span v-for='(item, index) in footerItems' :key='index'>{{item}}</span>
+          <span 
+            v-for='(item, index) in footerItems' 
+            :key='index'
+            @click='handleRouterJump(item.link)'>{{item.text}}</span>
         </div>
       </div>
     </div>
@@ -18,7 +21,21 @@
 export default {
   data () {
     return {
-      footerItems: ['个人中心', '购物车', '我的订单', '浏览记录', '消息中心', '问题反馈']
+      footerItems: [
+        {text: '个人中心', link: '/my-account'},
+        {text: '购物车', link: '/my-account/my-cart'},
+        {text: '我的订单', link: '/my-account/my-order'},
+        {text: '浏览记录', link: '/my-account/browsing-history'},
+        {text: '消息中心', link: '/my-account/message'},
+        {text: '问题反馈', link: '/my-account/feedback'}
+      ]
+    }
+  },
+  methods: {
+    handleRouterJump (link) {
+      this.$router.push({
+        path: link
+      })
     }
   }
 };
@@ -28,8 +45,8 @@ export default {
   width: 100%;
   height: 90px;
   background: rgba(112, 112, 112, 1);
-  position: relative;
-  bottom: 0;
+  // position: relative;
+  // bottom: 0;
   .inner {
     width: 1200px;
     margin: auto;

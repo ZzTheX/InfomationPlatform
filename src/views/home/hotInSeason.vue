@@ -1,6 +1,6 @@
 <template>
   <div class='best_in_season'>
-    <productCard v-for='(item, index) in prodList' :key='item' :prodData='item' :prodCardIndex='index'></productCard>
+    <productCard v-for='(item, index) in prodList' :key='index' :prodData='item' :prodCardIndex='index'></productCard>
   </div>
 </template>
 <script>

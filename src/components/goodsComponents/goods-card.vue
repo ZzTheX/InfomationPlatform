@@ -34,7 +34,7 @@ export default {
   },
   props: {
     prodData: {
-      type: Object,
+      // type: Object,
       required: true
     },
     prodCardIndex: {

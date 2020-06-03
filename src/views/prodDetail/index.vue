@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="operation_bar">
-                  <div @click='handleLaunchGroupon' class="lanch_groupon">发起拼购</div>
+                  <div @click='handleToOrderNow' class="lanch_groupon">发起拼购</div>
                   <div @click='handleAddToCart' class='addto_cart'>加入购物车</div>
                   <div @click='handleToOrderNow' class="order_now">立即下单</div>
                 </div>
@@ -78,7 +78,7 @@
                       <p>四川成都</p>
                     </div>
                     <div class="operation_bar">
-                      <div @click='handleLaunchGroupon' class="lanch_groupon">发起拼购</div>
+                      <div @click='handleToOrderNow' class="lanch_groupon">发起拼购</div>
                       <div @click='handleAddToCart' class='addto_cart'>加入购物车</div>
                       <div  @click='handleToOrderNow' class="order_now">立即下单</div>
                     </div>

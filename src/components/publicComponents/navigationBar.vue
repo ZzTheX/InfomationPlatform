@@ -2,15 +2,8 @@
    <div class="nav">
      <div class="center">
         <div class="city_select" id='city_select'>
-          <!-- <span v-if='isChooseManually'>四川成都</span> -->
-          <el-select v-model="value" filterable placeholder="请输入城市">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-          </el-select>
+          <el-cascader v-model="value" :options="options" placeholder="请选择地区">
+          </el-cascader>
           <span>moon five</span>
         </div>
         <div class="navList">
@@ -45,40 +38,11 @@ export default {
         // '信息中心'
       ],
       options: [
-        {
-          value: 'sichuan',
-          label: '成都',
-        },
-        {
-          value: 'beijing',
-          label: '北京'
-        },
-        {
-          value: 'bazhong',
-          label: '巴中',
-        },
-        {
-          value: 'neimenggu',
-          label: '内蒙古'
-        },
-        {
-          value: 'minayang',
-          label: '绵阳'
-        },
-        {
-          value: 'wuhan',
-          label: '武汉'
-        },
-        {
-          value: 'hangzhou',
-          label: '杭州'
-        },
-        {
-          value: 'qingdao',
-          label: '青岛'
-        }
       ]
     }
+  },
+  created () {
+    this.getCitiesList()
   },
   mounted () {
     // console.log(window.navigator.geolocation.getCurrentPosition())
@@ -90,6 +54,36 @@ export default {
     },
     handleChange () {
 
+    },
+    getCitiesList () {
+      this.http.get('/api/member/option/getAddressOption').then(res => {
+        if(res.data.code === 200) {
+          this.cityList = res.data.result
+          this.options = this.cityList.map((item, index) => {
+            return {
+              label: item.name,
+              value: item.id,
+              children: item.children.map((o, i) => {
+                return {
+                  label: o.name,
+                  value: o.id,
+                  children: o.children.map((p, k) => {
+                    return {
+                      label: p.name,
+                      value: p.id
+                    }
+                  })
+                }
+              })
+            }
+          })
+        }else {
+          this.$message({
+            type: 'warning',
+            message: '获取城市列表失败'
+          })
+        }
+      })
     }
   }
 }
@@ -111,12 +105,18 @@ export default {
 
     .city_select /deep/ .el-input__inner {
       border: none;
-      width: 108px;
-      height: 32px;
+      width: 226px;
+      height: 31px;
+      line-height: 31px;
       background-color: #f5f5f5;
     }
     .city_select /deep/.el-input__icon {
-      line-height: 32px;
+      line-height: 31px;
+    }
+    .city_select {
+      /deep/ .el-cascader {
+        line-height: 31px;
+      }
     }
     .navList {
       >span {

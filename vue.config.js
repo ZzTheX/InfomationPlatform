@@ -16,6 +16,7 @@ module.exports = {
     host: '0.0.0.0',
     port: '8888',
       proxy: {
+        
           '/api': {
             target: 'http://platform.taogoucloud.com',
             changeOrigin: true,

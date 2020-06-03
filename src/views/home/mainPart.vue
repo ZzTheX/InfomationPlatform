@@ -1,24 +1,23 @@
 <template>
   <div class='main_part'>
     <div class='inner'>
-      <div class="swiper-container" ref="slider">
-        <div class="swiper-wrapper" ref=carousel>
+      <div class="swiper_container" ref="container">
+        <div class="swiper_wrapper" ref='wrapper'>
           <img 
             v-for='(item, index) in bannerList'
             :key='index'
-            class='swiper-slide'
-            width='1200' 
-            height='500' 
-            :src='item'
+            class='swiper_slide'
+            ref='slide'
+            :src='item.image'
            >
         </div>
         <div class="swiper-pagination"></div>
 		  </div>
       <!-- 商品分类 -->
       <div class='prod_classify'>
-        <div class="prod_classify_card" v-for='(item, index) in classifyDataList' :key='index'>
-          <img :src="item.link" alt="">
-          <p>{{item.category}}</p>
+        <div class="prod_classify_card" v-for='(item, index) in categories1' :key='index'>
+          <img :src="item.picture">
+          <p>{{item.name}}</p>
         </div>
       </div>
       <!-- 首页banner -->
@@ -85,18 +84,20 @@ import productCard from '../../components/goodsComponents/prod-card'
 export default {
   data () {
     return {
+      carouselIndex: 0,
       imgList: [
         {url: require('../../assets/index/banner.png')}
       ],
       bannerList: [
        
       ],
-      classifyDataList: [
-        {category: '商品分类', link: require('../../assets/index/category1.png')},
-        {category: '商品分类', link: require('../../assets/index/category2.png')},
-        {category: '商品分类', link: require('../../assets/index/category3.png')},
-        {category: '商品分类', link: require('../../assets/index/category3.png')},
-        {category: '', link: require('../../assets/index/category5.png')}
+      categories: [],
+      categories1: [
+        {name: '商品分类', picture: require('../../assets/index/category1.png')},
+        {name: '商品分类', picture: require('../../assets/index/category2.png')},
+        {name: '商品分类', picture: require('../../assets/index/category3.png')},
+        {name: '商品分类', picture: require('../../assets/index/category3.png')},
+        {name: '', picture: require('../../assets/index/category5.png')}
       ],
       hotSaleList: [
         {src: require('../../assets/index/hotsale1.png')},
@@ -135,35 +136,24 @@ export default {
    this.getAllHomePageData()
   },
   mounted () {
-    var swiper = new Swiper('.swiper-container', {
-        speed: 600,
-        width: 4800,
-        // height: 500,
-        initialSlide: 0,
-        autoplay: true,
-				slidesPerView: 4,
-				freeMode: true,
-        loop:true,
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true
-        },
-        // autoplayDisableOnInteraction: false
-      })
+   this.startCarousel()
   },
    components: {
     productCard
    },
    methods: {
      getAllHomePageData () {
-       this.http.get('/api/product/getProductHome','', (res) => {
-         console.log('首页数据:', res)
-         let imgList = res.data.result.home_banner
-         imgList.forEach(item => {
-           this.bannerList.push(item.image)
-         })
-         
-       })
+      this.http.get('/api/product/getProductHome').then(res => {
+        if(res.data.code === 200) {
+          // 商品分类数据
+          this.categories = res.data.result.categories
+          //  轮播图数据
+          this.bannerList = res.data.result.home_banner
+          //  复制第一张图到末尾
+          this.bannerList.push(this.bannerList[0])
+        }
+        console.log('首页返回数据:', res.data.result)
+      })
      },
      handleClick (index, path) {
        this.routerNavIndex = index
@@ -172,6 +162,18 @@ export default {
      },
      goToPassageList () {
        this.$router.push('/article-list')
+     },
+     // 轮播图
+     startCarousel () {
+      let wrapper = this.$refs.wrapper
+      let timer = setInterval(() => {
+        this.carouselIndex++
+        // wrapper.style.transition = 'transform 3s linear'
+        wrapper.style.transform ='translatex('+(-this.carouselIndex*1200)+ 'px'+')' 
+        if(this.carouselIndex >= 4) {
+          this.carouselIndex = 0
+        }
+      }, 3000) 
      }
    }
 }
@@ -188,14 +190,25 @@ export default {
     width: 1200px;
     margin: auto;
     background-color: #fff;
-    .swiper-wrapper {
+    .swiper_container {
+      position: relative;
       width: 1200px;
-      .swiper-slide {
-        width: 1200px;
-        height: 500px;
+      height: 500px;
+      overflow: hidden;
+      .swiper_wrapper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 6000px;
+        display: flex;
+        .swiper_slide {
+          width: 1200px;
+          height: 500px;
+        }
       }
     }
-
     .carousel {
       height: 500px;
       overflow: hidden;

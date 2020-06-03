@@ -34,7 +34,7 @@ export default {
   },
   props: {
     prodData: {
-      type: Object,
+      // type: Object,
       required: true
     },
     prodCardIndex: {
@@ -44,6 +44,7 @@ export default {
   },
   filters: {
     ommit (text) {
+      var text = text || ''
       if(text.length > 17) {
         return  text.slice(0, 17) + '...'
       } else {

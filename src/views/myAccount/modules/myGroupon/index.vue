@@ -21,7 +21,7 @@
                     <div class='order_item_body_left'>
                         <img :src="goodsImg" alt="">
                         <div class='goods_intro'>
-                            <p>{{'商品名称'.repeat(6)}}</p>
+                            <p>{{'商品名称'.repeat(5)}}</p>
                             <p>可售时间段: 2020-05-22至2020-06-20</p>
                         </div>
                     </div>
@@ -120,6 +120,7 @@ export default {
                     img {
                         width: 80px;
                         height: 80px;
+                        flex-grow: 1;
                     }
                     .goods_intro {
                         display: flex;
@@ -129,6 +130,10 @@ export default {
                         line-height: 24px;
                         p:first-child {
                             padding-right: 56px;
+                        }
+                        p:last-child {
+                            font-size: 14px;
+                            color: #333;
                         }
                     }
                 }

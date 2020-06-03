@@ -9,6 +9,9 @@
 import login from './login.vue'
 export default {
   data () {
+    return {
+      
+    }
   },
   components: {
     login

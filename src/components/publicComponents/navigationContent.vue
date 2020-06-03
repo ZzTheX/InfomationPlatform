@@ -204,7 +204,7 @@ export default {
     flex-grow: 1;
     outline: none;
     border: none;
-    padding-left: 6px;
+    padding-left: 18px;
   }
   > button {
     width: 69px;

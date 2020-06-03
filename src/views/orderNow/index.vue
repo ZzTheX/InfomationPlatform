@@ -12,7 +12,6 @@
         <span>发布方</span>
         <span>交易时间</span>
       </nav>
-
       <!-- 商品信息 -->
       <div class="placeOdermiaoshu">
         <img :src="merchandise.picUrl" alt />
@@ -32,6 +31,9 @@
             <span>可售时间：</span>
             {{merchandise.vendibility_tiem_start}}至{{merchandise.vendibility_tiem_end}}
           </div>
+          <div class='purchase_num'>
+            购买数量: {{100}}
+          </div>
         </div>
       </div>
 
@@ -41,10 +43,6 @@
           <label for="shuliang">预定数量</label>
           <input type="text" placeholder="请输入预定数量" />
         </form>
-        <!-- <form action>
-          <label for="shuliang">交易日期</label>
-          <input type="datetime" placeholder="请选择交易日期" />
-        </form>-->
         <div class="block">
           <span class="demonstration">交易日期</span>
           <el-date-picker v-model="value1" type="date" placeholder="请选择交易日期"></el-date-picker>
@@ -64,23 +62,23 @@
         <h3>收货地址</h3>
         <form action>
           <label for="shuliang">收货人</label>
-          <input type="text" placeholder="单行输入" />
+          阿凡达
         </form>
         <form action>
           <label for="shuliang">联系电话</label>
-          <input type="text" placeholder="单行输入" />
+          17234567890
         </form>
         <form action>
           <label for="shuliang">详细地址</label>
-          <input type="text" placeholder="单行输入" />
+          四川省成都市青羊区
         </form>
       </div>
 
       <!-- 底部按钮区域 -->
       <div class="placeOderBottom">
         <i></i>
-        <span>返回</span>
-        <span>立即下单</span>
+        <span @click='handleBack'>返回</span>
+        <span @click='handlePlaceOrder'>提交订单</span>
       </div>
     </div>
   </div>
@@ -97,7 +95,7 @@ export default {
         total_prices: "699.00", //   商品总价
         freight: "1.24", //   运费
         actual_payment: "234.23", //   实际付款
-        The_issuer: "发布方", //   发布方
+        The_issuer: "哆啦A梦", //   发布方
         trading_hour: "2020-04-01", //   交易时间
         vendibility_tiem_start: "2020-04-01", //   可售时间开始
         vendibility_tiem_end: "2020-04-01", //   可售时间结束
@@ -149,6 +147,27 @@ export default {
     //        输入期望定金
     inputMoney() {
       this.money = this.$refs.inputMoney.value + "";
+    },
+    handleBack () {
+      this.$router.go(-1)
+    },
+    handlePlaceOrder () {
+      // immediatelyCreateOrder调用创建订单接口
+      // 返回支付信息    调用三方支付接口 成功和失败都跳转订单详情页面
+      setTimeout(() => {
+        this.$message({
+          type: 'warning',
+          message: '支付失败'
+        })
+      },500)
+      this.$router.push({
+        name: 'orderDetail',
+        query: {
+          status: 1
+        }
+      })
+
+
     }
   }
 };
@@ -208,7 +227,7 @@ export default {
 }
 .placeOdermiaoshu > div > div:first-child {
   width: 1050px;
-  height: 80px;
+  height: 70px;
   display: flex;
   align-items: center;
 }
@@ -250,6 +269,9 @@ export default {
   padding: 0 1px 1px 0;
   align-items: center;
   margin-right: 6px;
+}
+.purchase_num {
+  margin-top: 8px;
 }
 .placeOderInputs {
   width: 1140px;
@@ -337,6 +359,7 @@ border: none;
   justify-content: center;
   align-items: center;
   margin-right: 26px;
+  cursor: pointer;
 }
 .placeOderBottom > span:last-child {
   background: rgba(255, 199, 51, 1);

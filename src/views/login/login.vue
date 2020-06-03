@@ -6,15 +6,15 @@
     </div>
     <div class='login_input_area'>
       <div class='phone_input_wrap'>
-        <input type="text" placeholder="手机号" v-model='userInfo.phone'>
+        <input type="text" placeholder="手机号" v-model.number='userInfo.phone'>
       </div>
       <!-- v-if切换验证码登录与密码登录 -->
       <div v-if='loginType' class='password_input_wrap'>
-        <input class='password' type="password" placeholder="登录密码" v-model='userInfo.password'>
+        <input class='password' type="password" placeholder="登录密码" v-model.number='userInfo.password'>
       </div>
       <div class='code_input_wrap' v-else>
-        <input class='code' type="text" placeholder="请输入6位短信验证码" v-model='userInfo.verifyCode'>
-        <button class="get_code">获取验证码</button>
+        <input class='code' type="text" placeholder="请输入6位短信验证码" v-model.number='userInfo.password'>
+        <button class="get_code" @click='getCode'>获取验证码</button>
       </div>
     </div>
     <div class='to_regist'>
@@ -32,30 +32,60 @@
 </template>
 
 <script>
+import qs from 'qs'
 export default {
   data () {
     return {
       userInfo: {
+        login_method: 1,
         phone: '',
-        password: '',
-        verifyCode: ''
+        password: ''
       },
-      loginType: 0
+      loginType: 1
     }
+  },
+  created () {
+    console.log(this.$route.query.from)
   },
   methods: {
     toggleLoginType (loginType) {
       this.loginType = loginType
     },
     goToRegister () {
-      this.$router.push({name: 'register'})
+      let query = this.$route.query
+      this.$router.push({
+        name: 'register',
+        query
+      })
     },
     handleLogin () {
+      let path = this.$route.query.from
       if(this.userInfo.phone && this.userInfo.password) {
-        localStorage.setItem('token','123456')
-      } else {
-        alert('请输入正确的手机号与密码')
+          this.http({
+            url: '/api/member/login',
+            method: 'POST',
+            data: qs.stringify(this.userInfo),
+            headers: {
+              'Content-Type':'application/x-www-form-urlencoded'
+            }
+          }).then(res => {
+            let token = res.data.result.token
+            let { username } = res.data.result
+            localStorage.setItem('token', token)
+            localStorage.setItem('username', username)
+            this.$message({
+              message: '登录成功',
+              type: 'success'
+            })
+            this.$router.replace({
+              path
+            })
+          })
+          
       }
+    },
+    getCode () {
+      console.log('获取登录验证码')
     }
   }
 }

@@ -37,12 +37,13 @@
             </div>
             <p class='goods_price'>{{goods.price}}</p>
             <p class='goods_remaining'>{{goods.remaining}}</p>
-            <div class='input_number'></div>
-            <p class='price_total'></p>
+            <div class='input_number'>99个</div>
+            <p class='price_total'>9999.00</p>
             <p class='service_charge'>{{goods.charge}}</p>
             <p class='operate' @click='handleDelete'>删除</p>
           </div>
           <div class='row2'>
+
             <p class='trans_date'>交易日期</p>
              <el-date-picker
                 size="mini"
@@ -71,7 +72,7 @@
       <p class='chosen_goods'>已选商品<span stlye='color:##FF4400'>{{goodsNum}}</span>件</p>
       <p class='goods_charge'>手续费<span>{{180.00}}</span></p>
       <p class='price_total'>合计<span>1900.00</span></p>
-      <p class='settle_button'>结算</p>
+      <p class='settle_button' @click='goToOrderDetail'>结算</p>
     </div>
   </div>
 </template>
@@ -148,6 +149,14 @@ export default {
     },
     handleChooseDeposit (value) {
       this.deposit = value
+    },
+    goToOrderDetail () {
+      this.$router.push({
+        name: 'orderDetail',
+        query: {
+          status: 1
+        }
+      })
     }
   }
 }
