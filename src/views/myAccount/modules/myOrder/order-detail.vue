@@ -104,7 +104,11 @@
              </div>
          </div>
          <div class='refuse_popout' v-show='isShowRefuse'>
-             <div class='k'></div>
+            <div class='refuse_pop'>
+                 <p><span @click='isShowRefuse=false'>×</span></p>
+                <div  @click='agreeRefund'>同意退款</div>
+                <div  @click='refuseRefund'>拒绝退款</div>
+            </div>
          </div>
     </div>
 </template>
@@ -115,7 +119,7 @@ export default{
         return {
             isShoWModify: '',
             status: '',
-            isShowDeliver: true,
+            isShowDeliver: false,
             isShowRefuse: false
         }
     },
@@ -134,6 +138,12 @@ export default{
         },
         submitDeliverInfo () {
             this.isShowDeliver = false
+        },
+        agreeRefund () {
+            this.isShowRefuse = false
+        },
+        refuseRefund () {
+            this.isShowRefuse = false
         }
     },
     filters: {
@@ -402,6 +412,34 @@ export default{
        left:0;
        bottom: 0;
        background-color: rgba(0, 0, 0, 0.4);
+       .refuse_pop {
+           margin: auto;
+           width: 493px;
+           height: 397px;
+           margin-top: 200px;
+           background-color: #fff;
+           p {
+           text-align: right;
+           margin-bottom: 84px;
+           padding-top: 35px;
+           padding-right: 41px;
+           font-size: 22px;
+            span {
+                cursor: pointer;
+            }
+           }
+            div {
+                margin: auto;
+                width:240px;
+                height:50px;
+                background:rgba(255,201,15,1);
+                border-radius:4px;
+                text-align: center;
+                line-height: 50px;
+                margin-bottom: 37px;
+            }
+       }
+       
      }
  }
 </style>

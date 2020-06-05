@@ -8,8 +8,12 @@
 
 <script>
 export default {
+  created () {
+    this.$store.commit('stepChange', false)
+  },
   methods: {
     toFillForm (path) {
+      this.$store.commit('stepChange', true)
       this.$router.push(path)
     }
   }

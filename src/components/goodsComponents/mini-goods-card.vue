@@ -1,5 +1,5 @@
 <template>
-   <div class='product_card'>
+   <div class='product_card' @click='goToEditMyPost'>
     <img class='product_card_img' :src="require('../../assets/index/bestsell.png')">
     <div class='product_info'>
       <p class='product_description'>
@@ -20,7 +20,13 @@
 
 <script>
 export default {
-
+  methods: {
+    goToEditMyPost () {
+      this.$router.push({
+        name: 'supplyForm'
+      })
+    }
+  }
 }
 </script>
 

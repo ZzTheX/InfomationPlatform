@@ -33,7 +33,9 @@
 
 <script>
 export default{
-
+    created () {
+        this.$store.commit('stepChange', true)
+    }
 }
 </script>
 

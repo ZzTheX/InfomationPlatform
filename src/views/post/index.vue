@@ -6,19 +6,16 @@
             <p>1</p>
             <p>选择类型</p>
           </div>
-          <div class='line line1'></div>
+          <div class='line line1' :class='{line_yellow: this.$store.state.isStepTwo}'></div>
           <div class='two'>
-            <p>2</p>
-            <p>填写信息</p>
+            <p :class='{isStepTwo: this.$store.state.isStepTwo}'>2</p>
+            <p :style='{color: this.$store.state.isStepTwo ? "#000" : "#808080"}'>填写信息</p>
           </div>
           <div class='line line2'></div>
           <div class='three'>
             <p>3</p>
             <p>完成</p>
           </div>
-          <!-- <p>选择类型</p>
-          <p>填写信息</p>
-          <p>完成</p> -->
         </div>
         <router-view></router-view>
       </div>
@@ -27,7 +24,14 @@
 
 <script>
 export default {
-
+  created () {
+    console.log(111111,this.$store.state.isStepTwo)
+  },
+  data () {
+    return {
+      isStepTwo: this.$store.state.isStepTwo
+    }
+  }
 }
 </script>
 
@@ -68,6 +72,10 @@ export default {
             p:first-child {
               background-image: url('../../assets/square_gray.png');
             }
+            p.isStepTwo {
+              color: #000;
+              background-image: url('../../assets/square_yellow.png');
+            }
           }
           .three {
             color: #808080;
@@ -82,6 +90,9 @@ export default {
             width: 200px;
             background-color: #fef;
             border-bottom: 2px solid #E6E6E6;
+          }
+          .line_yellow {
+             border-bottom: 2px solid #FFC90F;
           }
         }
     }

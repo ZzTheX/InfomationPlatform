@@ -29,13 +29,6 @@ export default {
         {link: 'browsing-history', title: '浏览记录'},
         {link: 'my-homepage', title: '我的发布'},
         {link: 'message', title: '信息中心'}
-        // '关注',
-        // '个人中心',
-        // '购物车',
-        // '我的订单',
-        // '浏览记录',
-        // '我的发布',
-        // '信息中心'
       ],
       options: [
       ]

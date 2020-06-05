@@ -35,6 +35,7 @@
          <el-form-item label='收货地址'>
              <el-textarea></el-textarea>
          </el-form-item>
+         <div class='log_out' @click='handleLogout'>退出登录</div>
      </el-form>
   </div>
 </template>
@@ -49,6 +50,12 @@ export default {
     },
     components: {
         modifyButton
+    },
+    methods: {
+        handleLogout () {
+            localStorage.clear()
+            this.$router.push('/')
+        }
     }
 }
 </script>
@@ -59,6 +66,14 @@ export default {
     padding-left: 41px;
     .el-form-item {
         display: flex;
+        /deep/.el-form-item__label {
+            font-size: 16px;
+            color: #333;
+        }
+        
+    }
+    .log_out {
+        cursor: pointer;
     }
 }
 </style>
