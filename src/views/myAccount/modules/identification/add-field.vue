@@ -3,16 +3,16 @@
     <el-form label-width="340px">
       <!-- ----------- -->
       <el-form-item label="园地名称：">
-        <el-input placeholder="单行输入"></el-input>
+        <el-input placeholder="请输入园地名称" v-model='gardens[0].garden_name'></el-input>
       </el-form-item>
       <!-- ----------- -->
       <el-form-item label="园地详细地址：">
-        <el-input placeholder="单行输入"></el-input>
+        <el-input placeholder="请输入园地详细地址" v-model='gardens[0].garden_address'></el-input>
       </el-form-item>
       <!-- --------- -->
       <el-form-item label="园地规模：">
-        <el-input class="duaninput" placeholder="单行输入"></el-input>
-        <el-select class="danwei1" v-model="value" placeholder="请选择">
+        <el-input class="duaninput" placeholder="请输入园地规模" v-model='gardens[0].garden_scale'></el-input>
+        <el-select class="danwei1" v-model="gardens[0].scale_unit" placeholder="单位">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -26,16 +26,16 @@
         <!-- <el-input placeholder="单行输入"></el-input> -->
         <div class="xuanze" @click="beingAdd">
           <span>点击添加产品</span>
-          <img src="../../../../assets/triangle.png" alt />
+          <img src="../../../../assets/triangle.png" />
         </div>
       </el-form-item>
 
       <!-- 添加产品 -->
-      <el-form v-if="isAdd">
-        <span class="x">x</span>
+      <el-form v-if="isAdd" class='add_product_form' label-width="100px">
+        <span class="x" @click='isAdd=false'>x</span>
         <!-- ------- -->
         <el-form-item label="主要产品：">
-          <el-input placeholder="选择产品"></el-input>
+          <el-input placeholder="请输入产品名称"></el-input>
         </el-form-item>
         <!-- --------- -->
         <el-form-item label="销售期间：">
@@ -46,7 +46,7 @@
         </el-form-item>
         <!-- ---------- -->
         <el-form-item label="产品规模：">
-          <el-input class="duaninput" placeholder="单行输入"></el-input>
+          <el-input class="duaninput" placeholder="请输入产品规模"></el-input>
           <el-select class="danwei1" v-model="value" placeholder="请选择">
             <el-option
               v-for="item in options"
@@ -58,8 +58,8 @@
         </el-form-item>
         <!-- ------- -->
         <el-form-item label="预计产量：">
-          <el-input class="duaninput" placeholder="单行输入"></el-input>
-          <el-select class="danwei1" v-model="value" placeholder="请选择">
+          <el-input class="duaninput" placeholder="请输入预计产量"></el-input>
+          <el-select class="danwei1" v-model="value" placeholder="单位">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -88,7 +88,7 @@
       </el-form-item>
     </el-form>
     <!-- 按钮 -->
-    <span class="addBtn">保存</span>
+    <span class="addBtn" @click='saveGardenInfo'>保存</span>
   </div>
 </template>
 
@@ -96,7 +96,7 @@
 export default {
   data() {
     return {
-       isAdd:false,
+      isAdd:false,
       options: [
         {
           value: "选项1",
@@ -119,6 +119,29 @@ export default {
           label: "北京烤鸭"
         }
       ],
+      gardens: [
+        {
+          "garden_address": "",
+          "garden_images": "",
+          "garden_introduction": "",
+          "garden_name": "",
+          "garden_scale": 50,
+          "latitude": "",
+          "longitude": "",
+          "products": [
+            {
+              "end_time": 1585554850,
+              "expected_output": 30,
+              "expected_output_unit": "",
+              "product_name": "",
+              "start_time": 1577851200,
+              "yield_scale": 20,
+              "yield_unit": ""
+            }
+          ],
+          "scale_unit": ""
+        }
+      ],
       value: "",
       time_start: "",
       time_end: "",
@@ -128,6 +151,10 @@ export default {
   methods:{
      beingAdd(){
         this.isAdd=!this.isAdd;
+     },
+     saveGardenInfo () {
+       console.log(this.gardens[0].garden_name)
+       this.$store.commit('saveGardenInfo', this.gardens)
      }
   }
 };
@@ -141,7 +168,7 @@ export default {
   flex-direction: column;
   margin-top: 44px;
   .el-form {
-    .el-form {
+    >.el-form {
       width: 438px;
       height: 376px;
       padding: 21px;
@@ -153,6 +180,7 @@ export default {
         width: 100%;
         justify-content: flex-end;
         margin-bottom: 16px;
+        cursor: pointer;
       }
       .block {
         display: flex;
@@ -164,11 +192,11 @@ export default {
     }
     .el-form-item {
       .el-input {
-        width: 310px;
+        width: 280px;
         height: 41px;
       }
       .duaninput {
-        width: 200px;
+        width: 170px;
       }
       .xuanze {
         width: 310px;

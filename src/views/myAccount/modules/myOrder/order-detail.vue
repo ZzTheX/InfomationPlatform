@@ -110,6 +110,16 @@
                 <div  @click='refuseRefund'>拒绝退款</div>
             </div>
          </div>
+         <div class='refuse_reason' v-show='isShowRefuseReason'>
+             <div>
+                 <p>回绝理由</p>
+                 <textarea ></textarea>
+                 <div class='buttons'>
+                     <button>取消</button>
+                     <button>提交</button>
+                 </div>
+             </div>
+         </div>
     </div>
 </template>
 
@@ -120,7 +130,8 @@ export default{
             isShoWModify: '',
             status: '',
             isShowDeliver: false,
-            isShowRefuse: false
+            isShowRefuse: false,
+            isShowRefuseReason: false
         }
     },
     created () {
@@ -440,6 +451,52 @@ export default{
             }
        }
        
+     }
+     .refuse_reason {
+       position: fixed;
+       top: 0;
+       right: 0;
+       left:0;
+       bottom: 0;
+       background-color: rgba(0, 0, 0, 0.4);
+       > div {
+           margin: auto;
+           width: 862px;
+           height: 530px;
+           background-color: #fff;
+           margin-top: 170px;
+           padding: 28px 37px 0 39px;
+           font-size: 18px;
+           font-weight: 600;
+           > p {
+               margin-bottom: 20px;
+           }
+            > textarea {
+                display: block;
+                width: 780px;;
+                height: 318px;
+                outline: none;
+                border-bottom: 1px solid #E6E6E6;
+                padding: 10px;
+            }
+            .buttons {
+                display: flex;
+                margin-top: 40px;
+                justify-content: space-evenly;
+                >button {
+                    width: 180px;
+                    height: 50px;
+                    background-color: #D9D9D9;
+                    outline: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    &:last-child {
+                        background-color: #FFC90F;
+                    }
+                }
+            }
+       }
+      
      }
  }
 </style>

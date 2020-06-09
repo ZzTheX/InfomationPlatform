@@ -66,14 +66,14 @@
         <el-input v-model='supplyData.minimum_batch'></el-input>
       </el-form-item>
       <el-form-item label="期望定金">
-        <span class='price_tag'>1000</span>
-        <span class='price_tag'>5000</span>
-        <span class='price_tag'>1000</span>
-        <el-input class="unit" placeholder="其他金额"></el-input>
+        <span class='price_tag' @click='changePrice("1000")' :class='{isYellow: supplyData.deposit_amount === "1000"}'>1000</span>
+        <span class='price_tag' @click='changePrice("5000")' :class='{isYellow: supplyData.deposit_amount === "5000"}'>5000</span>
+        <span class='price_tag' @click='changePrice("10000")' :class='{isYellow: supplyData.deposit_amount === "10000"}'>10000</span>
+        <el-input class="unit" placeholder="其他金额" v-model="depositAmount"></el-input>
       </el-form-item>
       <el-form-item label="是否支持(拼团)零售">
-        <span class='price_tag'>支持</span>
-        <span class='price_tag'>不支持</span>
+        <span class='price_tag' @click='isSupport = 1' :class='{isYellow: isSupport === 1}'>支持</span>
+        <span class='price_tag' @click='isSupport = 0' :class='{isYellow: isSupport === 0}'>不支持</span>
       </el-form-item>
       <el-form-item label="单人(地址)最小购买数量">
         <el-input v-model="supplyData.minimum_purchase_quantity"></el-input>
@@ -87,10 +87,15 @@
         </el-select>
       </el-form-item>
       <el-form-item label="最低成团数量">
-        <el-select></el-select>
+        <el-input v-model="supplyData.minimum_groups"></el-input>
+        <el-select class='unit'></el-select>
       </el-form-item>
-      <el-form-item label="最晚成团数量">
-        <el-select></el-select>
+      <el-form-item label="最晚成团时间">
+        <el-date-picker
+          v-model="supplyData.latest_group_time"
+          type="datetime"
+          placeholder="选择日期时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item label="添加产品图片">
         <p>(不大于9张,第一张为默认产品图)</p>
@@ -99,15 +104,10 @@
         <div class='imgsPreview'>
           <img width="80px" height='80px' v-for='(item, index) in imgsPreviewList' :key='index' :src=item>
           <label for="productImg">
-           <img :src="require('../../assets/upload.png')" width="80px" height="80px" v-show='true'>
+           <img :src="require('../../assets/upload.png')" width="80px" height="80px" v-show='isShowUpload'>
            <input type="file" ref='imgUpload' id="productImg" style='display:none'>
           </label>
         </div>
-        <!-- <label for="productImg">
-           <input type="file" id='productImg' style='display:none' ref='imgUpload'>
-           <div class='imgsPreview'>
-           </div>
-        </label> -->
       </el-form-item>
       <el-form-item label="添加详情描述">
         <el-input type='textarea' v-model="supplyData.description"></el-input>
@@ -124,12 +124,16 @@
 export default {
   data () {
     return {
+      isSupport: 1,
+      isShowUpload: true,
+      priceIndex: 1,
       classOne: '',
       classTwo: '',
       classThree: '',
       cityList: [],
+      customedDeposit: '',
+      depositAmount: '',
       imgsPreviewList: [
-
       ],
       priceUnitList: [
         {
@@ -188,14 +192,13 @@ export default {
         "available_quantity_unit": "KG",
         "available_start_time": '',
         "batch_unit": "KG",
-        "category_one": 1,
-        "category_third": 3,
-        "category_two": 2,
-        "deposit_amount": "",
+        "category_one": '',
+        "category_third": '',
+        "category_two": '',
+        "deposit_amount": '5000',
         "description": "产品简单的描述",
-        "garden_id": 1,
         "is_support_bulk_purchase": true,
-        "latest_group_time": 1589959406,
+        "latest_group_time": '',
         "minimum_batch": "20",
         "minimum_group_unit": "人",
         "minimum_groups": "20",
@@ -209,9 +212,9 @@ export default {
         ],
         "planting_scale": "500",
         "planting_unit": "亩",
-        "product_id": 1,
+        // "product_id": 1,
         "product_name": "测试商品名称",
-        "sales_area": "1,63,75",
+        "sales_area": [],
         "supply_price": "200",
         "supply_price_unit": "元"
       }
@@ -273,7 +276,26 @@ export default {
 
     },
     publishNow () {
-      console.log(this.supplyData)
+      // 表单校验
+      // if(!this.formValidate()) return
+      // 上传数据前格式化处理
+      this.supplyData.available_end_time = Date.parse(this.supplyData.available_end_time).toString().substr(0, 10)*1
+      this.supplyData.available_start_time = Date.parse(this.supplyData.available_start_time).toString().substr(0, 10)*1
+      this.supplyData.latest_group_time = Date.parse(this.supplyData.latest_group_time).toString().substr(0, 10)*1
+      this.supplyData.sales_area = this.supplyData.sales_area.join(',')
+      this.supplyData.category_one = this.classThree[0]
+      this.supplyData.category_two = this.classThree[1]
+      this.supplyData.category_third = this.classThree[2]
+      this.supplyData.is_support_bulk_purchase = !!this.isSupport
+      console.log(this.classThree)
+      console.log('发布商品上传数据:', this.supplyData)
+      this.http.post('/api/product/releaseSupplyProduct', this.supplyData, {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        }
+      }).then(res => {
+        console.log(res)
+      })
     },
     imgUpload () {
        let inpt = this.$refs.imgUpload
@@ -286,8 +308,70 @@ export default {
          that.http.post('/api/member/option/uploadFile', formData).then(res => {
            let imgUrl = res.data.result
            that.imgsPreviewList.push(imgUrl)
+           that.supplyData.picture_or_video.push({
+             type: 1,
+             url: imgUrl
+           })
+             if(that.imgsPreviewList.length >=9 ) {
+               console.log(that.imgsPreviewList.length)
+               that.isShowUpload = false
+             }
          })
        }
+    },
+    changePrice (price) {
+      this.supplyData.deposit_amount = price
+    },
+    formValidate () {
+      // 商品名字验证
+      if(this.supplyData.product_name.length > 14) {
+        this.$message({
+          type: 'warning',
+          message: '商品名称不得超过14个字'
+        })
+        return false
+      }
+      // 是否选择分类验证
+      if(!this.supplyData.classThree) {
+        this.$message({
+          type: 'warning',
+          message: '请选择商品分类'
+        })
+        return false
+      }
+      // 预售价格 
+      if(!this.supplyData.supply_price) {
+        this.$message({
+          type: 'warning',
+          message: '请输入预售价格'
+        })
+        return false
+      }
+      // 可售数量
+      if(!this.supplyData.available_quantity) {
+        this.$message({
+          type: 'warning',
+          message: '请输入预售数量'
+        })
+        return false
+      }
+      // 可售时间段
+      if(!this.supplyData.available_start_time || !this.supplyData.available_start_time) {
+        this.$message({
+          type: 'warning',
+          message: '请选择可售时间段'
+        })
+        return false
+      }
+      // 种植/养殖 规模
+      if(!this.supplyData.planting_scale) {
+        this.$message({
+          type: 'warning',
+          message: '请填写种植或养殖规模'
+        })
+        return false
+      }
+      // 销售区域 
     }
   }
 }
@@ -309,15 +393,19 @@ export default {
       display: inline-block;
       width: 100px;
       height: 40px;
-      background-color: #FFC733;
+      // background-color: #FFC733;
       text-align: center;
       margin-right: 24px;
       color: #333;
       font-size: 16px;
-      // border: 1px solid #D6D6D6;
+      border: 1px solid #D6D6D6;
+      cursor: pointer;
       &:last-child {
         margin-left: 0px;
       }
+    }
+    .isYellow {
+      background-color: #FFC733;
     }
     .imgsPreview {
       display: flex;
@@ -326,6 +414,7 @@ export default {
       height: 280px;
       >img {
         margin-right: 20px;
+        border: 1px solid #F5F5F5;
       }
     }
   }
