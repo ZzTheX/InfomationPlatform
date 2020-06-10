@@ -188,7 +188,7 @@ export default {
       ],
       supplyData: {
         "available_end_time": '',
-        "available_quantity": "",
+        "available_quantity": "1000",
         "available_quantity_unit": "KG",
         "available_start_time": '',
         "batch_unit": "KG",
@@ -202,7 +202,7 @@ export default {
         "minimum_batch": "20",
         "minimum_group_unit": "人",
         "minimum_groups": "20",
-        "minimum_purchase_quantity": "",
+        "minimum_purchase_quantity": "20",
         "minimum_purchase_unit": "KG",
         "picture_or_video": [
           {
@@ -212,7 +212,6 @@ export default {
         ],
         "planting_scale": "500",
         "planting_unit": "亩",
-        // "product_id": 1,
         "product_name": "测试商品名称",
         "sales_area": [],
         "supply_price": "200",

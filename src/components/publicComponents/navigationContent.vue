@@ -26,15 +26,16 @@
         <!-- 选择分类弹窗 -->
         <div class='category_popup' v-show='isShowCategory'>
           <div class='popup_sidebar'>
-            <li class='active'>一级分类1</li>
-            <li>一级分类1</li>
-            <li>一级分类1</li>
-            <li>一级分类1</li>
+            <li 
+              v-for='(item, index) in classFirst' 
+              :key='index' 
+              @click='toggleCategory(index)'
+              :class="{active: index === currentCategoryIndex}">{{item.category_name}}</li>
           </div>
           <div class='popup_right'>
-            <div v-for='i in 12' :key='i' @click="handleClick">
-              <img src='../../assets/category.png' alt="">
-              <span>{{'二级分类' + i}}</span>
+            <div v-for='(item, index) in classFirst[currentCategoryIndex].children' :key='index' @click="handleClick">
+              <img :src='item.main_pic' >
+              <span>{{item.category_name}}</span>
             </div>
           </div>
         </div>
@@ -47,6 +48,9 @@
 export default {
   data() {
     return {
+      currentCategoryIndex: 0,
+      classFirst: [],
+      classSecond: [],
       isShowCategory: false,
       keyword: "",
       input1: "",
@@ -55,7 +59,21 @@ export default {
       select: ""
     };
   },
+  created () {
+    this.getProductCategory()
+  },
   methods: {
+    toggleCategory (index) {
+      this.currentCategoryIndex = index
+    },
+    getProductCategory () {
+      this.http.get('/api/product/getAllProductCategory').then(res => {
+        console.log('商品目录：',res.data.result)
+        //  一级分类
+        this.classFirst = res.data.result
+        // 二级分类
+      })
+    },
     goToIndexPage() {
       this.$router.push({ path: "/index" });
       console.log("goTo");
@@ -64,7 +82,13 @@ export default {
       this.isShowCategory = !this.isShowCategory
     },
     handleSearch () {
-      this.$router.push({name: 'prodList'})
+      
+      this.$router.push({
+           name: 'prodList',
+           query: {
+             keyword: this.keyword
+           }
+        })
     },
     handleClick () {
       this.isShowCategory = false
@@ -110,6 +134,8 @@ export default {
         background-color: #fff;
         >li {
           height: 60px;
+          border-bottom:  1px solid silver;
+          cursor: pointer;
         }
         li.active {
           background-color: #FFC90F;

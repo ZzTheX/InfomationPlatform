@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import realName from './realNameIdentify/realNameIdentify.js'
 
 Vue.use(Vuex)
 
@@ -36,12 +37,13 @@ export default new Vuex.Store({
       console.log('stepChange=',value)
       state.isStepTwo = value
     },
-    saveGardenInfo () {
-      
-    }
+    saveGardenInfo (state, value) {
+      state.gardens = value
+    } 
   },
   actions: {
   },
   modules: {
+    realName
   }
 })

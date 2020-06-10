@@ -8,14 +8,19 @@
       <p>筛选</p>
     </div>
     <div class='goods_list_mian'>
-      <goods-card v-for='(item, index) in prodListData' :key='index' :prodData='item' :prodCardIndex="index"></goods-card>
+      <goods-card 
+        v-for='(item, index) in prodListData' 
+        :key='index' 
+        :prodData='item' 
+        :prodCardIndex="index"
+        @click.native='goToProductDetail'></goods-card>
     </div>
     <div class='pagination'>
       <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
+      :page-sizes="[16]"
       :page-size="100"
       layout="total, sizes, prev, pager, next, jumper"
       :total="400"></el-pagination>
@@ -28,6 +33,7 @@ import goodsCard from '../../components/goodsComponents/goods-card.vue'
 export default {
   data () {
     return {
+      currentPage4: 0,
       prodListData: [
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'},
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'},
@@ -46,6 +52,29 @@ export default {
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/0/507', price: 800, origin: '成都'},
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'}
       ]
+    }
+  },
+  created () {
+    console.log(this.$route.query)
+    this.getProductList()
+  },
+  methods: {
+    getProductList () {
+      this.http.get('/api/product/getProductList').then(res => {
+        console.log('商品列表数据res:',res)
+        this.prodList = res.data.result.rows
+      })
+    },
+    goToProductDetail () {
+      this.$router.push({
+        name: 'prodDetail'
+      })
+    },
+    handleSizeChange () {
+
+    },
+    handleCurrentChange () {
+
     }
   },
   components: {

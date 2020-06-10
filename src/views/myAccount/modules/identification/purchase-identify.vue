@@ -5,7 +5,8 @@
         <el-form
           label-width='150px'>
           <el-form-item label='采购商名称:'>
-            <el-input v-model="purchaserInfo.supplier_name"></el-input>
+            <el-input v-if='false' v-model="purchaserInfo.supplier_name"></el-input>
+            <el-tag type='info' v-if='true'>采购商名称</el-tag>
           </el-form-item>
           <el-form-item label='公司名称:'>
             <el-input v-model="purchaserInfo.company_name"></el-input>
@@ -88,29 +89,6 @@ export default {
         "contact_email": "",
         "contact_number": "",
         "enterprise_size": "",
-        "gardens": [
-          {
-            "garden_address": "",
-            "garden_images": "",
-            "garden_introduction": "",
-            "garden_name": "",
-            "garden_scale": 50,
-            "latitude": "",
-            "longitude": "",
-            "products": [
-              {
-                "end_time": 1585554850,
-                "expected_output": 30,
-                "expected_output_unit": "",
-                "product_name": "",
-                "start_time": 1577851200,
-                "yield_scale": 20,
-                "yield_unit": ""
-              }
-            ],
-            "scale_unit": ""
-          }
-        ],
         "principal": "",
         "supplier_name": ""
       }
