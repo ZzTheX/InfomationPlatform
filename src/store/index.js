@@ -30,7 +30,8 @@ export default new Vuex.Store({
         ],
         "scale_unit": ""
       }
-    ]
+    ],
+    goodsList: []
   },
   mutations: {
     stepChange (state, value) {
@@ -39,7 +40,11 @@ export default new Vuex.Store({
     },
     saveGardenInfo (state, value) {
       state.gardens = value
-    } 
+    },
+    goodsListChange (state, value) {
+      state.goodsList = value
+      console.log('vuex---goodsList', value)
+    }
   },
   actions: {
   },

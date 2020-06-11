@@ -87,19 +87,19 @@ const routes = [
        path: 'prod-detail',
        name: 'prodDetail',
        component: () => import('../views/prodDetail/index.vue'),
-       redirect: {name: 'prodDescription'},
-       children: [
-         {
-           path: 'prod-description',
-           name: 'prodDescription',
-           component: () => import('../views/prodDetail/prodDescription.vue')
-         },
-         {
-           path: 'prod-comment',
-           name: 'prodComment',
-           component: () => import('../views/prodDetail/prodComment.vue')
-         }
-       ]
+      //  redirect: {name: 'prodDescription'},
+      //  children: [
+      //    {
+      //      path: 'prod-description',
+      //      name: 'prodDescription',
+      //      component: () => import('../views/prodDetail/prodDescription.vue')
+      //    },
+      //    {
+      //      path: 'prod-comment',
+      //      name: 'prodComment',
+      //      component: () => import('../views/prodDetail/prodComment.vue')
+      //    }
+      //  ]
      },
       // 立即下单
      {
@@ -332,6 +332,7 @@ const routes = [
             }
           ]
         },
+        // 意见反馈
         {
           path: 'feedback',
           name: 'feedback',

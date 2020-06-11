@@ -19,8 +19,8 @@
       <div>
         <input type="password" placeholder='确认密码'>
       </div>
-      <div>
-        <input type="text" placeholder="选择地区" v-model="registerData.address">
+      <div class='choose_area'>
+        <el-cascader v-model='registration_city' :options='cityList' @change='handleChange'></el-cascader>
       </div>
       <button @click='handleRegister'>注册</button>
       <span @click='goToLoginPage'>已有账号, 立即登录</span>
@@ -30,6 +30,7 @@
 </template>
 <script>
 import validate from '../../auth/validate'
+import qs from 'qs'
 export default {
   data () {
     return {
@@ -37,13 +38,15 @@ export default {
       isShowGetCode: true,
       SMSCode: '',
       count: 60,
+      registration_city: '',
       registerData: {
         address: '20,2500,2522',
         code: '',
         mobile: '',
-        password: ''
-     
-      }
+        password: '',
+        registration_id: 'pc'
+      },
+      cityList: []
     }
   },
   computed: {
@@ -58,50 +61,81 @@ export default {
     goToLoginPage () {
       this.$router.push({name: 'login'})
     },
+    handleChange (value) {
+      console.log(value)
+    },
     handleRegister () {
-      this.http.post('/api/member/register', this.registerData, (res) => {
-        console.log(res)
-        // localStorage.setItem('token', '123456')
-        this.$router.replace({
-          path: this.from
-        })
+      this.registerData.address = this.registration_city.join(',')
+      this.http.post('/api/member/register', qs.stringify(this.registerData), {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(res => {
+        if(res.data.code === 200) {
+          this.$message({
+            message: '注册成功',
+            type: 'success'
+          })
+          console.log('注册成功返回数据:', res)
+          localStorage.setItem('token', res.data.result.token)
+          localStorage.setItem('username', res.data.result.username)
+          this.$router.replace(this.from)
+        } else {
+          this.$$message({
+            message: res.data.message,
+            type: 'warning'
+          })
+        }
+        
+
       })
     },
     getSMSCode () {
       let phone = this.registerData.mobile
       // 验证合法手机号
+      console.log(phone)
       if(validate.isPhone(phone)) {
         // 1 开启定时器  获取验证码倒计时
           let timer = setInterval(() => {
-          this.isShowGetCode = false
-          if(this.count <= 0) {
-            clearInterval(timer)
-            this.isShowGetCode = true
-            this.count = 60
-            return 
-          }
-          this.count --
+            this.isShowGetCode = false
+            if(this.count <= 0) {
+              clearInterval(timer)
+              this.isShowGetCode = true
+              this.count = 60
+              return 
+            }
+            this.count --
         },1000)
-      // 2手机号验证通过 发送验证码
-        this.http.get('/api/member/sendRegisterCode', {mobile: this.registerData.mobile}, (res) => {
-        if(res.data.code === 200) {
-          localStorage.setItem('token', '123456')
-        }
-        console.log('验证码接口返回数据：', res)
-      })
-
+        // 2手机号验证通过 发送验证码
+        this.http.get(`/api/member/sendRegisterCode?mobile=${phone}`).then( res => {
+          if(res.data.code === 200) {
+            this.$message({
+              message: '验证码已发送',
+              type: 'success'
+            })
+            console.log('验证码返回数据:', res)
+          }
+        })
       } else {
         this.$message({
           message: '请输入正确的手机号',
           type: 'warning'
         })
       }
-      
-      
     },
     getCitiesList () {
-      this.http.get('/api/member/option/getAddressOption','', res => {
-        console.log('城市列表：',res)
+      this.http.get('/api/member/option/getAddressOption').then(res => {
+        console.log('城市列表:', res)
+        this.cityList = res.data.result.map(item => {
+          return {
+            label: item.name,
+            value: item.id,
+            children: item.children.map(item => {
+              return {
+                label: item.name,
+                value: item.id
+              }
+            })
+          }
+        })
       })
     }
   }
@@ -183,6 +217,20 @@ export default {
         font-size: 16px;
         color: #06B4FD;
         cursor: pointer;
+      }
+      .choose_area {
+        /deep/.el-cascader {
+          width: 100%;
+          height: 59px;
+          .el-input {
+            border: none;
+            font-size: 18px;
+            /deep/.el-input__inner {
+              border: none;
+              padding-left: 0px;
+            }
+          }
+        }
       }
     }
   }

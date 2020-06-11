@@ -59,7 +59,8 @@ export default {
       })
     },
     handleLogin () {
-      let path = this.$route.query.from
+      let path = this.$route.query.from || '/'
+      console.log('router_url_from:', path)
       if(this.userInfo.phone && this.userInfo.password) {
           this.http({
             url: '/api/member/login',

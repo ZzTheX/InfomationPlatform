@@ -59,13 +59,7 @@ export default {
               children: item.children.map((o, i) => {
                 return {
                   label: o.name,
-                  value: o.id,
-                  children: o.children.map((p, k) => {
-                    return {
-                      label: p.name,
-                      value: p.id
-                    }
-                  })
+                  value: o.id
                 }
               })
             }
@@ -98,7 +92,7 @@ export default {
 
     .city_select /deep/ .el-input__inner {
       border: none;
-      width: 226px;
+      width: 188px;
       height: 31px;
       line-height: 31px;
       background-color: #f5f5f5;

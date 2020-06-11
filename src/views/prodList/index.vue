@@ -9,11 +9,11 @@
     </div>
     <div class='goods_list_mian'>
       <goods-card 
-        v-for='(item, index) in prodListData' 
+        v-for='(item, index) in prodList' 
         :key='index' 
         :prodData='item' 
         :prodCardIndex="index"
-        @click.native='goToProductDetail'></goods-card>
+        @click.native='goToProductDetail(item.product_tag, item.product_id)'></goods-card>
     </div>
     <div class='pagination'>
       <el-pagination
@@ -51,7 +51,8 @@ export default {
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'},
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/0/507', price: 800, origin: '成都'},
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'}
-      ]
+      ],
+      prodList: []
     }
   },
   created () {
@@ -63,11 +64,16 @@ export default {
       this.http.get('/api/product/getProductList').then(res => {
         console.log('商品列表数据res:',res)
         this.prodList = res.data.result.rows
+        this.$store.commit('goodsListChange', this.prodList)
       })
     },
-    goToProductDetail () {
+    goToProductDetail (product_tag, product_id) {
       this.$router.push({
-        name: 'prodDetail'
+        name: 'prodDetail',
+        query: {
+          product_tag,
+          product_id
+        }
       })
     },
     handleSizeChange () {

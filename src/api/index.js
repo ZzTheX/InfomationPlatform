@@ -1,6 +1,6 @@
 import axios from 'axios'
 let http = axios.create({
-  baseURL: 'http://platform.taogoucloud.com',
+  baseURL: 'https://platform.taogoucloud.com',
   withCredentials: true
 });
 //  请求拦截

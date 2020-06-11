@@ -8,9 +8,17 @@
 
 <script>
 export default {
+  created () {
+    this.getCertificationInfo()
+  },
   methods: {
     handleClick (path){
       this.$router.push({path})
+    },
+    getCertificationInfo () {
+      this.http.get('/api/member/personalInformation').then(res => {
+        console.log(res)
+      })
     }
   }
 }
