@@ -1,9 +1,11 @@
 <template>
   <div class='settings'>
       <div class='settings_head'>
-          <p @click='handClick(0)' :class='{active: tabIndex === 0}'>个人信息</p>
-          <p @click='handClick(1)' :class='{active: tabIndex === 1}'>帮助文档</p>
-          <p @click='handClick(2)' :class='{active: tabIndex === 2}'>关于我们</p>
+          <p @click='handClick(0, "personal-info")' :class='{active: tabIndex === 0}'>个人信息</p>
+          <p @click='handClick(1, "modify-password")' :class='{active: tabIndex === 1}'>密码管理</p>
+          <p @click='handClick(2, "adress-manage")' :class='{active: tabIndex === 2}'>地址管理</p>
+          <p @click='handClick(3)' :class='{active: tabIndex === 3}'>帮助文档</p>
+          <p @click='handClick(4)' :class='{active: tabIndex === 4}'>关于我们</p>
       </div>
       <router-view></router-view>
   </div>
@@ -16,9 +18,15 @@ export default {
             tabIndex: 0
         }
     },
+    created () {
+        this.$store.commit('changeLeftSideTabIndex', 13)
+    },
     methods: {
         handClick (index, path) {
             this.tabIndex = index
+            this.$router.push({
+                path
+            })
         }
     }
 }
@@ -26,7 +34,7 @@ export default {
 
 <style lang='less' scoped>
 .settings {
-    height: 1004px;
+    // height: 1004px;
     background-color:#fff;
     .settings_head {
         display: flex;

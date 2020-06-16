@@ -17,6 +17,9 @@ export default {
         '平台公约'.repeat(40),
       ]
     }
+  },
+  created () {
+    this.$store.commit('changeLeftSideTabIndex', 12)
   }
 }
 </script>

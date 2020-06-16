@@ -125,6 +125,9 @@ export default {
       num: 1
     }
   },
+    created () {
+    this.$store.commit('changeLeftSideTabIndex', 1)
+  },
   mounted () {
     // let dom = this.$refs.settlement
     // let offsetTop = dom.offsetTop

@@ -13,9 +13,9 @@
         </div>
         <div class="swiper-pagination"></div>
 		  </div>
-      <!-- 商品分类 -->
+      <!-- 四个商品分类 -->
       <div class='prod_classify'>
-        <div class="prod_classify_card" v-for='(item, index) in categories1' :key='index'>
+        <div class="prod_classify_card" v-for='(item, index) in categories' :key='index' @click='searchByCategory(item.category_id)'>
           <img :src="item.picture">
           <p>{{item.name}}</p>
         </div>
@@ -29,7 +29,7 @@
         <p class='hot_sale_head'>热门分类</p>
         <div class='hot_sale_cardsList'>
           <!-- {{bannerList}} -->
-          <img class='hot_sale_card' v-for="(item, index) in hotSaleList"  :key='index' :src='item.src' :style="{marginBottom: index > 2 ? 0 : '35px'}">
+          <img class='hot_sale_card' v-for="(item, index) in hotSaleList"  :key='index' :src='item.picture' :style="{marginBottom: index > 2 ? 0 : '35px'}">
         </div>
       </div>
       <!-- 查看更多  => 转文章列表 -->
@@ -44,7 +44,7 @@
           <p class='best_sell_head_right'>查看更多 ></p>
         </div>
         <div class='best_sell_cardsList'>
-            <product-card v-for='(item, index) in bestSellList' :key='index' :prodData='item' :prodCardIndex='index'></product-card>
+            <product-card v-for='(item, index) in hotProducts' :key='index' :prodData='item' :prodCardIndex='index'></product-card>
         </div>
       </div>
       <!--今日主推  -->
@@ -53,15 +53,15 @@
           <p class='recommand_head_left'>今日主推</p>
           <p class='recommand_head_right'>查看更多 ></p>
         </div>
-        <img class='recommand_banner' :src="require('../../assets/index/recommand_banner.png')">
+        <img class='recommand_banner' :src="todayPush[0].picture">
         <div class='recommand_carousel'>
-          <img :src="require('../../assets/index/carousel_left.png')" class='recommand_carousel_left'>
-          <img :src="require('../../assets/index/carousel_center.png')" class='recommand_carousel_center'>
-          <img :src="require('../../assets/index/carousel_right.png')" class='recommand_carousel_right'>
+          <img :src="todayPush[1].picture" class='recommand_carousel_left'>
+          <img :src="todayPush[2].picture" class='recommand_carousel_center'>
+          <img :src="todayPush[3].picture" class='recommand_carousel_right'>
         </div>
       </div>
       <!-- 当季热门 -->
-      <div class='best_in_season'>
+      <div class='product_category'>
         <div class='router_nav'>
           <p
           class='router_nav_item'
@@ -71,7 +71,18 @@
           @click='handleClick(index, item.routerPath)'
           >{{item.title}}</p>
         </div>
-        <router-view></router-view>
+        <div class='best_in_season'>
+          <productCard v-for='(item, index) in currentSeasonHotProd' :key='index' :prodData='item' :prodCardIndex='index'></productCard>
+        </div>
+        <div class='el_page'>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="8"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="400"></el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -84,13 +95,18 @@ import productCard from '../../components/goodsComponents/prod-card'
 export default {
   data () {
     return {
+      groupId: 1,
       carouselIndex: 0,
+      page_no: 1,
+      page_size: 8,
+      currentPage: 1,
       imgList: [
         {url: require('../../assets/index/banner.png')}
       ],
       bannerList: [
        
       ],
+      todayPush: [],
       categories: [],
       categories1: [
         {name: '商品分类', picture: require('../../assets/index/category1.png')},
@@ -107,6 +123,7 @@ export default {
         {src: require('../../assets/index/hotsale2.png')},
         {src: require('../../assets/index/hotsale3.png')}
       ],
+      hotProducts: [],
       bestSellList: [
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'},
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'},
@@ -117,6 +134,8 @@ export default {
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/0/507', price: 800, origin: '成都'},
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'}
       ],
+      // 当季热门
+      currentSeasonHotProd: [],
       swiperOptions: {
         pagination: {
           el: '.swiper-pagination'
@@ -134,14 +153,15 @@ export default {
   },
   created () {
    this.getAllHomePageData()
+   this.getCurrentSeasonHotProd()
   },
   mounted () {
-   this.startCarousel()
   },
    components: {
     productCard
    },
    methods: {
+     // 获取首页数据
      getAllHomePageData () {
       this.http.get('/api/product/getProductHome').then(res => {
         if(res.data.code === 200) {
@@ -151,12 +171,33 @@ export default {
           this.bannerList = res.data.result.home_banner
           //  复制第一张图到末尾
           this.bannerList.push(this.bannerList[0])
+          // 热门分类
+          this.hotSaleList =  res.data.result.top_categories
+          // 今日主推
+          this.todayPush = res.data.result.today_push
+          // 热销产品
+          this.hotProducts = res.data.result.hot_products
+          console.log('热销产品：', res.data.result.hot_products)
+          console.log('热销产品:', this.hotProducts)
+          
         }
         console.log('首页返回数据:', res.data.result)
       })
      },
+     // 获取当季热门, 产业园直供, 特选好货, 需求信息
+     getCurrentSeasonHotProd () {
+       this.http.get('/api/product/getProductByCategory?group_id='+this.groupId).then(res => {
+         console.log('当季热门返回数据', res)
+         if(res.data.code===200) {
+           console.log('当季热门数据：',res.data.result.rows)
+           this.currentSeasonHotProd = res.data.result.rows
+         }
+       })
+     },
      handleClick (index, path) {
        this.routerNavIndex = index
+       this.groupId = index+1
+       this.getCurrentSeasonHotProd()
       //  console.log(path)
       //  this.$router.replace({ path })
      },
@@ -165,15 +206,28 @@ export default {
      },
      // 轮播图
      startCarousel () {
-      let wrapper = this.$refs.wrapper
+       console.log('refs:', this.refs.wrapper)
+       var wrapper = this.$refs.wrapper
+       console.log(wrapper)
       let timer = setInterval(() => {
         this.carouselIndex++
         // wrapper.style.transition = 'transform 3s linear'
+        console.log(wrapper)
         wrapper.style.transform ='translatex('+(-this.carouselIndex*1200)+ 'px'+')' 
         if(this.carouselIndex >= 4) {
           this.carouselIndex = 0
         }
       }, 3000) 
+     },
+     searchByCategory () {
+      //  this.$router.
+      console.log('通过商品分类获取产品列表')
+     },
+     handleSizeChange () {
+
+     },
+     handleCurrentChange () {
+
      }
    }
 }
@@ -310,7 +364,6 @@ export default {
       // 热销产品卡片列表
       .best_sell_cardsList {
         display: flex;
-        justify-content: space-between;
         flex-wrap: wrap;
       }
 
@@ -360,7 +413,7 @@ export default {
       }
 
     }
-    .best_in_season {
+    .product_category {
       // height: 1612px;
       .router_nav {
         display: flex;
@@ -373,6 +426,14 @@ export default {
         .router_nav_item_active {
           border-bottom: 7px solid #FFC90F;
         }
+      }
+      .best_in_season {
+        min-height: 600px;
+        width: 100%;
+        padding-top: 38px;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
       }
       .router_view {
         height: 1574px;

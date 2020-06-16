@@ -12,6 +12,9 @@ export default {
     return {
 
     }
+  },
+  created () {
+    this.$store.commit('changeLeftSideTabIndex', 9)
   }
 }
 </script>

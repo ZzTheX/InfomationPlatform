@@ -1,6 +1,9 @@
 import axios from 'axios'
+import { Message } from 'element-ui'
+import Vue from 'Vue'
+Vue.use(Message)
 let http = axios.create({
-  baseURL: 'https://platform.taogoucloud.com',
+  baseURL: 'http://platform.taogoucloud.com',
   withCredentials: true
 });
 //  请求拦截
@@ -15,7 +18,28 @@ http.interceptors.request.use(
   err => {
     return Promise.reject(err)
   })
-
+http.interceptors.response.use(
+  response => {
+    console.log('响应拦截response', response)
+    if(response.data.code === 500) {
+      Vue.prototype.$message({
+        type: 'warning',
+        message: response.data.msg
+      })
+    } else if(response.data.code === 4003) {
+      Vue.prototype.$message({
+        type: 'warning',
+        message: response.data.msg
+      })
+      localStorage.clear()
+    }
+    return response
+  },
+  error => {
+    console.log('错误处理', error, error.response)
+    return error
+  }
+)
   export default http
 // 请求方法二次封装
 // function apiAxios(method, url, params, response) {

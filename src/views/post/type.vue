@@ -13,7 +13,7 @@ export default {
   },
   methods: {
     toFillForm (path) {
-      this.$store.commit('stepChange', true)
+      // this.$store.commit('stepChange', true)
       this.$router.push(path)
     }
   }

@@ -249,6 +249,15 @@ export default{
           'Content-Type': 'application/json;charset=UTF-8'
         }
       }).then(res => {
+        if(res.data.code === 200) {
+          this.$message({
+            type: 'warning',
+            message: res.data.msg
+          })
+          this.$router.push({
+            name: 'myPost'
+          })
+        } 
         console.log('发布需求信息返回信息:', res)
       })
     },

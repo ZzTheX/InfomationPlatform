@@ -16,6 +16,9 @@ export default {
 
     }
   },
+  created () {
+    this.$store.commit('changeLeftSideTabIndex', 10)
+  },
   methods: {
     goToSurveyFormPage (isShowIdSelect, title) {
       this.$router.push(

@@ -5,7 +5,7 @@
     <img class='product_card_img' :src="prodData.main_picture">
     <div class='product_info'>
       <p class='product_description'>
-        <span>{{prodData.product_name}}|</span>
+        <span>{{prodData.product_name}}</span>
       </p>
       <p class='product_price'>
         <span class='is_support_bulk' v-if='prodData.is_support_bulk_purchase'>拼</span>
@@ -91,7 +91,7 @@ export default {
 .product_card {
   width: 282px;
   height: 365px;
-  margin-bottom: 38px;
+  margin-bottom: 64px;
   margin-right: 24px;
   display: flex;
   flex-direction: column;

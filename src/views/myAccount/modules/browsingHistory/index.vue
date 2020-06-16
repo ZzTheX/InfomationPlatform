@@ -17,6 +17,9 @@ export default {
 
     }
   },
+  created () {
+      this.$store.commit('changeLeftSideTabIndex', 4)
+  },
   components: {
     miniGoodsCard
   }

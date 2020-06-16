@@ -62,15 +62,15 @@
         <h3>收货地址</h3>
         <form action>
           <label for="shuliang">收货人</label>
-          阿凡达
+          {{adress.contact_person}}
         </form>
         <form action>
           <label for="shuliang">联系电话</label>
-          17234567890
+          {{adress.contact_mobile}}
         </form>
         <form action>
           <label for="shuliang">详细地址</label>
-          四川省成都市青羊区
+          {{adress.address}}
         </form>
       </div>
 
@@ -88,6 +88,7 @@
 export default {
   data() {
     return {
+      adress: {},
       merchandise: {
         name: "商品名称商品名fasf称商品名称商品名称商fdsafasfasfa品名称", //  商品名称
         unit_price: "99.90", //   单价
@@ -133,7 +134,19 @@ export default {
         value1: '',
     };
   },
+  created () {
+      this.getMyAdress()
+  },
   methods: {
+    // 获取收件地址
+    getMyAdress () {
+      this.http.get('/api/address/getAddressList').then(res => {
+        console.log('收件地址列表：', res)
+        if(res.data.code === 200) {
+          this.adress = res.data.result[0]
+        }
+      })
+    },
     ///       点击选择期望定金
     setMoney(money) {
       console.log(money);
@@ -152,7 +165,7 @@ export default {
       this.$router.go(-1)
     },
     handlePlaceOrder () {
-      // immediatelyCreateOrder调用创建订单接口
+      // immediatelyCreateOrder 调用创建订单接口
       // 返回支付信息    调用三方支付接口 成功和失败都跳转订单详情页面
       setTimeout(() => {
         this.$message({

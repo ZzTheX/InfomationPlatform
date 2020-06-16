@@ -19,6 +19,9 @@ export default {
 
     }
   },
+  created () {
+    this.$store.commit('changeLeftSideTabIndex', 8)
+  },
   methods: {
     handleRouter (index) {
       this.currentIndex = index

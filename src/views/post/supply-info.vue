@@ -113,7 +113,7 @@
         <el-input type='textarea' v-model="supplyData.description"></el-input>
       </el-form-item>
       <div class='btns_group'>
-        <p >保存商品</p>
+        <p @click='saveSupplyProduct'>保存商品</p>
         <p @click='publishNow'>立即发布</p>
       </div>
     </el-form>
@@ -188,7 +188,7 @@ export default {
       ],
       supplyData: {
         "available_end_time": '',
-        "available_quantity": "1000",
+        "available_quantity": "",
         "available_quantity_unit": "KG",
         "available_start_time": '',
         "batch_unit": "KG",
@@ -199,10 +199,10 @@ export default {
         "description": "产品简单的描述",
         "is_support_bulk_purchase": true,
         "latest_group_time": '',
-        "minimum_batch": "20",
+        "minimum_batch": "",
         "minimum_group_unit": "人",
-        "minimum_groups": "20",
-        "minimum_purchase_quantity": "20",
+        "minimum_groups": "",
+        "minimum_purchase_quantity": "",
         "minimum_purchase_unit": "KG",
         "picture_or_video": [
           {
@@ -210,11 +210,11 @@ export default {
             "url": "http://image.xingyuekeji.com.cn/b206968ad6f6495f92336f2c6213162e.png"
           }
         ],
-        "planting_scale": "500",
+        "planting_scale": "",
         "planting_unit": "亩",
         "product_name": "测试商品名称",
         "sales_area": [],
-        "supply_price": "200",
+        "supply_price": "",
         "supply_price_unit": "元"
       }
     }
@@ -278,22 +278,42 @@ export default {
       // 表单校验
       // if(!this.formValidate()) return
       // 上传数据前格式化处理
-      this.supplyData.available_end_time = Date.parse(this.supplyData.available_end_time).toString().substr(0, 10)*1
-      this.supplyData.available_start_time = Date.parse(this.supplyData.available_start_time).toString().substr(0, 10)*1
-      this.supplyData.latest_group_time = Date.parse(this.supplyData.latest_group_time).toString().substr(0, 10)*1
-      this.supplyData.sales_area = this.supplyData.sales_area.join(',')
-      this.supplyData.category_one = this.classThree[0]
-      this.supplyData.category_two = this.classThree[1]
-      this.supplyData.category_third = this.classThree[2]
-      this.supplyData.is_support_bulk_purchase = !!this.isSupport
-      console.log(this.classThree)
+      this.transformProductData()
       console.log('发布商品上传数据:', this.supplyData)
       this.http.post('/api/product/releaseSupplyProduct', this.supplyData, {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8'
         }
       }).then(res => {
+        if(res.data.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.msg
+          })
+        console.log('发布商品返回数据', res)
+          // 跳转去我的发布页面
+          this.$router.push({
+            name: 'myPost'
+          })
+        }
+      })
+    },
+    saveSupplyProduct () {
+      this.transformProductData()
+      this.http.post('saveSupplyProduct', this.supplyData, {
+        headers: {'Content-Type': 'application/json;charset=UTF-8'}
+      }).then(res => {
         console.log(res)
+        if(res.data.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.msg
+          })
+          // 跳转去我的发布页面
+           this.$router.push({
+            name: 'myPost'
+          })
+        }
       })
     },
     imgUpload () {
@@ -371,6 +391,17 @@ export default {
         return false
       }
       // 销售区域 
+    },
+    // 格式化上传商品数据  时间戳，地址， 分类等
+    transformProductData ()  {
+      this.supplyData.available_end_time = Date.parse(this.supplyData.available_end_time).toString().substr(0, 10)*1
+      this.supplyData.available_start_time = Date.parse(this.supplyData.available_start_time).toString().substr(0, 10)*1
+      this.supplyData.latest_group_time = Date.parse(this.supplyData.latest_group_time).toString().substr(0, 10)*1
+      this.supplyData.sales_area = this.supplyData.sales_area.join(',')
+      this.supplyData.category_one = this.classThree[0]
+      this.supplyData.category_two = this.classThree[1]
+      this.supplyData.category_third = this.classThree[2]
+      this.supplyData.is_support_bulk_purchase = !!this.isSupport
     }
   }
 }

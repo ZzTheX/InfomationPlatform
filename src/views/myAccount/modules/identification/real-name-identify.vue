@@ -4,26 +4,31 @@
     <div class="form_content">
       <el-form label-width="180px">
         <el-form-item label="姓名: ">
-          <el-input v-model="myIdInfo.name"></el-input>
+          <p v-if='verified'>{{myIdInfo.name}}</p>
+          <el-input v-else v-model="myIdInfo.name"></el-input>
         </el-form-item>
         <el-form-item label="性别: ">
-          <!-- <el-input></el-input> -->
-          <el-select v-model="myIdInfo.sex" placeholder="请选择">
+          <p v-if='verified'>{{myIdInfo.sex}}</p>
+          <el-select v-else v-model="myIdInfo.sex" placeholder="请选择">
             <el-option value="男">男</el-option>
             <el-option value="女">女</el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="身份证号码: ">
-          <el-input maxlength="18" v-model="myIdInfo.id_card"></el-input>
+          <p v-if='verified'>{{myIdInfo.id_card}}</p>
+          <el-input v-else maxlength="18" v-model="myIdInfo.id_card"></el-input>
         </el-form-item>
         <el-form-item label="生日:">
-          <el-date-picker v-model="myIdInfo.birthday" type="date" placeholder="选择日期"></el-date-picker>
+          <p v-if='verified'>{{myIdInfo.birthday}}</p>
+          <el-date-picker v-else v-model="myIdInfo.birthday" type="date" placeholder="选择日期"></el-date-picker>
         </el-form-item>
         <el-form-item label="邮箱:">
-          <el-input type="email" v-model="myIdInfo.email"></el-input>
+          <p v-if='verified'>{{myIdInfo.email}}</p>
+          <el-input v-else type="email" v-model="myIdInfo.email"></el-input>
         </el-form-item>
         <el-form-item label="联系地址:">
-          <el-input v-model="myIdInfo.address"></el-input>
+          <p v-if='verified'>{{myIdInfo.address}}</p>
+          <el-input v-else v-model="myIdInfo.address"></el-input>
         </el-form-item>
         <el-form-item label="上传身份证正面(必填):">
           <label for="id_front_pic">
@@ -50,18 +55,22 @@ import qs from 'qs'
 export default {
   data() {
     return {
+      verified: false,
       frontImg: "", //正面照片路劲 /img/up_load.e25d68a6.png
       reverseImg: "", //反面照片路劲 /img/up_load.e25d68a6.png
       myIdInfo: {
-        address: "四川省成都市", //联系地址
-        birthday: "1997-09-09", //生日
-        email: "17747789876@qq.com", //电子邮箱
-        id_card: "512671199709098765", //身份证号码
+        address: "", //联系地址
+        birthday: "", //生日
+        email: "", //电子邮箱
+        id_card: "", //身份证号码
         id_card_image: '', //证件照
-        name: "花花", //姓名
-        sex: "男" 
+        name: "", //姓名
+        sex: "" 
         }
     }
+  },
+  created () {
+    this.getVerifiedInfo()
   },
   methods: {
     uploadIdPic (e) {
@@ -72,13 +81,10 @@ export default {
         headers: {'Content-Type': '"multipart/form-data"'}
       }).then(res => {
         console.log('上传身份证图片返回信息:', res);
-        this.myIdInfo.id_card_image = res.data.result
-        // if(flag === 0) {
-        //   this.myIdInfo.id_card_image = res.data.result
-        // }else {
-        //   this.myIdInfo.id_card_image = this.myIdInfo.id_card_image + ',' + res.data.result
-        // }
-        // console.log(res.data.result)
+        if(res.data.code === 200) {
+          this.myIdInfo.id_card_image = res.data.result
+        }
+      
       })
       
     },
@@ -86,7 +92,28 @@ export default {
       this.http.post('/api/approve/realPersonCertification', this.myIdInfo, {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).then(res => {
-        console.log(res)
+        console.log('实名认证返回信息:', res)
+        if(res.data.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.msg
+          })
+        }
+      })
+    },
+    getVerifiedInfo () {
+      this.http.get('/api/member/personalInformation').then(res => {
+        if(res.data.code === 200) {
+          this.verified = res.data.result.verified
+        }
+        this.getMyInfo()
+      })
+    },
+    getMyInfo () {
+      if(this.verified  === false) { return }
+      this.http.get('/api/approve/getRealPersonCertification').then(res => {
+        console.log('获取我的实名认证资料:', res)
+        this.myIdInfo = res.data.result
       })
     }
 
@@ -171,6 +198,9 @@ export default {
     padding-left: 170px;
     .el-form {
       width: 490px;
+      p {
+        padding-left: 15px;
+      }
       /deep/.el-form-item__label {
         color: #333;
         font-size: 16px;

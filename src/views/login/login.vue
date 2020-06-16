@@ -70,17 +70,20 @@ export default {
               'Content-Type':'application/x-www-form-urlencoded'
             }
           }).then(res => {
-            let token = res.data.result.token
-            let { username } = res.data.result
-            localStorage.setItem('token', token)
-            localStorage.setItem('username', username)
-            this.$message({
-              message: '登录成功',
-              type: 'success'
-            })
-            this.$router.replace({
-              path
-            })
+              console.log('login.vue 登录返回数据', res)
+              // let token = res.data.result.token
+                res.data.code === 200
+                let { token, username } = res.data.result
+                localStorage.setItem('token', token)
+                localStorage.setItem('username', username)
+                this.$message({
+                  message: '登录成功',
+                  type: 'success'
+                })
+                this.$router.replace({
+                  path
+                })
+              
           })
           
       }

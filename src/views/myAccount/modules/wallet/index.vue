@@ -65,6 +65,9 @@ export default {
         }
       ]
     }
+  },
+  created () {
+      this.$store.commit('changeLeftSideTabIndex', 6)
   }
 
 }

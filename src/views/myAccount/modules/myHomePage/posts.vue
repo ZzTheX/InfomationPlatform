@@ -11,13 +11,14 @@
      </el-select>
     </div>
     <div class='goods_card_list'>
-      <goods-card v-for='i in 24' :key='i'></goods-card>
+      <!-- <goods-card v-for='i in 24' :key='i'></goods-card> -->
+      <miniGoodsCard v-for="(item, index) in prodData" :key='index' :prodData='item'></miniGoodsCard>
     </div>
   </div>
 </template>
 
 <script>
-import goodsCard from '../../../../components/goodsComponents/mini-goods-card'
+import miniGoodsCard from '../../../../components/goodsComponents/mini-goods-card'
 export default {
   data () {
     return {
@@ -31,15 +32,18 @@ export default {
   },
   created () {
     let haha = this
-    this.http.get('/prodData').then(function(res){
-      let { data } = res.data
-      console.log('posts组件返回数据: ' , data)
-      haha.prodData = data
+    this.http.get('/api/product/getMemberProductList').then((res) => {
+      console.log('我发布的产品数据列表：', res)
+      this.prodData = res.data.result.rows
+      // let { data } = res.data
+      // console.log('posts组件返回数据: ' , data)
+      // haha.prodData = data
 
     })
+    this.$store.commit('changeLeftSideTabIndex', 0)
   },
   components: {
-    'goods-card': goodsCard
+    miniGoodsCard
   }
 }
 </script>
@@ -74,7 +78,7 @@ export default {
   .goods_card_list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    // justify-content: space-between;
     align-content: flex-start;
     width: 100%;
     padding: 17px 0 26px 17px;

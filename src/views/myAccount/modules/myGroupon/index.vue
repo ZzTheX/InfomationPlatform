@@ -48,6 +48,9 @@ export default {
             goodsImg: require('../../../../assets/goods.png')
         }
     },
+    created () {
+        this.$store.commit('changeLeftSideTabIndex', 4)
+    },
     methods: {
       goToGrouponDetail () {
         this.$router.push()

@@ -35,19 +35,19 @@
         <span class="x" @click='isAdd=false'>x</span>
         <!-- ------- -->
         <el-form-item label="主要产品：">
-          <el-input placeholder="请输入产品名称"></el-input>
+          <el-input placeholder="请输入产品名称" v-model="gardens[0].products.product_name"></el-input>
         </el-form-item>
         <!-- --------- -->
         <el-form-item label="销售期间：">
           <div class="block">
-            <el-date-picker v-model="time_start" clear-icon type="month" placeholder="开始月份"></el-date-picker>
-            <el-date-picker v-model="time_end" clear-icon type="month" placeholder="结束月份"></el-date-picker>
+            <el-date-picker v-model="gardens[0].products.start_time" clear-icon type="month" placeholder="开始月份"></el-date-picker>
+            <el-date-picker v-model="gardens[0].products.end_time" clear-icon type="month" placeholder="结束月份"></el-date-picker>
           </div>
         </el-form-item>
         <!-- ---------- -->
         <el-form-item label="产品规模：">
-          <el-input class="duaninput" placeholder="请输入产品规模"></el-input>
-          <el-select class="danwei1" v-model="value" placeholder="请选择">
+          <el-input class="duaninput" v-model="gardens[0].products.yield_scale" placeholder="请输入产品规模"></el-input>
+          <el-select class="danwei1" v-model="gardens[0].products.yield_unit" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -58,10 +58,10 @@
         </el-form-item>
         <!-- ------- -->
         <el-form-item label="预计产量：">
-          <el-input class="duaninput" placeholder="请输入预计产量"></el-input>
-          <el-select class="danwei1" v-model="value" placeholder="单位">
+          <el-input class="duaninput" placeholder="请输入预计产量" v-model="gardens[0].products.expected_output"></el-input>
+          <el-select class="danwei1" v-model="gardens[0].products.expected_output_unit" placeholder="单位">
             <el-option
-              v-for="item in options"
+              v-for="item in outputOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -72,9 +72,10 @@
       <!-- ------- -->
       <el-form-item label="添加图片/视频：" class="uploads">
         <label for="upload">
-          <img src="../../../../assets/up_load.png" alt />
+          <img src="../../../../assets/up_load.png" ref='gradenImg' v-show='!isShowImg'/>
+          <img :src="gardens[0].garden_images" v-show='isShowImg' >
         </label>
-        <input type="file" id="upload" />
+        <input type="file" id="upload" @change="onchange"/>
       </el-form-item>
       <!-- -------- -->
       <el-form-item label="园地简介：">
@@ -83,7 +84,7 @@
           type="textarea"
           :rows="8"
           placeholder="请输入园地简介"
-          v-model="intro"
+          v-model="gardens[0].garden_introduction"
         ></el-input>
       </el-form-item>
     </el-form>
@@ -96,27 +97,22 @@
 export default {
   data() {
     return {
+      isShowImg: false,
       isAdd:false,
       options: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          value: "亩",
+          label: "亩"
         },
         {
-          value: "选项2",
-          label: "双皮奶"
-        },
+          value: "公顷",
+          label: "公顷"
+        }
+      ],
+      outputOptions: [
         {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
+          value: 'KG',
+          label: "KG"
         }
       ],
       gardens: [
@@ -125,21 +121,21 @@ export default {
           "garden_images": "",
           "garden_introduction": "",
           "garden_name": "",
-          "garden_scale": 50,
-          "latitude": "",
-          "longitude": "",
+          "garden_scale": '',
+          // "latitude": "经度",
+          // "longitude": "纬度",
           "products": [
             {
               "end_time": 1585554850,
-              "expected_output": 30,
-              "expected_output_unit": "",
+              "expected_output": 3000,
+              "expected_output_unit": "KG",
               "product_name": "",
               "start_time": 1577851200,
-              "yield_scale": 20,
-              "yield_unit": ""
+              "yield_scale": '',
+              "yield_unit": "KG"
             }
           ],
-          "scale_unit": ""
+          "scale_unit": "亩"
         }
       ],
       value: "",
@@ -149,12 +145,27 @@ export default {
     };
   },
   methods:{
-     beingAdd(){
+     beingAdd () {
         this.isAdd=!this.isAdd;
      },
+     onchange (e) {
+       let file = e.target.files[0]
+       let formData = new FormData()
+       formData.append('file', file)
+       this.http.post('/api/member/option/uploadFile', formData).then(res => {
+         if(res.data.code === 200) {
+           this.gardens[0].garden_images = res.data.result
+           this.isShowImg = true
+         }
+       })
+     },
      saveGardenInfo () {
-       console.log(this.gardens[0].garden_name)
+       console.log(this.gardens)
+      //  console.log(this.gardens[0].garden_name)
        this.$store.commit('saveGardenInfo', this.gardens)
+       this.$router.push({
+         name: 'supplierIdentify'
+       })
      }
   }
 };

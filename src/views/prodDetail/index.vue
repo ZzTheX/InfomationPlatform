@@ -3,6 +3,7 @@
     <div class="prod_detail">
       <div class="prod_card">
         <div class="prod_card_left">
+          {{prodData.info.product_name}}
           <img
             :src="prodData.info.banner[0].url"
             v-if="prodData.info.banner[0].type === 1"
@@ -145,13 +146,13 @@
             <p>
               实名认证:
               <span class="tag">{{
-                prodData.merchantInfo.description.verified ? "已认证" : "未认证"
+                prodData.merchantInfo.verified ? "已认证" : "未认证"
               }}</span>
             </p>
             <p>
               商家认证:
               <span class="tag">{{
-                prodData.merchantInfo.description.supplier_certification
+                prodData.merchantInfo.supplier_certification
                   ? "已认证"
                   : "未认证"
               }}</span>
@@ -159,7 +160,7 @@
             <p>
               芝麻认证:
               <span class="tag">{{
-                prodData.merchantInfo.description.sesame_authorize
+                prodData.merchantInfo.sesame_authorize
                   ? "已认证"
                   : "未认证"
               }}</span>
@@ -233,21 +234,60 @@
 export default {
   data() {
     return {
+      verified: false,
       inputValue: '',
       num: true,
       product_id: "",
       product_tag: "",
       prodData: {
-        is_attention: ""
+        approve_status: '',
+        comment_count: '',
+        comments: [],
+        descriptions: [],
+        group_count:'',
+        is_attention: "",
+        info: {
+          available_end_time: '',
+          available_inventory: '',
+          available_start_time: '',
+          merchant_id: '',
+          product_id: '',
+          banner: [],
+          product_name: '',
+          product_tag: '',
+          supply_price: '',
+        },
+        merchantInfo: {
+          company_name: '',
+          face: '',
+          credit_level: '',
+          description: '',
+          verified: '',
+          supplier_certification: '',
+          sesame_authorize: ''
+
+        }
       },
       isShowProdDesc: true
     };
   },
   created() {
-    this.product_id = this.$route.query.product_id;
-    this.getProductDetail();
+    this.product_id = this.$route.query.product_id
+    // 获取用户认证信息
+    this.getVerifiedInfo()
+    
+  },
+  mounted () {
+    this.getProductDetail()
   },
   methods: {
+    getVerifiedInfo () {
+      this.http.get('/api/member/personalInformation').then(res => {
+        if(res.data.code === 200) {
+          this.verified = res.data.result.verified
+        }
+      })
+    },
     getProductDetail() {
       let { product_tag, product_id } = this.$route.query;
       // 采购商品详情
@@ -255,8 +295,14 @@ export default {
         this.http
           .get(`/api/product/getPurchaseProductDetail?product_id=${product_id}`)
           .then(res => {
+            console.log('code：采购商', res.data.code)
             if (res.data.code === 200) {
+              console.log('获取商品详情成功')
               this.prodData = res.data.result;
+              this.prodData.info = res.data.result.info
+              this.prodData.info.descriptions = res.data.result.info.descriptions
+              this.prodData.merchantInfo = res.data.result.merchantInfo
+              console.log('this.prodData：', this.prodData)
             } else {
               this.$message({
                 message: res.data.msg,
@@ -272,8 +318,14 @@ export default {
         this.http
           .get(`/api/product/getSupplyProductDetail?product_id=${product_id}`)
           .then(res => {
+             console.log('code:供应商', res.data.code)
             if (res.data.code === 200) {
+              console.log('获取商品详情成功')
               this.prodData = res.data.result;
+              this.prodData.info = res.data.result.info
+              this.prodData.info.descriptions = res.data.result.info.descriptions
+              this.prodData.merchantInfo = res.data.result.merchantInfo
+                console.log('this.prodData：', this.prodData)
             } else {
               this.$message({
                 message: res.data.msg,
@@ -298,6 +350,17 @@ export default {
     handleLaunchGroupon() {},
     handleAddToCart() {},
     handleToOrderNow() {
+     //  判断用户是否实名认证
+      if(this.verified === false) {
+        this.$message({
+          type: 'warning',
+          message: '请先进行实名认证'
+        })
+        this.$router.push({
+          name: 'realNameIdentify'
+        })
+        return
+      }
       this.$router.push({
         name: "orderNow"
       });

@@ -4,7 +4,8 @@
     <div class="form_wraper">
       <el-form label-width="340px">
         <el-form-item label="供应商名称：">
-          <el-input></el-input>
+          <el-input v-show='!isSubmmited' v-model='certiData.supplier_name'></el-input>
+          <p v-show='isSubmmited'>{{certificationInfo.supplier_name}}</p>
         </el-form-item>
         <el-form-item label="种植养殖园地：">
           <div @click="goAddField" class="addFieldBtn">点击添加园地<img src="../../../../assets/triangle.png" alt=""></div>
@@ -35,38 +36,53 @@
           </div>
         </div>
         <el-form-item label="园地负责人：">
-          <el-input></el-input>
+          <el-input v-show='!isSubmmited' v-model='certiData.principal'></el-input>
+           <p v-show='isSubmmited'>{{certificationInfo.principal}}</p>
         </el-form-item>
         <el-form-item label="联系电话：">
-          <el-input></el-input>
+          <el-input v-show='!isSubmmited' v-model='certiData.contact_number'></el-input>
+           <p v-show='isSubmmited'>{{certificationInfo.contact_number}}</p>
         </el-form-item>
         <el-form-item label="联系邮箱：">
-          <el-input></el-input>
+          <el-input v-show='!isSubmmited' v-model='certiData.contact_email'></el-input>
+           <p v-show='isSubmmited'>{{certificationInfo.contact_email}}</p>
         </el-form-item>
         <el-form-item label="联系地址：">
-          <el-input></el-input>
+          <el-input v-show='!isSubmmited' v-model='certiData.contact_address'></el-input>
+           <p v-show='isSubmmited'>{{certificationInfo.contact_address}}</p>
         </el-form-item>
-        <div style="padding-left: 340px">补充信息</div>
+        <el-form-item label="补充信息(选填)">
+          <el-tag type='warning'>如有, 请提交以便于获得更高信用授权</el-tag>
+        </el-form-item>
+        <!-- <div style="padding-left: 340px">补充信息</div> -->
         <el-form-item label="公司名称：">
-          <el-input></el-input>
+          <el-input v-show='!isSubmmited' v-model="certiData.company_name"></el-input>
+           <p v-show='isSubmmited'>{{certificationInfo.company_name}}</p>
         </el-form-item>
         <el-form-item label="公司税号：">
-          <el-select></el-select>
+          <el-input v-show='!isSubmmited' v-model="certiData.company_tax_id"></el-input>
+           <p v-show='isSubmmited'>{{certificationInfo.company_tax_id}}</p>
         </el-form-item>
         <el-form-item label="企业规模：">
-          <el-input></el-input>
+         <el-input v-show='!isSubmmited' v-model='certiData.enterprise_size'></el-input>
+          <p v-show='isSubmmited'>{{certificationInfo.enterprise_size}}</p>
         </el-form-item>
-        <el-form-item id="hisiri" label="上传营业执照照片：">
-          <el-upload>
-            <el-button type="info">选择文件</el-button>
-            <span>未选择任何文件</span>
-          </el-upload>
+        <el-form-item id="hisiri" label="上传营业执照照片:" v-show='!isSubmmited'>
+          <label for="licenseUpload">
+            <img :src="certiData.business_license" v-show='isShowLicense'>
+            <div class='upload' v-show='!isShowLicense'>+</div>
+            <input type="file" id='licenseUpload' style="display:none" @change='onchange'>
+          </label>
+        </el-form-item>
+        <el-form-item id="hisiri" label="营业执照照片:" v-show='isSubmmited'>
+            <img :src="certificationInfo.business_license" >
         </el-form-item>
         <el-form-item label>
           <span class="hint_info">支持文件拓展名:pdf、jpg、png...</span>
         </el-form-item>
         <el-form-item label>
-          <div class="submit_button">提交认证</div>
+          <div v-show='!isSubmmited' class="submit_button" @click='submitSupplierCerti'>提交认证</div>
+          <div v-show='isSubmmited' class="submit_button">{{supplier_certification | certificationStatus}}</div>
         </el-form-item>
       </el-form>
     </div>
@@ -75,15 +91,93 @@
 
 <script>
 export default {
+  data () {
+    return {
+      supplier_certification: 0,
+      isShowLicense: false,
+      certificationInfo: {},
+      certiData: {
+          business_license: '',
+          certification_type: 1,
+          company_name: "",
+          company_tax_id: "",
+          contact_address: "",
+          contact_email: "",
+          contact_number: "",
+          enterprise_size: "",
+          principal: '',
+          supplier_name: '',
+      } 
+    }
+  },
+  filters: {
+    certificationStatus (value) {
+       console.log('certificationStatus',value)
+      if(value === 1) {
+       return '审核中'
+      } else if(value === 2) {
+        return  '审核未通过'
+      } else if (value === 3) {
+        return  '审核已通过'
+      }
+    }
+  },
+  computed: {
+    isSubmmited () {
+      return this.supplier_certification > 0
+    }
+  },
+  created () {
+    console.log('status;', this.supplier_certification)
+    this.supplier_certification = this.$route.query.supplier_certification
+    this.getCertificationInfo()
+  },
   methods:{
+    getCertificationInfo () {
+      this.http.get('/api/approve/getCertification?certification_type=1').then(res => {
+        if(res.data.code === 200) {
+          console.log('供应商认证信息', res)
+          this.certificationInfo = res.data.result
+        }
+      })
+    },
+    onchange (e) {
+      let file = e.target.files[0]
+      let formData = new FormData()
+      formData.append('file', file)
+      this.http.post('/api/member/option/uploadFile', formData).then(res => {
+        // console.log('营业执照上传返回数据：', res)
+        this.certiData.business_license = res.data.result
+        this.isShowLicense = true
+      })
+    },
     goAddField () {
      this.$router.push({
        path: "add-field",
        qurey: ""
-     }); 
+     })
+    },
+    submitSupplierCerti () {
+      console.log('园地信息:', this.$store.state.gardens)
+      this.certiData.gardens = this.$store.state.gardens
+      this.http.post('/api/approve/certification', this.certiData).then(res => {
+        if(res.data.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.msg
+          })
+          this.$router.replace({
+            name: 'identification'
+          })
+        }
+      })
+    },
+    handleSucess (res, file) {
+      console.log(res, file)
     }
+
   }
-};
+}
 </script>
 <style lang='less'>
 .suplier {
@@ -116,6 +210,20 @@ export default {
       }
       #hisiri {
         margin-bottom: 0;
+        img {
+          width: 309px;
+          
+        }
+        .upload {
+          width: 200px;
+          height: 200px;
+          text-align: center;
+          line-height: 200px;
+          border: 1px dashed #999;
+          color: #909090;
+          font-size: 80px;
+          // font-weight: ;
+        }
       }
       .hint_info {
         font-size: 12px;

@@ -31,7 +31,7 @@
             @click='jumpToRouter(index, item.link)'
             v-for='(item, index) in tabList'
             :key='index'
-            :class="{active: currentTabIndex === index}">{{item.title}}</li>
+            :class="{active: leftSideTabIndex === index}">{{item.title}}</li>
         </div>
       </div>
       <!-- 个人主页右侧 -->
@@ -79,9 +79,15 @@ export default {
       isMyHomepage: true
     }
   },
+  computed: {
+    leftSideTabIndex () {
+      return this.$store.state.leftSideTabIndex
+    }
+  },
   methods: {
     jumpToRouter (index, path) {
-      this.currentTabIndex = index
+      // this.$store.commit('changeLeftSideTabIndex', index)
+      // this.currentTabIndex = index
       this.$router.replace('/my-account/' + path)
     }
   }
@@ -225,10 +231,8 @@ export default {
           cursor: pointer;
           &.active {
            border-left: 4px solid #FFC90F;
+           font-weight: bold;
           }
-        }
-        li:first-child {
-          font-weight: bold;
         }
       }
     }

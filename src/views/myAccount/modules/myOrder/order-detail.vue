@@ -52,13 +52,8 @@
                 <div v-if='status === 1'>立即付款</div>
                 <!-- <div v-if='status === 2'>待确认</div> -->
             </div>
-           
-            <!-- <div v-if=''>去发货</div> -->
-            <!-- <div>去评价</div>
-            <div>确认收货</div>
-            <div>修改订单</div>
-            <div>申请提款</div> -->
         </div>
+        <!-- 修改订单表单弹窗 -->
          <div class='modify_order' v-show='isShoWModify'>
           <div>
               <p>原有信息</p>
@@ -89,6 +84,7 @@
               </div>
           </div>
          </div>
+         <!-- 选择物流弹窗 -->
          <div class='choose_deliver' v-show='isShowDeliver'>
              <div class='deliver_pop'>
                  <p>物流信息<span @click='hideDeliverPop'>×</span></p>
@@ -103,6 +99,7 @@
                 <div class='submit_btn' @click='submitDeliverInfo'>提交</div>
              </div>
          </div>
+         <!-- 确认是否拒绝弹窗 -->
          <div class='refuse_popout' v-show='isShowRefuse'>
             <div class='refuse_pop'>
                  <p><span @click='isShowRefuse=false'>×</span></p>
@@ -110,6 +107,7 @@
                 <div  @click='refuseRefund'>拒绝退款</div>
             </div>
          </div>
+         <!-- 拒绝理由文本框弹窗 -->
          <div class='refuse_reason' v-show='isShowRefuseReason'>
              <div>
                  <p>回绝理由</p>
@@ -120,6 +118,16 @@
                  </div>
              </div>
          </div>
+         <!-- 取消订单弹窗 -->
+         <div class='cancel_order' v-show='isShowCancelOrder'>
+             <div class='wrap'>
+                <p>确认取消订单？<span style='float:right;cursor:pointer' @click='isShowCancelOrder=false'>×</span></p>
+                <div class='buttons'>
+                    <button>取消</button>
+                    <button>确认</button>
+                </div>
+             </div>
+         </div>
     </div>
 </template>
 
@@ -127,6 +135,7 @@
 export default{
     data () {
         return {
+            isShowCancelOrder: false,
             isShoWModify: '',
             status: '',
             isShowDeliver: false,
@@ -497,6 +506,40 @@ export default{
             }
        }
       
+     }
+     .cancel_order {
+       position: fixed;
+       top: 0;
+       right: 0;
+       left:0;
+       bottom: 0;
+       background-color: rgba(0, 0, 0, 0.4);
+       .wrap {
+           margin: auto;
+           width: 500px;
+           height: 300px;
+           background-color: #fff;
+           margin-top: 170px;
+           padding: 28px 37px 0 39px;
+           font-size: 18px;
+           font-weight: 600;
+           .buttons {
+               display: flex;
+                margin-top: 120px;
+                justify-content: space-evenly;
+                >button {
+                    width: 180px;
+                    height: 50px;
+                    background-color: #D9D9D9;
+                    outline: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    &:last-child {
+                        background-color: #FFC90F;
+                    }
+                }
+           }
+       }
      }
  }
 </style>

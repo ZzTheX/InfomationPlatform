@@ -23,36 +23,8 @@ const routes = [
        name: 'index',
        alias: 'home',
        component: MainPart,
-       redirect: { name: 'hotInSeason'},
-       children: [
-         {
-           path: 'hot-in-season',
-           name: 'hotInSeason',
-           component: () => import('../views/home/hotInSeason.vue')
-         },
-         {
-           path: 'supply',
-           name: 'supply',
-           component: () => import('../views/home/supply.vue')
-         },
-         {
-           path: 'selection',
-           name: 'selection',
-           component: () => import('../views/home/selection.vue')
-         },
-         {
-           path: 'promotion',
-           name: 'promotion',
-           component: () => import('../views/home/promotion.vue')
-         },
-         {
-           path: 'require-info',
-           name: 'requireInfo',
-           component: () => import('../views/home/requireInfo.vue')
-         }
-       ]
      },
-     //登录页面
+    // 登录页面
      {
        path: 'login',
        name: 'login',
@@ -365,18 +337,31 @@ const routes = [
           component: () => import('../views/myAccount/modules/agreement'),
           meta: { auth: true }
         },
+        // 设置
         {
           path: 'settings',
           name: 'settings',
           component: () => import('../views/myAccount/modules/settings'),
-          redirect: {name:'personal-info'},
+          redirect: {name:'personalInfo'},
           meta: { auth: true },
           children: [
             {
               path: 'personal-info',
-              name: 'personal-info',
+              name: 'personalInfo',
               component: () => import('../views/myAccount/modules/settings/personal-info.vue'),
               meta: { auth: true }
+            },
+            {
+              path: 'modify-password',
+              name: 'modifyPassword',
+              component: () => import('../views/myAccount/modules/settings/modify-password.vue'),
+              meta: { auth: true }
+            },
+            {
+              path: 'adress-manage',
+              name: 'adressManage',
+              component: () => import('../views/myAccount/modules/settings/adress-manage.vue'),
+              meta: {auth: true}
             }
           ]
         }

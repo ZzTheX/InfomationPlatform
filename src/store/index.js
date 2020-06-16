@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     // 发布商品步骤条
     isStepTwo: '',
+    leftSideTabIndex: '',
     gardens: [
       {
         "garden_address": "",
@@ -44,6 +45,10 @@ export default new Vuex.Store({
     goodsListChange (state, value) {
       state.goodsList = value
       console.log('vuex---goodsList', value)
+    },
+    changeLeftSideTabIndex(state, value) {
+      console.log('changeLeftSideTabIndex', state, value)
+      state.leftSideTabIndex = value
     }
   },
   actions: {

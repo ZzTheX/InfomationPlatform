@@ -3,9 +3,10 @@
     <div class='merchant'>
       <div class='merchant_card'>
           <img src="../../assets/company.png" alt="">
-          <span class='company_name'>河鲜贞诗养殖公司</span>
-          <span>昵称名字</span>
-          <span>采购商认证</span>
+          <span class='company_name'>公司名称</span>
+          <span>昵称</span>
+          <span class='vertified'>采购商认证</span>
+          <span class='vertified'>供应商认证</span>
       </div>
       <div class="home_nav">
         <span class='active'>我发布的</span>
@@ -49,7 +50,7 @@ export default {
     margin: auto;
     background-color: #F5F5F5FF;
     .merchant_card {
-        height: 322px;
+        height: 330px;
         border-bottom: 1px solid #F0F0F0;
         display: flex;
         flex-direction: column;
@@ -62,6 +63,7 @@ export default {
         > img {
             width: 80px;
             height: 80px;
+            flex-shrink: 0;
             margin-bottom: 22px;
         }
         span:nth-child(2) {
@@ -74,8 +76,8 @@ export default {
             color: #333;
             font-size: 18px;
         }
-        span:nth-child(4) {
-          width: 81px;
+        >span.vertified {
+           width: 81px;
           height: 22px;
           line-height: 22px;
           font-size: 12px;
@@ -103,6 +105,7 @@ export default {
     }
     .main_content {
       display: flex;
+      min-height: 800px;
       .company_intro {
         width: 222px;
         margin-right: 14px;

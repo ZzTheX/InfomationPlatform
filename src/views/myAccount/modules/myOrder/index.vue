@@ -212,6 +212,7 @@ export default {
         this.http.get('/api/order/getMemberOrderPage').then(res => {
             console.log(res)
         })
+        this.$store.commit('changeLeftSideTabIndex', 2)
     },
     filters: {
 

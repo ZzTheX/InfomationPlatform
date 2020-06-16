@@ -5,8 +5,7 @@
         <el-form
           label-width='150px'>
           <el-form-item label='采购商名称:'>
-            <el-input v-if='false' v-model="purchaserInfo.supplier_name"></el-input>
-            <el-tag type='info' v-if='true'>采购商名称</el-tag>
+            <el-input v-model="purchaserInfo.supplier_name"></el-input>
           </el-form-item>
           <el-form-item label='公司名称:'>
             <el-input v-model="purchaserInfo.company_name"></el-input>
@@ -50,7 +49,7 @@
            <img src="" alt="">
           </el-form-item>
           <el-form-item label=''>
-            <div class='submit_button' @click='getCertification'>提交认证</div>
+            <div class='submit_button' @click='submitCertification'>提交认证</div>
           </el-form-item>
         </el-form>
       </div>
@@ -82,7 +81,7 @@ export default {
       ],
       purchaserInfo: {
         "business_license": "",
-        "certification_type": 1,
+        "certification_type": 2,
         "company_name": "",
         "company_tax_id": "",
         "contact_address": "",
@@ -97,9 +96,11 @@ export default {
   methods: {
     imgUploadSucess (res, file, fileList) {
       // console.log(res, file, fileList)
-      this.purchaserInfo.business_license = res.data.result
+      console.log('图片上传回调:', res)
+      this.purchaserInfo.business_license = res.result
     },
-    getCertification () {
+    submitCertification () {
+      console.log('提交采购认证数据:', this.purchaserInfo)
       this.http.post('/api/approve/certification', this.purchaserInfo).then(res => {
         console.log(res)
         if(res.data.code === 200) {
@@ -114,8 +115,6 @@ export default {
             type: 'warning'
           })
         }
-       
-        
       })
     }
   }

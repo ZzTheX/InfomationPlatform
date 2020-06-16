@@ -2,25 +2,25 @@
   <div 
     class='product_card' 
     :style="{marginRight: (prodCardIndex + 1) % 4 === 0 ? '0' : '24px' }"
-    @click='goToDetailPage'>
-    <img class='product_card_img' :src="prodData.src" alt="">
+    @click='goToDetailPage(prodData.product_id, prodData.product_tag)'>
+    <img class='product_card_img' :src="prodData.main_picture" alt="">
     <div class='product_info'>
       <p class='product_description'>
-        <span>{{prodData.brand}}|</span>
-        <span>{{prodData.des | ommit}}</span>
+        <span>{{prodData.product_name}}</span>
       </p>
       <p class='store_info'>
-        <span class='store_number'>可售总数量: {{prodData.inventory}}</span>
-        <span class='time'>{{prodData.time}}</span>
+        <span class='store_number'>可售总数量: {{'undifined'}}</span>
+        <span class='time'>{{dateFormat(prodData.release_time)}}</span>
       </p>
       <p class='price_info'>
-        <span class='prod_price'>{{prodData.price | priceFilter}}</span>
-        <span class='prod_origin'>{{prodData.origin}}</span>
+        <span class='prod_price'>{{prodData.product_price | priceFilter}}</span>
+        <span class='prod_origin'>{{'undifined'}}</span>
       </p>
     </div>
   </div>
 </template>
 <script>
+import {dateFormat} from '../../utils/transform.js'
 export default {
   data () {
     return {
@@ -56,9 +56,17 @@ export default {
     }
   },
   methods: {
-    goToDetailPage () {
-      this.$router.push('/prod-detail')
-    }
+    goToDetailPage (id, tag) {
+      // id 为商品id  tag为商品分类 tag=1供应商品 tag=2需求商品
+      this.$router.push({
+        name: 'prodDetail',
+        query: {
+          product_id: id,
+          product_tag: tag
+        }
+      })
+    },
+    dateFormat: dateFormat
   }
 }
 </script>
