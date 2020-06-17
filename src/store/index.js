@@ -32,7 +32,10 @@ export default new Vuex.Store({
         "scale_unit": ""
       }
     ],
-    goodsList: []
+    goodsList: [],
+    myInfo: {},
+    isLoading: false
+
   },
   mutations: {
     stepChange (state, value) {
@@ -49,7 +52,19 @@ export default new Vuex.Store({
     changeLeftSideTabIndex(state, value) {
       console.log('changeLeftSideTabIndex', state, value)
       state.leftSideTabIndex = value
+    },
+    storeMyInfo (state, value) {
+      state.myInfo = value
+    },
+    startLoading (state) {
+      console.log('startLoading')
+      state.isLoading = true
+    },
+    endLoading (state) {
+      console.log('loadingEnd')
+      state.isLoading = false
     }
+
   },
   actions: {
   },

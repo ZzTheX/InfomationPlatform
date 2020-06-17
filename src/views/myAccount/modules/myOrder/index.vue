@@ -7,17 +7,17 @@
           :key='index'
           :class='{active: navTabIndex === index}' 
           @click='handleClick(index)'>{{item.title}}</p>
-          <el-select v-model="value1" @change='handleSaleTypeChange'>
+          <el-select v-model="orderQuery.sale_type" @change='handleSaleTypeChange'>
               <el-option
-                v-for="(item, index) in options1"
+                v-for="(item, index) in saleTypeOption"
                 :key="index"
                 :label="item.label"
                 :value="item.value">
               </el-option>
           </el-select>
-          <el-select v-model="value2" @change='handleOrderTypeChange'>
+          <el-select v-model="orderQuery.order_type" @change='handleOrderTypeChange'>
             <el-option
-                v-for="(item, index) in options2"
+                v-for="(item, index) in orderTypeOption"
                 :key="index"
                 :label="item.label"
                 :value="item.value">
@@ -116,6 +116,12 @@
 export default {
     data () {
         return {
+            orderQuery: {
+                sale_type: 1,
+                order_type: 1,
+                page_no: 1,
+                page_size: 6
+            },
             sale_type: 1,
             isModifyVisible: false,
             value: 0,
@@ -186,31 +192,31 @@ export default {
                 }
 
             ],
-            options1: [
+            saleTypeOption: [
                 {
-                    value: '我购买的',
+                    value: 1,
                     label:' 我购买的'
                 },
                 {
-                    value: '我卖出的',
+                    value: 2,
                     label:' 我卖出的'
                 }
             ],
-            options2: [
+            orderTypeOption: [
                 {
-                    value: '拼购',
+                    value: 2,
                     label: '拼购'
                 },
                 {
-                    value: '立即下单',
+                    value: 1,
                     label: '立即下单'
                 }
             ]
         }
     },
     created () {
-        this.http.get('/api/order/getMemberOrderPage').then(res => {
-            console.log(res)
+        this.http.get('/api/order/getMemberOrderPage', this.orderQuery).then(res => {
+            console.log('订单列表返回数据：',res)
         })
         this.$store.commit('changeLeftSideTabIndex', 2)
     },

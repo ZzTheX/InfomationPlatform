@@ -26,23 +26,24 @@
 
         <!-- 收货地址列表 -->
        
-        <h6>我的收货地址</h6>
+        <p style='margin-bottom: 15px'>我的收货地址</p>
         <el-table
             :data="tableData"
             style="width: 100%">
             <el-table-column
                 prop="contact_person"
                 label="姓名"
-                width="180">
+                width="120">
             </el-table-column>
             <el-table-column
                 prop="address"
-                label="地址">
+                label="地址"
+                width="240">
             </el-table-column>
              <el-table-column
                 prop="contact_mobile"
                 label="电话"
-                width="180">
+                width="140">
             </el-table-column>
             <el-table-column
                 label="操作"
@@ -92,7 +93,6 @@ export default{
             addressList: [],
             isEdible: false,
             editAdress: {
-
             },
             newAdress: {
                 contact_person: '',
@@ -138,7 +138,7 @@ export default{
                         type: 'success',
                         message: res.data.msg
                     })
-                    window.location.reload()
+                   this.$router.go(0)
                 }
             })
         },
@@ -246,7 +246,7 @@ export default{
         }
         .edit_adress {
             text-align: center;
-            width: 200px;
+            width: 240px;
             height: 40px;
             border-radius: 2px;
             background-color: #ffc90f;

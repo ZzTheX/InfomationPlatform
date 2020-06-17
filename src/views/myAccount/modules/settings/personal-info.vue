@@ -6,39 +6,44 @@
              width="92"
              height="92"
              :src="myInfo.face" >
-            <span class='modify_button' @click='handleEditMyInfo' v-show='!isEdible'>修改</span>
+            <span class='modify_button' @click='handleEditMyInfo' v-show='!isEdible'>编辑</span>
             <span class='modify_button' @click='isEdible=false' v-show="isEdible">查看</span>
             <label for="editAvatar" class='edit_avatar' v-show='isEdible'>
-                <span>编辑</span>
-                <input type="file" style='display:none' id='editAvatar'>
+                <span>上传</span>
+                <input type="file" style='display:none' id='editAvatar' @change='uploadAvatar'>
             </label>
          </el-form-item>
          <el-form-item label='登录ID'>
-             <p v-show='!isEdible'>123456789</p>
-             <el-input v-show='isEdible' v-model='myInfo.mobile'>123456789</el-input>
+             <p>{{myInfo.mobile}}</p>
          </el-form-item>
          <el-form-item label='昵称'>
-             <p v-show='!isEdible'>昵称</p>
-             <el-input v-show='isEdible' v-model='myInfo.nickname'>123456789</el-input>
+             <p v-show='!isEdible'>{{myInfo.nickname}}</p>
+             <el-input v-show='isEdible' v-model='myInfo.nickname'></el-input>
          </el-form-item>
          <el-form-item label='性别'>
-             <p v-show='!isEdible'>性别</p>
-              <el-input v-show='isEdible' v-model='myInfo.sex'>123456789</el-input>
+             <p v-show='!isEdible'>{{myInfo.sex || '未选择'}}</p>
+              <el-select v-show='isEdible' v-model='myInfo.sex'>
+                  <el-option 
+                    v-for='(item, index) in sexOptions'
+                    :key='index'
+                    :label="item.label"
+                    :value='item.value'></el-option>
+              </el-select>
          </el-form-item>
          <el-form-item label='生日'>
-             <p v-show='!isEdible'>19980326</p>
-              <el-input v-show='isEdible' v-model='myInfo.birthday'>123456789</el-input>
+             <p v-show='!isEdible'>{{dateFormat(myInfo.birthday) || '未选择'}}</p>
+              <el-date-picker type='date' v-show='isEdible' v-model='myInfo.birthday'></el-date-picker>
          </el-form-item>
-         <el-form-item label='常住'>
-             <p v-show='!isEdible'>成都</p>
-             <el-input v-show='isEdible' v-model='myInfo.resident'>123456789</el-input>
+         <el-form-item label='常住地址'>
+             <p v-show='!isEdible'>{{myInfo.resident || '未选择'}}</p>
+             <el-input v-show='isEdible' v-model='myInfo.resident'></el-input>
          </el-form-item>
          <el-form-item label='简介'>
-             <p v-show='!isEdible'>个人简介</p>
-             <el-input type='textarea' v-show='isEdible' v-model='myInfo.introduction'>个人简介</el-input>
+             <p v-show='!isEdible'>{{myInfo.introduction || '未填写'}}</p>
+             <el-input type='textarea' v-show='isEdible' v-model='myInfo.introduction'></el-input>
          </el-form-item>
          <el-form-item label='喜欢的'>
-             <el-tag type="info" v-for='item in 3' :key=item>标签{{item}}</el-tag>
+             <el-tag type="info" v-for='item in myInfo.like' :key='item'>{{item}}</el-tag>
          </el-form-item>
          <el-form-item label=' '>
              <div class='edit_myinfo' @click='submitEditMyInfo' v-show='isEdible'>提交</div>
@@ -48,6 +53,7 @@
 </template>
 
 <script>
+import { dateFormat } from '../../../../utils/transform.js'
 export default {
     data () {
         return {
@@ -58,11 +64,23 @@ export default {
                 mobile: '',
                 face: '',
                 nickname: '',
+                birthday: '',
                 sex: '',
                 resident: '',
                 like: [],
                 introduction: ''
-            }
+            },
+            sexOptions: [
+                {
+                    label: '男',
+                    value:'男'
+                },
+                {
+                    label: '女',
+                    value: '女'
+
+                }
+            ]
         }
     },
     created () {
@@ -71,6 +89,19 @@ export default {
     components: {
     },
     methods: {
+        dateFormat: dateFormat,
+        uploadAvatar (e) {
+            console.log('upload')
+            this.$store.commit('startLoading')
+            let file = e.target.files[0]
+            let formData = new FormData()
+            formData.append('file', file)
+            this.http.post('/api/member/option/uploadFile', formData).then(res => {
+                this.myInfo.face = res.data.result
+                this.$store.commit('endLoading')
+            })
+
+        },
         handleLogout () {
             localStorage.clear()
             this.$router.push('/')
@@ -87,14 +118,14 @@ export default {
             })
         },
         submitEditMyInfo () {
-            console.log('submit => post')
+            console.log('submit => post', this.myInfo)
+            this.myInfo.birthday = new Date(this.myInfo.birthday).getTime()
             this.http.post('/api/member/updatePersonalInformation', this.myInfo).then(res => {
-
                 console.log('submit-res', res)
                 if(res.data.code === 200) {
                     this.$message({
                         type: 'success',
-                        message: '密码修改成功'
+                        message: res.data.msg
                     })
                 } else {
                     this.$message({
@@ -102,6 +133,8 @@ export default {
                         message: res.data.msg
                     })
                 }
+                this.getMyInfo()
+                this.isEdible = false
             })
         }
     }
@@ -122,8 +155,14 @@ export default {
             /deep/.el-form-item__content {
                 display: flex;
             }
+            .el-select {
+                width: 224px;
+            }
             .el-textarea {
                 width: 224px;
+                .el-textarea__inner {
+                    height: 100px;
+                }
             }
         }
         .avatar {

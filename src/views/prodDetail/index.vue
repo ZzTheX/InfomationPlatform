@@ -3,13 +3,12 @@
     <div class="prod_detail">
       <div class="prod_card">
         <div class="prod_card_left">
-          {{prodData.info.product_name}}
           <img
             :src="prodData.info.banner[0].url"
             v-if="prodData.info.banner[0].type === 1"
             ref="mainImg"
           />
-          <video controls poster="/images/w3school.gif" v-else>
+          <video controls poster="" v-else>
             <source src="movie.mp4" type="video/mp4" />
             你的浏览器不支持H5视频播放,推荐您使用<a
               href="https://www.google.cn/intl/zh-CN/chrome/"

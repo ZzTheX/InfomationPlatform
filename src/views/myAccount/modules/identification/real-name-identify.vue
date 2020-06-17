@@ -30,17 +30,25 @@
           <p v-if='verified'>{{myIdInfo.address}}</p>
           <el-input v-else v-model="myIdInfo.address"></el-input>
         </el-form-item>
-        <el-form-item label="上传身份证正面(必填):">
-          <label for="id_front_pic">
-            <img width="310px" height="168px" :src="frontImg"/>
-          </label>
-          <input type="file" id="id_front_pic" ref="frontPic" @change='uploadIdPic' style="display:none;">
+        <el-form-item label="身份证正面:" v-if='verified'>
+            <img width="310px" height="168px" :src="myIdInfo"/>
         </el-form-item>
-        <el-form-item label="上传身份证反面(必填):">
+         <el-form-item label="上传身份证正面(必填):" v-else>
+          <label for="id_front_pic">
+            <img width="310px" height="168px" :src="frontImg" v-if='isUploadFront' />
+            <img width="310px" height="168px" :src="frontImg" v-else />
+          </label>
+          <input type="file" id="id_front_pic" ref="frontPic" @change='uploadIdPicFront' style="display:none;">
+        </el-form-item>
+        <el-form-item label="身份证反面:" v-if='verified' >
+            <img width="310px" height="168px" :src="reverseImg" v-if='isUploadBack'/>
+            <img width="310px" height="168px" :src="reverseImg" v-else/>
+        </el-form-item>
+        <el-form-item label="上传身份证反面(必填):"  v-else>
           <label for="id_back_pic">
             <img width="310px" height="168px" :src="reverseImg" />
           </label>
-          <input type="file" id="id_back_pic" ref="backPic" @change='uploadIdPic' style="display:none;" />
+          <input type="file" id="id_back_pic" ref="backPic" @change='uploadIdPicBack' style="display:none;" />
         </el-form-item>
       </el-form>
       <div class="submit_button" @click='submitMyInfo'>提交认证</div>
@@ -55,15 +63,17 @@ import qs from 'qs'
 export default {
   data() {
     return {
+      isUploadFront:　false,
+      isUploadBack: false,
       verified: false,
-      frontImg: "", //正面照片路劲 /img/up_load.e25d68a6.png
-      reverseImg: "", //反面照片路劲 /img/up_load.e25d68a6.png
+      frontImg: require('../../../../assets/up_load.png'), //正面照片路劲 /img/up_load.e25d68a6.png
+      reverseImg: require("../../../../assets/up_load.png"), //反面照片路劲 /img/up_load.e25d68a6.png
       myIdInfo: {
         address: "", //联系地址
         birthday: "", //生日
         email: "", //电子邮箱
         id_card: "", //身份证号码
-        id_card_image: '', //证件照
+        id_card_image: [], //证件照
         name: "", //姓名
         sex: "" 
         }
@@ -73,20 +83,32 @@ export default {
     this.getVerifiedInfo()
   },
   methods: {
-    uploadIdPic (e) {
+    uploadIdPicFront (e) {
+      this.uploadPic(e, 'front')
+    },
+    uploadIdPicBack (e) {
+      this.uploadPic(e, 'back')
+    },
+    uploadPic (e, flag) {
       let file = e.target.files[0]
       let formdata = new FormData()
       formdata.append('file',file)
-      this.http.post('/api/member/option/uploadFile', qs.stringify(formdata), {
+      this.http.post('/api/member/option/uploadFile', formdata, {
         headers: {'Content-Type': '"multipart/form-data"'}
       }).then(res => {
         console.log('上传身份证图片返回信息:', res);
         if(res.data.code === 200) {
-          this.myIdInfo.id_card_image = res.data.result
+          if(flag === 'front') {
+            this.frontImg = res.data.result
+            this.isUploadFront = true
+          }
+          if(flag === 'back') {
+            this.reverseImg = res.data.result
+            this.isUploadBack = true
+          }
+          this.myIdInfo.id_card_image.push(res.data.result)
         }
-      
       })
-      
     },
     submitMyInfo () {
       this.http.post('/api/approve/realPersonCertification', this.myIdInfo, {

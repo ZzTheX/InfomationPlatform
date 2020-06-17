@@ -4,7 +4,15 @@
         <div class="city_select" id='city_select'>
           <el-cascader v-model="value" :options="options" placeholder="请选择地区">
           </el-cascader>
-          <span>moon five</span>
+          <div class='me'>
+            <span>{{nickname}}</span>
+            <div class='logout'>
+              <img src="../../assets/user_avatar2.png" class='avatar'>
+              <span @click='goToSetting'>账号设置</span>
+              <span>|</span>
+              <span @click='logout'>退出登录</span>
+            </div>
+          </div>
         </div>
         <div class="navList">
           <span v-for="(item, index) in navList" :key='index' @click='goToRouter(item.link)'>{{item.title}}</span>
@@ -16,6 +24,7 @@
 export default {
   data () {
     return{
+      isShow: false,
       isChooseManually: true,
       value: '四川成都',
       dropDown: [
@@ -36,11 +45,19 @@ export default {
   },
   created () {
     this.getCitiesList()
+    this.getPersonalInfo()
   },
   mounted () {
     // console.log(window.navigator.geolocation.getCurrentPosition())
   },
   methods: {
+    hoverMe () {
+      console.log('hoverme')
+      this.isShow = true
+    },
+    leaveMe () {
+      this.isShow = false
+    },
     goToRouter (path) {
       console.log(path)
       this.$router.push({path: '/my-account/' + path})
@@ -71,6 +88,27 @@ export default {
           })
         }
       })
+    },
+    goToSetting () {
+      this.$router.push({
+        name: 'settings'
+      })
+    },
+    logout () {
+      localStorage.clear()
+      this.$router.push({
+        name: 'login'
+      })
+    },
+    getPersonalInfo () {
+      this.http.get('/api/member/personalInformation').then(res => {
+        this.$store.commit('storeMyInfo', res.data.result)
+      })
+    }
+  },
+  computed: {
+    nickname () {
+      return this.$store.state.myInfo.nickname
     }
   }
 }
@@ -101,6 +139,44 @@ export default {
       line-height: 31px;
     }
     .city_select {
+      display: flex;
+      .me {
+        position: relative;
+        &:hover {
+          border: 1px solid #eee;
+          background-color: #fff;
+        }
+        &:hover .logout{
+          visibility: visible;
+        }
+        >span {
+          cursor: pointer;
+          padding-left: 8px;
+          padding-right: 8px;
+        }
+        .logout {
+          visibility: hidden;
+          display: flex;
+          position: absolute;
+          border: 1px solid #eee;
+          top: 32px;
+          left: 0;
+          padding: 8px;
+          width: 240px;
+          height: 80px;
+          background-color: #fff;
+          z-index: 10;
+          >img {
+            width: 60px;
+            height: 60px;
+            margin-right: 20px;
+          }
+          span {
+            margin-left: 5px;
+            cursor: pointer;
+          }
+        }
+      }
       /deep/ .el-cascader {
         line-height: 31px;
       }
