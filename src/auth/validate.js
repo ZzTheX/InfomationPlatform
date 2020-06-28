@@ -1,12 +1,11 @@
 // 手机号
 function isPhone (value) {
-    let bool = /^[1][3,4,5,7,8][0-9]{9}$/.test(value)
-    return bool
+    return /^[1][3,4,5,7,8][0-9]{9}$/.test(value)
 }
 
 // 验证码
 function isCode (value) {
-    return bool = /^[0-9]{6}$/.test(value)
+    return /^[0-9]{6}$/.test(value)
 }
 
 // 密码

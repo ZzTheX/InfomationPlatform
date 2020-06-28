@@ -15,7 +15,8 @@
               <input
                 type="text"
                 placeholder="搜索商品"
-                v-model="keyword">
+                v-model="keyword"
+                @keydown.enter="handleSearch">
               <button @click='handleSearch'>搜索</button>
             </div>
             <div class="get-add">
@@ -82,7 +83,9 @@ export default {
       this.isShowCategory = !this.isShowCategory
     },
     handleSearch () {
-      
+      console.log('搜索', this)
+      this.$store.commit('getProductList', {keyword: this.keyword})
+      console.log(111)
       this.$router.push({
            name: 'prodList',
            query: {
@@ -92,6 +95,9 @@ export default {
     },
     handleClick () {
       this.isShowCategory = false
+      this.$router.push({
+        name: 'prodList'
+      })
     },
     toPost () {
       this.$router.push({name: 'post'})

@@ -293,7 +293,7 @@ export default {
         console.log('发布商品返回数据', res)
           // 跳转去我的发布页面
           this.$router.push({
-            name: 'myPost'
+            name: 'posts'
           })
         }
       })
@@ -320,11 +320,13 @@ export default {
        let inpt = this.$refs.imgUpload
        let that = this
        inpt.onchange = function () {
+         that.$store.commit('startLoading')
          let file = this.files[0]
          let formData = new FormData()
          formData.append('file', file)
          console.log(formData,file, that.http)
          that.http.post('/api/member/option/uploadFile', formData).then(res => {
+            that.$store.commit('endLoading')
            let imgUrl = res.data.result
            that.imgsPreviewList.push(imgUrl)
            that.supplyData.picture_or_video.push({

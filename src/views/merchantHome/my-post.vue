@@ -38,6 +38,20 @@ export default {
   },
   components: {
     goodsCard
+  },
+  methods: {
+    getProductList () {
+      let paramas = {
+        
+      }
+      this.http({
+        url: '/api/product/getMemberProductList',
+        method: 'get',
+        paramas
+      }).then(res => {
+        console.log('发布的产品', res)
+      })
+    }
   }
 }
 </script>

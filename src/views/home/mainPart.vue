@@ -29,7 +29,13 @@
         <p class='hot_sale_head'>热门分类</p>
         <div class='hot_sale_cardsList'>
           <!-- {{bannerList}} -->
-          <img class='hot_sale_card' v-for="(item, index) in hotSaleList"  :key='index' :src='item.picture' :style="{marginBottom: index > 2 ? 0 : '35px'}">
+          <img 
+            class='hot_sale_card' 
+            @click='goToProdList()'
+            v-for="(item, index) in hotSaleList"  
+            :key='index' 
+            :src='item.picture' 
+            :style="{marginBottom: index > 2 ? 0 : '35px'}">
         </div>
       </div>
       <!-- 查看更多  => 转文章列表 -->
@@ -79,7 +85,8 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="currentPage"
-            :page-size="8"
+            :page-size="16"
+            :page-sizes="[16]"
             layout="total, sizes, prev, pager, next, jumper"
             :total="400"></el-pagination>
         </div>
@@ -98,7 +105,7 @@ export default {
       groupId: 1,
       carouselIndex: 0,
       page_no: 1,
-      page_size: 8,
+      page_size: 16,
       currentPage: 1,
       imgList: [
         {url: require('../../assets/index/banner.png')}
@@ -186,12 +193,21 @@ export default {
      },
      // 获取当季热门, 产业园直供, 特选好货, 需求信息
      getCurrentSeasonHotProd () {
-       this.http.get('/api/product/getProductByCategory?group_id='+this.groupId).then(res => {
+       let page_no = this.currentPage
+       this.http.get('/api/product/getProductByCategory', {
+         groupId: this.groupId,
+         page_no: this.currentPage
+       }).then(res => {
          console.log('当季热门返回数据', res)
          if(res.data.code===200) {
            console.log('当季热门数据：',res.data.result.rows)
            this.currentSeasonHotProd = res.data.result.rows
          }
+       })
+     },
+     goToProdList () {
+       this.$router.push({
+         name: 'prodList'
        })
      },
      handleClick (index, path) {
@@ -220,14 +236,17 @@ export default {
       }, 3000) 
      },
      searchByCategory () {
-      //  this.$router.
+       this.$router.push({
+         name: 'prodList'
+       })
       console.log('通过商品分类获取产品列表')
      },
      handleSizeChange () {
 
      },
-     handleCurrentChange () {
-
+     handleCurrentChange (value) {
+       console.log('currentchange', value)
+       this.getCurrentSeasonHotProd()
      }
    }
 }

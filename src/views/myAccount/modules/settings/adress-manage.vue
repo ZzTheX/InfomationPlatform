@@ -56,11 +56,11 @@
         </el-table>
        <!-- 修改地址信息 -->
         <el-dialog
-            title="提示"
+            title="编辑地址"
             :visible.sync="centerDialogVisible"
             width="30%"
             center>
-             <el-form label-width="100px">
+             <el-form label-width="100px" :rules="rules" ref="ruleForm">
                <el-form-item label='联系人:'>
                    <el-input v-model="editAdress.contact_person"></el-input>
                </el-form-item>
@@ -87,6 +87,7 @@ import qs from 'qs'
 export default{
     data () {
         return {
+            rules: {},
             centerDialogVisible: false,
             currentIndex: '',
             cityList: [],
@@ -167,7 +168,7 @@ export default{
                         message: res.data.msg
                     })
                     // 刷新页面
-                    this.getgetAdressList()
+                    this.getAdressList()
                     this.$router.go(0)
                 }
             })
@@ -188,7 +189,7 @@ export default{
                         message: res.data.msg
                     })
                     // 刷新页面
-                    window.location.reload()
+                    // window.location.reload()
                 }
             })
         },

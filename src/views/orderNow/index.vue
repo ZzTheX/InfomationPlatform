@@ -14,16 +14,20 @@
       </nav>
       <!-- 商品信息 -->
       <div class="placeOdermiaoshu">
-        <img :src="merchandise.picUrl" alt />
+        <img :src="prodData.info.banner[0].url" alt />
         <div>
           <div>
-            <span>{{merchandise.name}}</span>
-            <span>￥{{merchandise.unit_price}}</span>
-            <span>剩余{{merchandise.remaining_quantity}}个</span>
-            <span>￥{{merchandise.total_prices}}</span>
+            <span>{{prodData.info.product_name}}</span>
+            <!-- supply_price是否就是单价？ -->
+            <span>￥{{prodData.info.supply_price}}</span>
+            <span>剩余{{prodData.info.remaining_quantity}}个</span>
+            <span>￥{{sum_price}}</span>
             <span>￥{{merchandise.freight}}</span>
-            <span class="lpaceOderactualpayment">￥{{merchandise.actual_payment}}</span>
-            <span>{{merchandise.The_issuer}}</span>
+            <!-- 实际付款 = 运费 + 商品总价 -->
+            <span class="lpaceOderactualpayment">￥{{shouldPay}}</span>
+
+            <span>{{prodData.merchantInfo.company_name}}</span>
+            <!-- 交易时间不是在下单页面选择的吗？ -->
             <span>{{merchandise.trading_hour}}</span>
           </div>
           <div>
@@ -31,9 +35,9 @@
             <span>可售时间：</span>
             {{merchandise.vendibility_tiem_start}}至{{merchandise.vendibility_tiem_end}}
           </div>
-          <div class='purchase_num'>
+          <!-- <div class='purchase_num'>
             购买数量: {{100}}
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -41,13 +45,19 @@
       <div class="placeOderInputs">
         <form action>
           <label for="shuliang">预定数量</label>
-          <input type="text" placeholder="请输入预定数量" />
+          <input type="text" placeholder="请输入预定数量" v-model='placeOrderData.num'/>
+          <el-select placeholder="请选择单位" v-model="placeOrderData.num_unit">
+            <el-option 
+              v-for='(item, index) in unitOptions' 
+              :key='index'
+              :label="item.label"
+              :value='item.value'></el-option>
+          </el-select>
         </form>
         <div class="block">
           <span class="demonstration">交易日期</span>
-          <el-date-picker v-model="value1" type="date" placeholder="请选择交易日期"></el-date-picker>
+          <el-date-picker v-model="placeOrderData.transaction_date" type="date" placeholder="请选择交易日期"></el-date-picker>
         </div>
-
         <div class="money">
           <span>期望定金</span>
           <span v-if="money=='1000'" @click="setMoney('1000')" class="nochekd chekd">1000</span>
@@ -59,21 +69,29 @@
           <span class="qitamoney">其他金额</span>
           <input ref="inputMoney" @input="inputMoney" type="text" placeholder="输入" />
         </div>
-        <h3>收货地址</h3>
-        <form action>
-          <label for="shuliang">收货人</label>
-          {{adress.contact_person}}
-        </form>
-        <form action>
-          <label for="shuliang">联系电话</label>
-          {{adress.contact_mobile}}
-        </form>
-        <form action>
-          <label for="shuliang">详细地址</label>
-          {{adress.address}}
-        </form>
+        <h6>选择收货地址<span class='add_addres' @click='goToAddAdrress' v-show='adressList.length===0'>添加收货地址+</span></h6>
+        <el-table
+            :data="adressList"
+            highlight-current-row
+            @current-change="handleCurrentChange"
+            style="width: 100%">
+            <el-table-column
+                prop="contact_person"
+                label="姓名"
+                width="120">
+            </el-table-column>
+            <el-table-column
+                prop="address"
+                label="地址"
+                width="240">
+            </el-table-column>
+             <el-table-column
+                prop="contact_mobile"
+                label="电话"
+                width="140">
+            </el-table-column>
+        </el-table>
       </div>
-
       <!-- 底部按钮区域 -->
       <div class="placeOderBottom">
         <i></i>
@@ -88,7 +106,25 @@
 export default {
   data() {
     return {
-      adress: {},
+      radio: '',
+      purchase_num: '',
+      adressList: [
+        {
+          contact_person: '',
+          address: '',
+          contact_mobile: '',
+        },
+        {
+          contact_person: '',
+          address: '',
+          contact_mobile: '',
+        },
+        {
+          contact_person: '',
+          address: '',
+          contact_mobile: '',
+        }
+      ],
       merchandise: {
         name: "商品名称商品名fasf称商品名称商品名称商fdsafasfasfa品名称", //  商品名称
         unit_price: "99.90", //   单价
@@ -106,87 +142,187 @@ export default {
       form: {
         date1: ""
       },
-       pickerOptions: {
+      pickerOptions: {
           disabledDate(time) {
             return time.getTime() > Date.now();
           },
-          shortcuts: [{
-            text: '今天',
-            onClick(picker) {
-              picker.$emit('pick', new Date());
+          shortcuts: [
+            {
+              text: '今天',
+              onClick(picker) {
+                picker.$emit('pick', new Date());
+              }
+            }, 
+            {
+              text: '昨天',
+              onClick(picker) {
+                const date = new Date();
+                date.setTime(date.getTime() - 3600 * 1000 * 24);
+                picker.$emit('pick', date);
+              }
+            }, 
+            {
+              text: '一周前',
+              onClick(picker) {
+                const date = new Date();
+                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                picker.$emit('pick', date);
+              }
             }
-          }, {
-            text: '昨天',
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24);
-              picker.$emit('pick', date);
-            }
-          }, {
-            text: '一周前',
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', date);
-            }
-          }]
-        },
-        value1: '',
-    };
+          ]
+      },
+      value1: '',
+      prodData: {},
+      placeOrderData: {
+        deposit_price: '5000',
+        num: '',
+        num_unit: 'KG',
+        product_id: '',
+        transaction_date: '',
+        address_id: '25'
+      },
+      unitOptions: [
+        {
+          label: 'KG',
+          value: 'KG'
+        }
+      ]
+    }
   },
   created () {
-      this.getMyAdress()
+    this.placeOrderData.product_id = this.$route.query.product_id
+    this.getMyAdress()
+    this.getProductDetail()
+  },
+  computed: {
+    sum_price () {
+      return (this.purchase_num || 1) * this.prodData.info.supply_price
+    },
+    shouldPay () {
+      return (this.purchase_num || 1) * this.prodData.info.supply_price + this.merchandise.freight
+    }
   },
   methods: {
+    getProductDetail() {
+      let { product_tag, product_id } = this.$route.query;
+      // 采购商品详情
+      if (product_tag === "采购商") {
+        this.http
+          .get(`/api/product/getPurchaseProductDetail?product_id=${product_id}`)
+          .then(res => {
+            console.log('code：采购商', res.data.code)
+            if (res.data.code === 200) {
+              console.log('获取商品详情成功')
+              this.prodData = res.data.result;
+              this.prodData.info = res.data.result.info
+              this.prodData.info.descriptions = res.data.result.info.descriptions
+              this.prodData.merchantInfo = res.data.result.merchantInfo
+              console.log('this.prodData：', this.prodData)
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "warning"
+              });
+            }
+            console.log("商品详情数据:", res);
+          });
+        return;
+      }
+      // 供应商品详情
+      if (product_tag === "供应商") {
+        this.http
+          .get(`/api/product/getSupplyProductDetail?product_id=${product_id}`)
+          .then(res => {
+             console.log('code:供应商', res.data.code)
+            if (res.data.code === 200) {
+              console.log('获取商品详情成功')
+              this.prodData = res.data.result;
+              this.prodData.info = res.data.result.info
+              this.prodData.info.descriptions = res.data.result.info.descriptions
+              this.prodData.merchantInfo = res.data.result.merchantInfo
+                console.log('this.prodData：', this.prodData)
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "warning"
+              });
+            }
+            console.log("商品详情数据:", res);
+          });
+        return;
+      }
+    },
     // 获取收件地址
     getMyAdress () {
       this.http.get('/api/address/getAddressList').then(res => {
         console.log('收件地址列表：', res)
         if(res.data.code === 200) {
-          this.adress = res.data.result[0]
+          this.adressList = res.data.result
         }
       })
     },
     ///       点击选择期望定金
     setMoney(money) {
       console.log(money);
-      if (this.money == money) {
+      if (this.placeOrderData.deposit_price == money) {
         this.money = "";
       } else {
-        this.money = money;
+        this.placeOrderData.deposit_price = money;
       }
       this.$refs.inputMoney.value = "";
     },
     //        输入期望定金
     inputMoney() {
-      this.money = this.$refs.inputMoney.value + "";
+      this.placeOrderData.deposit_price = this.$refs.inputMoney.value + "";
     },
     handleBack () {
       this.$router.go(-1)
     },
     handlePlaceOrder () {
       // immediatelyCreateOrder 调用创建订单接口
-      // 返回支付信息    调用三方支付接口 成功和失败都跳转订单详情页面
-      setTimeout(() => {
-        this.$message({
-          type: 'warning',
-          message: '支付失败'
-        })
-      },500)
-      this.$router.push({
-        name: 'orderDetail',
-        query: {
-          status: 1
-        }
+      let data = {
+        deposit_price: this.money,
+        num: this.purchase_num,
+        num_unit: '',
+        product_id: '',
+        transaction_date: '',
+        address_id: ''
+      }
+      console.log('placeOrder提交数据', this.placeOrderData)
+      this.http.post('/api/order/immediatelyCreateOrder', this.placeOrderData).then(res => {
+        console.log('提交订单返回数据', res)
       })
+      // setTimeout(() => {
+      //   this.$message({
+      //     type: 'warning',
+      //     message: '支付失败'
+      //   })
+      // },500)
+      // this.$router.push({
+      //   name: 'orderDetail',
+      //   query: {
+      //     status: 1
+      //   }
+      // })
 
 
+    },
+    goToAddAdrress () {
+      this.$router.push({
+        name: 'adressManage'
+      })
+    },
+    handleCurrentChange (value) {
+      this.placeOrderData.address_id = value.address_id
+    },
+    adressChange (value) {
+      console.log(value)
     }
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang='less'>
 .placeOderTotal {
   display: block;
   width: 100%;
@@ -289,9 +425,7 @@ export default {
 .placeOderInputs {
   width: 1140px;
   height: 430px;
-  display: flex;
   margin: 30px;
-  flex-direction: column;
   font-size: 16px;
 }
 .placeOderInputs > form,
@@ -301,6 +435,22 @@ export default {
   align-items: center;
   margin-bottom: 20px;
   height: 45px;
+}
+.add_addres {
+  font-size: 14px;
+  font-weight: normal;
+  display: inline-block;
+  color: #409eff;
+  margin-left: 30px;
+  cursor: pointer;
+  /* height: 40px;
+  line-height: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #ffc733; */
+}
+.el-table .el-table__body tr.current-row>td {
+    background-color: #bbd7f5;
 }
 .placeOderInputs > form > label, .placeOderInputs > .block>span{
   width: 76px;
@@ -378,5 +528,24 @@ border: none;
   background: rgba(255, 199, 51, 1);
   border: none;
   margin-right: 35px;
+}
+.el-select {
+  width: 120px;
+  margin-left: 20px;
+}
+.el-table {
+  /deep/.el-table__body {
+    tr {
+      cursor: pointer;
+    }
+    tr.current-row {
+      td {
+        background-color: #d4f1f7;
+      }
+    }
+  }
+}
+ tr.current-row>td {
+  background-color: #eee;
 }
 </style>

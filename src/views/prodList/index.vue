@@ -1,11 +1,11 @@
 <template>
   <div class='goods_list_page'>
     <div class='goods_list_nav'>
-      <p>区域</p>
-      <p>默认</p>
-      <p>成熟时间</p>
-      <p>价格排序</p>
-      <p>筛选</p>
+      <p @click="handleConditionSearch('area')">区域</p>
+      <p @click="handleConditionSearch('default')">默认</p>
+      <p @click="handleConditionSearch('saleTime')">可售时间</p>
+      <p @click="handleConditionSearch('salePrice')">价格排序</p>
+      <p >筛选</p>
     </div>
     <div class='goods_list_mian'>
       <goods-card 
@@ -60,8 +60,31 @@ export default {
     this.getProductList()
   },
   methods: {
+    handleConditionSearch (condition) {
+      if(condition === 'saleTime') {
+        this.http({
+         url: '/api/product/getProductList',
+         method: 'get',
+         params: {
+           time: 1
+         }
+        }).then(res => {
+          console.log('可售时间排序', res)
+        })
+      }
+    },
+    sortBySaleTime () {
+
+    },
     getProductList () {
-      this.http.get('/api/product/getProductList').then(res => {
+      let paramas = {
+        keyword: this.$route.query.keyword
+      }
+      this.http({
+        method: 'get',
+        url: '/api/product/getProductList',
+        paramas
+      }).then(res => {
         console.log('商品列表数据res:',res)
         this.prodList = res.data.result.rows
         this.$store.commit('goodsListChange', this.prodList)

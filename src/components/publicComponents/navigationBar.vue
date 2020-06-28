@@ -4,7 +4,7 @@
         <div class="city_select" id='city_select'>
           <el-cascader v-model="value" :options="options" placeholder="请选择地区">
           </el-cascader>
-          <div class='me'>
+          <div class='me' v-if='isLogin'>
             <span>{{nickname}}</span>
             <div class='logout'>
               <img src="../../assets/user_avatar2.png" class='avatar'>
@@ -25,6 +25,7 @@ export default {
   data () {
     return{
       isShow: false,
+      isLogin: false,
       isChooseManually: true,
       value: '四川成都',
       dropDown: [
@@ -96,13 +97,19 @@ export default {
     },
     logout () {
       localStorage.clear()
+      this.$store.commit('clearData')
       this.$router.push({
         name: 'login'
       })
     },
     getPersonalInfo () {
+      console.log('获取个人信息')
       this.http.get('/api/member/personalInformation').then(res => {
-        this.$store.commit('storeMyInfo', res.data.result)
+        console.log('个人信息返回数据:', res)
+        if(res.data.code === 200) {
+          this.isLogin = true
+          this.$store.commit('storeMyInfo', res.data.result)
+        }
       })
     }
   },
@@ -160,7 +167,7 @@ export default {
           position: absolute;
           border: 1px solid #eee;
           top: 32px;
-          left: 0;
+          left: -48px;
           padding: 8px;
           width: 240px;
           height: 80px;

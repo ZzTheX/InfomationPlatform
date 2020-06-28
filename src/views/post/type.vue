@@ -1,13 +1,27 @@
 <template>
   <div class='post_types'>
-    <div @click='toFillForm("supply-form")' class='active'>供应信息</div>
-    <div @click='toFillForm("require-form")'>需求信息</div>
-    <div @click='toFillForm("post-essay")'>发布推文</div>
+    <div 
+      :class='{active: currentIndex === 0}'
+      @click='toFillForm("supply-form")' 
+      @mouseenter="handleMouseEnter(0)" >供应信息</div>
+    <div 
+      :class='{active: currentIndex === 1}'
+      @click='toFillForm("require-form")' 
+      @mouseenter="handleMouseEnter(1)" >需求信息</div>
+    <div 
+      :class='{active: currentIndex === 2}'
+      @click='toFillForm("post-essay")' 
+      @mouseenter="handleMouseEnter(2)">发布推文</div>
   </div>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      currentIndex: 0
+    }
+  },
   created () {
     this.$store.commit('stepChange', false)
   },
@@ -15,6 +29,9 @@ export default {
     toFillForm (path) {
       // this.$store.commit('stepChange', true)
       this.$router.push(path)
+    },
+    handleMouseEnter (value) {
+      this.currentIndex = value
     }
   }
 }
@@ -43,8 +60,8 @@ export default {
          margin-bottom: 46px;
          cursor: pointer;
      }
-      div.active {
-         background-color: #FFC90F;
+     div.active{
+       background-color: #FFC90F;
      }
  }
 </style>

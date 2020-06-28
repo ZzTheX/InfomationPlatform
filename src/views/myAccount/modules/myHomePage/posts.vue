@@ -11,8 +11,7 @@
      </el-select>
     </div>
     <div class='goods_card_list'>
-      <!-- <goods-card v-for='i in 24' :key='i'></goods-card> -->
-      <miniGoodsCard v-for="(item, index) in prodData" :key='index' :prodData='item'></miniGoodsCard>
+      <miniGoodsCard v-for="(item, index) in postedGoodsList" :key='index' :prodData='item'></miniGoodsCard>
     </div>
   </div>
 </template>
@@ -23,6 +22,7 @@ export default {
   data () {
     return {
       value: '供应信息',
+      postedGoodsList: [],
       options: [
         {value: '供应信息', label: '供应信息'},
         {value: '需求信息', label: '需求信息'}
@@ -31,16 +31,24 @@ export default {
     }
   },
   created () {
-    let haha = this
-    this.http.get('/api/product/getMemberProductList').then((res) => {
-      console.log('我发布的产品数据列表：', res)
-      this.prodData = res.data.result.rows
-      // let { data } = res.data
-      // console.log('posts组件返回数据: ' , data)
-      // haha.prodData = data
-
-    })
+    this.getProductList()
     this.$store.commit('changeLeftSideTabIndex', 0)
+  },
+  methods: {
+    getProductList () {
+      let paramas = {
+
+      }
+      this.http({
+        url: '/api/product/getMemberProductList',
+        method: 'get',
+        paramas
+      }).then(res => {
+        console.log('我已发布的产品', res)
+        this.postedGoodsList = res.data.result.rows
+
+      })
+    }
   },
   components: {
     miniGoodsCard

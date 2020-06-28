@@ -65,7 +65,7 @@
             </div>
           </div>
           <div class="operation_bar">
-            <div @click="handleToOrderNow" class="lanch_groupon">发起拼购</div>
+            <div @click="handleLaunchGroupon" class="lanch_groupon">发起拼购</div>
             <div @click="handleAddToCart" class="addto_cart">加入购物车</div>
             <div @click="handleToOrderNow" class="order_now">立即下单</div>
           </div>
@@ -122,7 +122,7 @@
             <div class="operation_bar">
               <div
                 v-show='prodData.is_allow_member_group' 
-                @click="handleToOrderNow" 
+                @click="handleLaunchGroupon" 
                 class="lanch_groupon">
                 发起拼购
               </div>
@@ -202,14 +202,14 @@
            <div class='comment' v-show='!isShowProdDesc'>
               <div class='input_area'>
                 <input type="text" placeholder="请输入您的留言" ref='input' v-model='inputValue'>
-                <button>留言</button>
+                <button @click='leaveComment'>留言</button>
               </div>
               <div class='comment_list'>
-                <div class='comment_item' v-for='i in 3' :key='i'>
-                  <img :src="require('../../assets/user.png')">
+                <div class='comment_item' v-for='(item, index) in commentsList' :key='index'>
+                  <img :src="item.face">
                   <div class='comment_text'>
-                    <span>用户昵称</span>
-                    <p>超级棒啊！太爱了，第一套明制，一直想买没买，看见是现货就更草了，没有让我失望，但是那个领子扣上云母扣就有点不一样高低了，然后上袄底下脏了一小块，其他的没啥了，整体很棒啊！有暗纹真的爱了，马面是客服小姐姐给我换了白色的，爱了爱了</p>
+                    <span>{{item.nickname}}</span>
+                    <p>{{item.comment_content}}</p>
                     <div class='img_list'>
                       <img width='50' height='50' :src='require("../../assets/comment.png")' alt="">
                       <img width='50' height='50' :src='require("../../assets/comment.png")' alt="">
@@ -222,7 +222,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+           </div>
         </div>
       </div>
     </div>
@@ -230,6 +230,7 @@
 </template>
 
 <script>
+import qs from 'querystring'
 export default {
   data() {
     return {
@@ -267,6 +268,7 @@ export default {
 
         }
       },
+      commentsList: [],
       isShowProdDesc: true
     };
   },
@@ -302,6 +304,7 @@ export default {
               this.prodData.info.descriptions = res.data.result.info.descriptions
               this.prodData.merchantInfo = res.data.result.merchantInfo
               console.log('this.prodData：', this.prodData)
+              this.commentsList = res.data.result.comments
             } else {
               this.$message({
                 message: res.data.msg,
@@ -346,10 +349,36 @@ export default {
         name: "merchantHome"
       });
     },
-    handleLaunchGroupon() {},
-    handleAddToCart() {},
+    // 发起拼购
+    handleLaunchGroupon() {
+      let { product_tag, product_id } = this.$route.query
+      this.$router.push({
+        name: "orderNow",
+        query: {
+          product_tag,
+          product_id
+        }
+      })
+    },
+    handleAddToCart() {
+      this.http({
+        url: '/api/cart/addOrEditCart',
+        method: 'post',
+        data: qs.stringify({ product_id: this.product_id }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(res => {
+        if(res.data.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.msg
+          })
+        }
+        console.log('加入购物车返回信息', res)
+      })
+    },
     handleToOrderNow() {
      //  判断用户是否实名认证
+     console.log('是否实名认证',this.verified)
       if(this.verified === false) {
         this.$message({
           type: 'warning',
@@ -360,9 +389,15 @@ export default {
         })
         return
       }
+      let { product_tag, product_id } = this.$route.query
+      console.log(111)
       this.$router.push({
-        name: "orderNow"
-      });
+        name: "orderNow",
+        query: {
+          product_tag,
+          product_id
+        }
+      })
     },
     handleWatch() {
       this.http
@@ -383,6 +418,19 @@ export default {
     },
     toggleMainImg(item, index) {
       this.$refs.mainImg.src = item.url;
+    },
+    leaveComment () {
+      this.http({
+        method: 'post',
+        url: '/api/comment/addComment',
+        data: {
+          content: this.inputValue,
+          product_id: this.product_id
+        }
+      }).then(res => {
+        
+        console.log('留言返回数据', res)
+      })
     },
     handleResponse (e) {
      this.$refs.input.focus()
@@ -536,7 +584,7 @@ export default {
         .operation_bar {
           display: flex;
           margin-top: 20px;
-          justify-content: space-between;
+          justify-content: space-around;
           > div {
             height: 50px;
             line-height: 50px;
@@ -702,6 +750,7 @@ export default {
                 font-size: 16px;
                 height: 44px;
                 line-height: 44px;
+                cursor: pointer;
                 text-align: center;
               }
            }

@@ -17,7 +17,9 @@
             <p>完成</p>
           </div>
         </div>
-        <router-view></router-view>
+        <keep-alive include="post-essay">
+          <router-view></router-view>
+        </keep-alive>
       </div>
   </div>
 </template>

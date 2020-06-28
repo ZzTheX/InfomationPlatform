@@ -255,7 +255,7 @@ export default{
             message: res.data.msg
           })
           this.$router.push({
-            name: 'myPost'
+            name: 'posts'
           })
         } 
         console.log('发布需求信息返回信息:', res)
@@ -294,12 +294,14 @@ export default{
        let inpt = this.$refs.requireProductImg
        let that = this
        inpt.onchange = function () {
+         that.$store.commit('startLoading')
          console.log('onchange事件执行')
          let file = this.files[0]
          let formData = new FormData()
          formData.append('file', file)
          console.log(formData,file, that.http)
          that.http.post('/api/member/option/uploadFile', formData).then(res => {
+           that.$store.commit('endLoading')
            let imgUrl = res.data.result
            that.imgsPreviewList.push(imgUrl)
            that.requireData.picture_or_video.push({

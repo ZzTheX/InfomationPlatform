@@ -3,10 +3,8 @@
     <div class='pagination'>
       <el-pagination
         background
-        @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage4"
-        :page-sizes="[10, 20, 30, 40]"
         :page-size="6"
         :pager-count='13'
         layout="total, sizes, prev, pager, next, jumper"
@@ -14,7 +12,7 @@
       </el-pagination>
     </div>
     <div class='card_list'>
-      <passage-card v-for='(item, index) in cardList' :key='index' :passage-data='item'></passage-card>
+      <passage-card v-for='(item, index) in passageList' :key='index' :passage-data='item'></passage-card>
     </div>
     <div class='pigination_bottom'>
        <el-pagination
@@ -38,6 +36,7 @@ import passageCard from './passageCard.vue'
 export default {
   data () {
     return {
+      passageList: [],
       cardList: [
         {
           passageTitle: '文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题文章标题',
@@ -89,11 +88,26 @@ export default {
   },
   created () {
     // this.$http.get('')
+    this.getPassageList()
   },
   methods: {
+    handleCurrentChange () {
+
+    },
     getPassageList () {
-      let para = {
+      let params = {
+        page_no: 1,
+        page_size: 10
       }
+      this.http({
+        url: '/api/article/getArticlePage',
+        method: 'get',
+        params
+      }).then(res => {
+        console.log('文章列表',res )
+        this.passageList = res.data.result.rows
+
+      })
       this.loading = true
 
     }

@@ -2,20 +2,24 @@
   <div class='login'>
     <div class='login_tab'>
       <span @click='toggleLoginType(1)' :class='{ active: loginType === 1}'>密码登录</span>
-      <span @click='toggleLoginType(0)' :class='{ active: loginType === 0}'>验证码登录</span>
+      <span @click='toggleLoginType(2)' :class='{ active: loginType === 2}'>验证码登录</span>
     </div>
     <div class='login_input_area'>
       <div class='phone_input_wrap'>
         <input type="text" placeholder="手机号" v-model.number='userInfo.phone'>
       </div>
       <!-- v-if切换验证码登录与密码登录 -->
-      <div v-if='loginType' class='password_input_wrap'>
+      <!-- 密码登录 -->
+      <div v-if='loginType === 1' class='password_input_wrap'>
         <input class='password' type="password" placeholder="登录密码" v-model.number='userInfo.password'>
       </div>
-      <div class='code_input_wrap' v-else>
+      <!-- 验证码登录 -->
+      <div class='code_input_wrap' v-if='loginType===2'>
         <input class='code' type="text" placeholder="请输入6位短信验证码" v-model.number='userInfo.password'>
-        <button class="get_code" @click='getCode'>获取验证码</button>
+        <button class="get_code" @click='getCode' v-if='isShowGetCode'>获取验证码</button>
+        <button class="get_code" v-else>{{timerCount}}</button>
       </div>
+
     </div>
     <div class='to_regist'>
       <span @click='goToRegister'>注册</span>
@@ -32,10 +36,13 @@
 </template>
 
 <script>
+import validate from '../../auth/validate.js';
 import qs from 'qs'
 export default {
   data () {
     return {
+      isShowGetCode: true,
+      count: 60,
       userInfo: {
         login_method: 1,
         phone: '',
@@ -50,6 +57,7 @@ export default {
   methods: {
     toggleLoginType (loginType) {
       this.loginType = loginType
+      this.userInfo.login_method = loginType
     },
     goToRegister () {
       let query = this.$route.query
@@ -89,7 +97,38 @@ export default {
       }
     },
     getCode () {
-      console.log('获取登录验证码')
+      console.log('getCode')
+      let mobile = this.userInfo.phone
+      if(!validate.isPhone(mobile)) {
+        console.log('验证手机号')
+        this.$message({
+          type: 'warning',
+          message: '请输入正确的手机号'
+        })
+        return
+      }
+
+      this.http.get('/api/member/sendLoginCode?mobile=' + this.userInfo.phone).then(res => {
+        this.isShowGetCode = false
+        if(res.data.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.msg
+          })
+        }
+      })
+
+      let timer = setInterval(() => {
+        if(this.count <= 0) {
+          clearInterval(timer)
+        }
+        this.count --
+      }, 1000)
+    }
+  },
+  computed: {
+    timerCount () {
+      return this.count + '秒后重新获取'
     }
   }
 }

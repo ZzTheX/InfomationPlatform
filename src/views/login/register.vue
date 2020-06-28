@@ -17,10 +17,10 @@
         <input type="password" placeholder="输入密码" v-model.number="registerData.password">
       </div>
       <div>
-        <input type="password" placeholder='确认密码'>
+        <input type="password" placeholder='确认密码' v-model.number='password'>
       </div>
       <div class='choose_area'>
-        <el-cascader v-model='registration_city' :options='cityList' @change='handleChange'></el-cascader>
+        <el-cascader v-model='registration_city' :options='cityList' placeholder="请选择常住地址"></el-cascader>
       </div>
       <button @click='handleRegister'>注册</button>
       <span @click='goToLoginPage'>已有账号, 立即登录</span>
@@ -39,8 +39,9 @@ export default {
       SMSCode: '',
       count: 60,
       registration_city: '',
+      password: '',
       registerData: {
-        address: '20,2500,2522',
+        address: '',
         code: '',
         mobile: '',
         password: '',
@@ -61,10 +62,45 @@ export default {
     goToLoginPage () {
       this.$router.push({name: 'login'})
     },
-    handleChange (value) {
-      console.log(value)
+    validateForm () { 
+      // 判断是否输入验证码
+      console.log(this.registerData)
+      if(this.registerData.code === '' || this.registerData.phone==='') {
+        this.$message({
+          type: 'warning',
+          message: '请输入手机号和验证码'
+        })
+        return
+      }
+      // 判断是否输入密码
+      if(this.registerData.password === '' ){
+        this.$message({
+          type: 'warning',
+          message: '请输入密码'
+        })
+        return
+      }
+      // 判断两次密码是否一致
+      if(this.registerData.password != this.password) {
+        this.$message({
+          type: 'warning',
+          message: '两次密码输入不一致，请检查后重新输入'
+        })
+        return
+      }
+      // 判断是否输入地址
+      if( this.registration_citylength === 0 ) {
+        this.$message({
+          type: 'warning',
+          message: '请选择常住地址'
+        })
+        return
+      }
+      return true
     },
     handleRegister () {
+      let isFormCompleted = this.validateForm()
+      if(!isFormCompleted) { return }
       this.registerData.address = this.registration_city.join(',')
       this.http.post('/api/member/register', qs.stringify(this.registerData), {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -89,6 +125,7 @@ export default {
       })
     },
     getSMSCode () {
+      console.log('getSMSCode')
       let phone = this.registerData.mobile
       // 验证合法手机号
       console.log(phone)

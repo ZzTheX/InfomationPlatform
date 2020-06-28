@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import realName from './realNameIdentify/realNameIdentify.js'
+import http from '../api/index.js'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    // 商品搜索关键字
+    keyword: '',
     // 发布商品步骤条
     isStepTwo: '',
     leftSideTabIndex: '',
@@ -34,7 +37,8 @@ export default new Vuex.Store({
     ],
     goodsList: [],
     myInfo: {},
-    isLoading: false
+    isLoading: false,
+    productList: {}
 
   },
   mutations: {
@@ -63,6 +67,23 @@ export default new Vuex.Store({
     endLoading (state) {
       console.log('loadingEnd')
       state.isLoading = false
+    },
+    clearData (state) {
+      state.myInfo = {}
+    },
+    getProductList (state, data = {}) {
+      let pramas = {
+        keyword: data.keyword || '',
+        children_category_id: data.children_category_id || ''
+      }
+      http({
+        method: 'get',
+        url: '/api/product/getProductList',
+        pramas
+      }).then(res => {
+        console.log('商品列表:', res)
+        state.productList = res.data.result
+      })
     }
 
   },

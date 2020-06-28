@@ -16,13 +16,13 @@
     <!--  -->
     <div v-if='false'>你的购物车空空如也。快去买点东西吧</div>
     <!-- 订单列表 -->
-    <div class='my_order_list' ref='oderList' v-for='(item, index) in goodsData' :key='index'>
+    <div class='my_order_list' ref='oderList' v-for='(item, index) in goodsList' :key='index'>
       <div class='seller'>
         <el-checkbox @changae='chooseAllGoods'></el-checkbox>
-        <span>{{item.name}}</span>
+        <span>{{item.merchant_name}}</span>
       </div>
       <!-- 商品卡片 -->
-      <div class='my_order_item' v-for='(goods, i) in item.goodsList' :key='i'>
+      <div class='my_order_item' v-for='(goods, i) in item.products' :key='i'>
           <div class='row1'>
             <!-- <el-checkbox @change='chooseCurrentGoods'></el-checkbox>
             <img class='goods_img' :src="goods.src" alt="">
@@ -31,16 +31,16 @@
               <span>拼</span>
             </div> -->
             <div class='goods_title_img'>
-              <el-checkbox></el-checkbox>
-              <img :src="goods.imgSrc" width="80px" height="80px">
-              <p>{{goods.title}}</p>
+              <el-checkbox ></el-checkbox>
+              <img :src="goods.main_picture" width="80px" height="80px">
+              <p>{{goods.product_name}}</p>
             </div>
-            <p class='goods_price'>{{goods.price}}</p>
-            <p class='goods_remaining'>{{goods.remaining}}</p>
-            <div class='input_number'>99个</div>
+            <p class='goods_price'>{{goods.supply_and_marketing_price}}</p>
+            <p class='goods_remaining'>{{goods.available_inventory}}</p>
+            <el-input-number size='small' class='input_number' v-model="num" @change="handleChange" :min="1" :max="goods.available_inventory" label="描述文字"></el-input-number>
             <p class='price_total'>9999.00</p>
             <p class='service_charge'>{{goods.charge}}</p>
-            <p class='operate' @click='handleDelete'>删除</p>
+            <p class='operate' @click='handleDeleteGoodsInCart(goods.product_id)'>删除</p>
           </div>
           <div class='row2'>
 
@@ -69,7 +69,7 @@
         <span>全选</span>
       </div>
       <p class='delete'>删除</p>
-      <p class='chosen_goods'>已选商品<span stlye='color:##FF4400'>{{goodsNum}}</span>件</p>
+      <p class='chosen_goods'>已选商品<span stlye='color:##FF4400'>{{totalGoodsNum}}</span>件</p>
       <p class='goods_charge'>手续费<span>{{180.00}}</span></p>
       <p class='price_total'>合计<span>1900.00</span></p>
       <p class='settle_button' @click='goToOrderDetail'>结算</p>
@@ -78,55 +78,58 @@
 </template>
 
 <script>
+import qs from 'querystring'
 export default {
   data () {
     return {
       deposit: 5000,
-      goodsNum: 3,
-      goodsData: [
-        {
-          name: '商家名称',
-          goodsList: [
-            {
-              imgSrc: require('../../../../assets/goods1.png'),
-              title: '商品名称商品名称称商品名称商品名称称商品名称称商品',
-              price: '￥199.00',
-              remaining: 6000,
-              num: 100,
-              total: '￥199.00',
-              charge: '￥20.00'
-            }
-          ]
-        },
-        {
-          name: '商家名称',
-          goodsList: [
-            {
-              imgSrc: require('../../../../assets/goods1.png'),
-              title: '商品名称商品名称称商品名称商品名称称商品名称称商品',
-              price: '￥199.00',
-              remaining: 6000,
-              num: 100,
-              total: '￥199.00',
-              charge: '￥20.00'
-            },
-             {
-              imgSrc: require('../../../../assets/goods1.png'),
-              title: '商品名称商品名称称商品名称商品名称称商品名称称商品',
-              price: '￥199.00',
-              remaining: 6000,
-              num: 100,
-              total: '￥199.00',
-              charge: '￥20.00'
-            }
-          ]
-        }
-      ],
+      arr: [],
+      // goodsData: [
+      //   {
+      //     name: '商家名称',
+      //     goodsList: [
+      //       {
+      //         imgSrc: require('../../../../assets/goods1.png'),
+      //         title: '商品名称商品名称称商品名称商品名称称商品名称称商品',
+      //         price: '￥199.00',
+      //         remaining: 6000,
+      //         num: 100,
+      //         total: '￥199.00',
+      //         charge: '￥20.00'
+      //       }
+      //     ]
+      //   },
+      //   {
+      //     name: '商家名称',
+      //     goodsList: [
+      //       {
+      //         imgSrc: require('../../../../assets/goods1.png'),
+      //         title: '商品名称商品名称称商品名称商品名称称商品名称称商品',
+      //         price: '￥199.00',
+      //         remaining: 6000,
+      //         num: 100,
+      //         total: '￥199.00',
+      //         charge: '￥20.00'
+      //       },
+      //        {
+      //         imgSrc: require('../../../../assets/goods1.png'),
+      //         title: '商品名称商品名称称商品名称商品名称称商品名称称商品',
+      //         price: '￥199.00',
+      //         remaining: 6000,
+      //         num: 100,
+      //         total: '￥199.00',
+      //         charge: '￥20.00'
+      //       }
+      //     ]
+      //   }
+      // ],
+      goodsList: [],
       num: 1
     }
   },
     created () {
     this.$store.commit('changeLeftSideTabIndex', 1)
+    this.getMyCartList()
   },
   mounted () {
     // let dom = this.$refs.settlement
@@ -138,14 +141,36 @@ export default {
     // }
   },
   methods: {
+    getMyCartList () {
+      this.http.get('/api/cart/getMemberCart').then(res => {
+        console.log('购物车列表', res)
+        if(res.data.code === 200) {
+          this.goodsList = res.data.result
+          this.arr = new Array(this.goodsList.length)
+          this.arr.forEach((item, index, self) => {
+            self
+          })
+        }
+      })
+    },
     chooseAllGoods () {
 
     },
     chooseCurrentGoods () {
 
     },
-    handleDelete () {
-
+    handleDeleteGoodsInCart (product_id) {
+      this.http.post('/api/cart/deleteCart', qs.stringify({product_ids: product_id}), {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(res => {
+        if(res.data.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.msg
+          })
+        }
+        this.getMyCartList()
+      })
     },
     handleChange () {
 
@@ -161,6 +186,11 @@ export default {
         }
       })
     }
+  },
+  computed: {
+    totalGoodsNum () {
+     return 123
+    }
   }
 }
 </script>
@@ -168,7 +198,6 @@ export default {
 <style lang='less' scoped>
 .my_cart {
   width: 966px;
-  height: 1240px;
   padding-top: 13px;
   padding-left: 17px;
   padding-right: 21px;

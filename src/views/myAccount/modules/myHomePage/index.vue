@@ -20,6 +20,9 @@ export default {
       tabIndex: 0
     }
   },
+  created () {
+    this.$store.commit('changeLeftSideTabIndex', 0)
+  },
   methods: {
     handClick (index, path) {
       console.log(index)
