@@ -5,16 +5,16 @@
       <div class='my_homepage_sidebar'>
         <!-- 个人或公司名片（一） -->
         <div class='my_intro1' v-if='activeTab === "myHomepage"'>
-          <span class='avatar' :style="{backgroundImage: 'url(' + '../../assets/timg.jpg' + ')'}"></span>
-          <!-- <img class='avatar' src="../../assets/timg.jpg" > -->
+          <!-- <span class='avatar' :style="{backgroundImage: 'url(' + '../../assets/timg.jpg' + ')'}"></span> -->
+          <img class='avatar' :src="myInfo.face" >
           <span class='my_name'>{{myInfo.myName}}</span>
           <span class='my_nickname'>{{myInfo.myNickname}}</span>
           <span class='my_credit'>{{myInfo.myCredit}}</span>
           <p class='my_intro_detail'>{{myInfo.myIntro}}</p>
           <div class='my_intro_bottom'>
-            <span class='thumb_up'>赞{{myInfo.thumb}}</span>
-            <span class='stars'>关注{{myInfo.star}}</span>
-            <span class='fans'>粉丝{{myInfo.fans}}</span>
+            <span class='thumb_up'>赞{{myInfo.great_count}}</span>
+            <span class='stars'>关注{{myInfo.attention_count}}</span>
+            <span class='fans'>粉丝{{myInfo.fan_count}}</span>
           </div>
         </div>
         <!-- 名片（二） -->
@@ -48,17 +48,7 @@ export default {
     return {
       currentTabIndex: 0,
       activeTab: 'myHomepage',
-      myInfo: {
-        avatarLink: '',
-        myName: '河鲜贞诗养殖公司',
-        myNickname: '昵称mooum',
-        myCredit: '芝麻信用：极好',
-        myIntro: '这是一段自我介绍，抓取填写信息自动补充，最后填写的简介。这是一段自我介绍，抓取填写信息自动补充，最后填写的简介。',
-        thumb: 12,
-        star: 10,
-        fans: 90,
-        id: 'id:12345678'
-      },
+      myInfo: {},
       tabList: [
         {link: 'my-homepage', title: '个人主页'},
         {link: 'my-cart', title: '购物车'},
@@ -84,11 +74,20 @@ export default {
       return this.$store.state.leftSideTabIndex
     }
   },
+  created () {
+    this.getMyInfo()
+  },
   methods: {
     jumpToRouter (index, path) {
       // this.$store.commit('changeLeftSideTabIndex', index)
       // this.currentTabIndex = index
       this.$router.replace('/my-account/' + path)
+    },
+    getMyInfo () {
+      this.http.get('/api/member/personalHomepage').then(res => {
+        console.log('myAaccount', res)
+        this.myInfo = res.data.result
+      })
     }
   }
 }
@@ -114,7 +113,7 @@ export default {
         width: 222px;
         flex-direction: column;
         align-items: center;
-        height: 408px;
+        // height: 408px;
         padding: 27px 11px 0 13px;
         background-color: #fff;
         margin-bottom: 14px;
@@ -178,7 +177,7 @@ export default {
         }
       }
       .my_intro2 {
-        width: 222px;
+        // width: 222px;
         height: 288px;
         margin-bottom: 12px;
         background-color: #fff;

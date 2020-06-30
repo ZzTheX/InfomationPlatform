@@ -18,7 +18,7 @@
         <div class='company_intro'>
           <div class='viewers'>
             <span>赞</span>
-            <span>关注</span>
+            <span class='active' @click='subscribeMerhcant'>关注</span>
             <span>粉丝</span>
           </div>
           <div class='company_text_intro'>
@@ -36,7 +36,27 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      attention_id: '',
+    }
+  },
+  created () {
+    this.attention_id = this.$route.query.attention_id
+    // this.http.get('')
+  },
+  methods: {
+    subscribeMerhcant () {
+      this.http.get('/api/attention/confirmOrCancelAttention').then(res => {
+        if(res.data.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.msg
+          })
+        }
+      })
+    }
+  }
 }
 </script>
 
@@ -122,6 +142,7 @@ export default {
             background-repeat: no-repeat;
             background-position: 0 50%;
             padding-left: 21px;
+            cursor: pointer;
           }
           span:first-child {
             background-image: url('../../assets/thumb_up.png');
@@ -130,6 +151,10 @@ export default {
           span:nth-child(2) {
             background-image: url('../../assets/star.png');
             background-size: 15px 15px;
+            &.active {
+              background-size: 15px 15px;
+              background-image: url('../../assets/star_yellow.png');
+            }
           }
           span:nth-child(3) {
             background-image: url('../../assets/heart.png');

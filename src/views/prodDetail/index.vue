@@ -210,14 +210,14 @@
                   <div class='comment_text'>
                     <span>{{item.nickname}}</span>
                     <p>{{item.comment_content}}</p>
-                    <div class='img_list'>
+                    <!-- <div class='img_list'>
                       <img width='50' height='50' :src='require("../../assets/comment.png")' alt="">
                       <img width='50' height='50' :src='require("../../assets/comment.png")' alt="">
                       <img width='50' height='50' :src='require("../../assets/comment.png")' alt="">
-                    </div>
+                    </div> -->
                     <p>
-                      <span class='time'>2020年03月04日  11:27</span>
-                      <span @click='handleResponse()'>回复</span>
+                      <span class='time'>{{dateFormat(item.comment_time) | transformDate}}</span>
+                      <span @click='handleResponse(item.nickname)'>回复</span>
                     </p>
                   </div>
                 </div>
@@ -231,9 +231,12 @@
 
 <script>
 import qs from 'querystring'
+import {dateFormat} from '../../utils/transform' 
 export default {
   data() {
     return {
+      page_no: 1,
+      page_size: 30,
       verified: false,
       inputValue: '',
       num: true,
@@ -270,18 +273,38 @@ export default {
       },
       commentsList: [],
       isShowProdDesc: true
+      
     };
   },
   created() {
     this.product_id = this.$route.query.product_id
     // 获取用户认证信息
     this.getVerifiedInfo()
+    this.getCommentsList()
     
   },
   mounted () {
     this.getProductDetail()
   },
   methods: {
+    dateFormat: dateFormat,
+    getCommentsList () {
+      let data = {
+        product_id: this.product_id,
+        page_no: this.page_no,
+        page_size: this.page_size
+      }
+      this.http({
+        url: '/api/comment/getMoreComment',
+        method: 'get',
+        params: data
+      }).then(res => {
+        console.log('留言列表', res)
+        if(res.data.code === 200) {
+          this.commentsList = res.data.result.rows
+        }
+      })
+    },
     getVerifiedInfo () {
       this.http.get('/api/member/personalInformation').then(res => {
         if(res.data.code === 200) {
@@ -346,7 +369,10 @@ export default {
     //  路由跳转到商家主页
     goToMerchantHome() {
       this.$router.push({
-        name: "merchantHome"
+        name: "merchantHome",
+        query: {
+          attention_id: ''
+        }
       });
     },
     // 发起拼购
@@ -420,21 +446,39 @@ export default {
       this.$refs.mainImg.src = item.url;
     },
     leaveComment () {
-      this.http({
-        method: 'post',
-        url: '/api/comment/addComment',
-        data: {
+      let data = {
           content: this.inputValue,
           product_id: this.product_id
         }
+        if(this.inputValue.trim() === '') {
+          this.$message({
+            type: 'warning',
+            message: '留言不能为空'
+          })
+          return
+        }
+      this.http({
+        method: 'post',
+        url: '/api/comment/addComment',
+        data: qs.stringify(data),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
       }).then(res => {
-        
+        if(res.data.code === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.msg
+          })
+        }
         console.log('留言返回数据', res)
+        this.inputValue = ''
+        this.getCommentsList()
       })
     },
-    handleResponse (e) {
+    handleResponse (nickname) {
      this.$refs.input.focus()
-     this.inputValue = '回复用户昵称: '
+     this.inputValue = '回复' + nickname + ': '
     }
   },
   filters: {
@@ -458,14 +502,25 @@ export default {
         }
       }
       return fmt;
+    },
+    transformDate (val) {
+      return val.replace(/\./g, (a, index) => {
+        if(index === 4) {
+          return '年'
+        } 
+        if(index === 7) {
+          return '月'
+        }
+      }) + "日"
     }
   }
-};
+}
 </script>
 
 <style lang='less' scoped>
 .wrap {
   width: 100%;
+  min-height: 1600px;
   background-color: #f5f5f5;
   padding-top: 22px;
   .prod_detail {

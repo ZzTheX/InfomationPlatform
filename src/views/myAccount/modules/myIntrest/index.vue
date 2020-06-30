@@ -1,7 +1,7 @@
 <template>
   <div class='follow'>
     <div class='follow_suppliers'>
-      <p>关注的供货商</p>
+      <p>关注的商家</p>
       <div class='following_supplier_list'>
         <div
         class='supplier_card'

@@ -74,7 +74,7 @@ export default {
             return {
               label: item.name,
               value: item.id,
-              children: item.children.map((o, i) => {
+              children: (item.children || []).map((o, i) => {
                 return {
                   label: o.name,
                   value: o.id

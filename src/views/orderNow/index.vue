@@ -58,7 +58,7 @@
           <span class="demonstration">交易日期</span>
           <el-date-picker v-model="placeOrderData.transaction_date" type="date" placeholder="请选择交易日期"></el-date-picker>
         </div>
-        <div class="money">
+        <div class="deposit_money">
           <span>期望定金</span>
           <span v-if="money=='1000'" @click="setMoney('1000')" class="nochekd chekd">1000</span>
           <span v-else @click="setMoney('1000')" class="nochekd">1000</span>
@@ -292,20 +292,6 @@ export default {
       this.http.post('/api/order/immediatelyCreateOrder', this.placeOrderData).then(res => {
         console.log('提交订单返回数据', res)
       })
-      // setTimeout(() => {
-      //   this.$message({
-      //     type: 'warning',
-      //     message: '支付失败'
-      //   })
-      // },500)
-      // this.$router.push({
-      //   name: 'orderDetail',
-      //   query: {
-      //     status: 1
-      //   }
-      // })
-
-
     },
     goToAddAdrress () {
       this.$router.push({
@@ -329,15 +315,16 @@ export default {
   background-color: #f5f5f5;
   padding-top: 22px;
   padding-bottom: 46px;
+  .placeOderContent {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 1200px;
+    height: 794px;
+    background-color: white;
+  }
 }
-.placeOderContent {
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  width: 1200px;
-  height: 794px;
-  background-color: white;
-}
+
 /* 表格头部 */
 .oderNav {
   width: 1200px;
@@ -429,7 +416,7 @@ export default {
   font-size: 16px;
 }
 .placeOderInputs > form,
-.placeOderInputs > .money ,
+.placeOderInputs > .deposit_money ,
 .placeOderInputs > .block{
   display: flex;
   align-items: center;
