@@ -11,7 +11,7 @@
      </el-select>
     </div>
     <div class='goods_card_list'>
-      <miniGoodsCard v-for="(item, index) in postedGoodsList" :key='index' :prodData='item'></miniGoodsCard>
+      <miniGoodsCard v-for="(item, index) in prodListData" :key='index' :prodData='item'></miniGoodsCard>
     </div>
   </div>
 </template>
@@ -22,16 +22,234 @@ export default {
   data () {
     return {
       value: '供应信息',
-      postedGoodsList: [],
+      postedGoodsList: [
+        {
+
+        }
+      ],
+      prodListData: [
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+        {
+          main_picture: require('../../../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          is_support_bulk_purchase: true,
+          des: '商品描述',
+          num: 100,
+          available_inventory: 999,
+          start_time: new Date(),
+          end_time: new Date(),
+          product_price: 800,
+          product_address: '成都',
+          want_count: 10
+        },
+      ],
       options: [
         {value: '供应信息', label: '供应信息'},
         {value: '需求信息', label: '需求信息'}
       ],
-      prodData: []
+      prodData: [
+        {
+
+        }
+      ]
     }
   },
   created () {
-    this.getProductList()
+    // this.getProductList()
     this.$store.commit('changeLeftSideTabIndex', 0)
   },
   methods: {

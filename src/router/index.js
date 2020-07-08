@@ -366,10 +366,14 @@ const routes = [
           ]
         }
        ]
+     },
+     // 404页面
+     {
+      path: 'error',
+      name: 'error',
+      component: () => import('../views/error')
      }
-
     ]
-
   }
 ]
 

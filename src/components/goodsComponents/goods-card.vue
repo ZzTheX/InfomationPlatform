@@ -2,7 +2,7 @@
   <div
     class='product_card'
     :style="{marginRight: (prodCardIndex + 1) % 4 === 0 ? '0' : '24px' }">
-    <img class='product_card_img' :src="prodData.main_picture">
+    <img class='product_card_img' :src='prodData.main_picture'>
     <div class='product_info'>
       <p class='product_description'>
         <span>{{prodData.product_name}}</span>
@@ -35,7 +35,7 @@ export default {
     }
   },
   created () {
-    console.log(this.prodData)
+    console.log('goods-card,s proddata:', this.prodData)
       setTimeout(() => {
           // console.log(this.prodCardIndex)
       }, 1000)
@@ -90,7 +90,7 @@ export default {
 <style lang="less" scoped>
 .product_card {
   width: 282px;
-  height: 365px;
+  // height: 365px;
   margin-bottom: 64px;
   margin-right: 24px;
   display: flex;
@@ -146,6 +146,7 @@ export default {
      justify-content: space-between;
      color: #808080;
      font-size: 12px;
+     padding: 0;
      span:last-child {
        padding-left: 15px;
        background-image: url(../../assets/gray_heart.png);

@@ -50,7 +50,92 @@ export default {
   data() {
     return {
       currentCategoryIndex: 0,
-      classFirst: [],
+      classFirst: [
+        {
+          category_name: '分类1',
+          children: [
+            {
+              category_name: '分类1-1',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-2',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-3',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-4',
+              main_pic: require('../../assets/category.png')
+            }
+          ]
+        },
+        {
+          category_name: '分类2',
+          children: [
+            {
+              category_name: '分类1-1',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-2',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-3',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-4',
+              main_pic: require('../../assets/category.png')
+            }
+          ]
+        },
+        {
+          category_name: '分类3',
+          children: [
+            {
+              category_name: '分类1-1',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-2',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-3',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-4',
+              main_pic: require('../../assets/category.png')
+            }
+          ]
+        },
+        {
+          category_name: '分类4',
+          children: [
+            {
+              category_name: '分类1-1',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-2',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-3',
+              main_pic: require('../../assets/category.png')
+            },
+            {
+              category_name: '分类1-4',
+              main_pic: require('../../assets/category.png')
+            }
+          ]
+        }
+      ],
       classSecond: [],
       isShowCategory: false,
       keyword: "",
@@ -61,7 +146,7 @@ export default {
     };
   },
   created () {
-    this.getProductCategory()
+    // this.getProductCategory()
   },
   methods: {
     toggleCategory (index) {
@@ -84,7 +169,7 @@ export default {
     },
     handleSearch () {
       console.log('搜索', this)
-      this.$store.commit('getProductList', {keyword: this.keyword})
+      // this.$store.commit('getProductList', {keyword: this.keyword})
       console.log(111)
       this.$router.push({
            name: 'prodList',

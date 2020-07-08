@@ -4,40 +4,33 @@
       <!-- 内容头部表格头部 -->
       <nav class="oderNav">
         <span>商品</span>
-        <span>单价</span>
-        <span>剩余数量</span>
-        <span>商品总价</span>
-        <span>运费</span>
-        <span>实际付款</span>
-        <span>发布方</span>
-        <span>交易时间</span>
+        <div class='orderNav_right'>
+          <span>单价</span>
+          <span>剩余数量</span>
+          <span>商品总价</span>
+          <span>实际付款</span>
+          <span>最低订购数量</span>
+          <span>发布方</span>
+        </div>
       </nav>
       <!-- 商品信息 -->
       <div class="placeOdermiaoshu">
         <img :src="prodData.info.banner[0].url" alt />
-        <div>
-          <div>
-            <span>{{prodData.info.product_name}}</span>
-            <!-- supply_price是否就是单价？ -->
-            <span>￥{{prodData.info.supply_price}}</span>
-            <span>剩余{{prodData.info.remaining_quantity}}个</span>
-            <span>￥{{sum_price}}</span>
-            <span>￥{{merchandise.freight}}</span>
-            <!-- 实际付款 = 运费 + 商品总价 -->
-            <span class="lpaceOderactualpayment">￥{{shouldPay}}</span>
-
-            <span>{{prodData.merchantInfo.company_name}}</span>
-            <!-- 交易时间不是在下单页面选择的吗？ -->
-            <span>{{merchandise.trading_hour}}</span>
+        <div class='prodinfo'>
+          <div class='prodinfo_row1'>
+            <p>{{prodData.info.product_name}}</p>
+            <div class='prodinfo_row1_right'>
+              <span>{{prodData.info.supply_price}}</span>
+              <span>{{prodData.info.remaining_quantity}}</span>
+              <span>{{sum_price}}</span>
+              <span>{{shouldPay + '元'}}</span>
+              <span>{{prodData.info.minimum_batch}}</span>
+              <span>{{prodData.merchantInfo.company_name}}</span>
+            </div>
           </div>
-          <div>
-            <span>拼</span>
-            <span>可售时间：</span>
-            {{merchandise.vendibility_tiem_start}}至{{merchandise.vendibility_tiem_end}}
+          <div class='prodinfo_row2'>
+            <span>可售时间: 2019-09-08 至 2020-08-09</span>
           </div>
-          <!-- <div class='purchase_num'>
-            购买数量: {{100}}
-          </div> -->
         </div>
       </div>
 
@@ -59,17 +52,16 @@
           <el-date-picker v-model="placeOrderData.transaction_date" type="date" placeholder="请选择交易日期"></el-date-picker>
         </div>
         <div class="deposit_money">
-          <span>期望定金</span>
-          <span v-if="money=='1000'" @click="setMoney('1000')" class="nochekd chekd">1000</span>
-          <span v-else @click="setMoney('1000')" class="nochekd">1000</span>
-          <span v-if="money=='5000'" @click="setMoney('5000')" class="nochekd chekd">5000</span>
-          <span v-else @click="setMoney('5000')" class="nochekd">5000</span>
-          <span v-if="money=='10000'" @click="setMoney('10000')" class="nochekd chekd">10000</span>
-          <span v-else @click="setMoney('10000')" class="nochekd">10000</span>
-          <span class="qitamoney">其他金额</span>
-          <input ref="inputMoney" @input="inputMoney" type="text" placeholder="输入" />
+          <span>选择定金</span>
+          <span class='deposit' @click='chooseDeposit("1000")'> 1000</span>
+          <span class='deposit' @click='chooseDeposit("5000")'>5000</span>
+          <span class='deposit' @click='chooseDeposit("10000")'>10000</span>
+          <div class='custom_ammount'>
+            <span>其他金额</span>
+            <el-input></el-input>
+          </div>
         </div>
-        <h6>选择收货地址<span class='add_addres' @click='goToAddAdrress' v-show='adressList.length===0'>添加收货地址+</span></h6>
+        <h6>收货地址<span class='add_addres' @click='goToAddAdrress' v-show='adressList.length===0'>添加收货地址+</span></h6>
         <el-table
             :data="adressList"
             highlight-current-row
@@ -138,6 +130,7 @@ export default {
         vendibility_tiem_end: "2020-04-01", //   可售时间结束
         picUrl: "img/category.8a6181e0.png"
       },
+      deposit: 0,
       money: "",
       form: {
         date1: ""
@@ -196,10 +189,10 @@ export default {
   },
   computed: {
     sum_price () {
-      return (this.purchase_num || 1) * this.prodData.info.supply_price
+      return (this.placeOrderData.num || 1) * this.prodData.info.supply_price + '元'
     },
     shouldPay () {
-      return (this.purchase_num || 1) * this.prodData.info.supply_price + this.merchandise.freight
+      return (this.placeOrderData.num || 1) * this.prodData.info.supply_price + this.deposit
     }
   },
   methods: {
@@ -257,7 +250,7 @@ export default {
       this.http.get('/api/address/getAddressList').then(res => {
         console.log('收件地址列表：', res)
         if(res.data.code === 200) {
-          this.adressList = res.data.result
+          this.adressList = res.data.result.slice(0,1)
         }
       })
     },
@@ -333,79 +326,57 @@ export default {
   align-items: center;
   font-size: 16px;
   padding: 0 30px;
+  >span {
+    width: 322px;
+    text-align: left;
+  }
+  .orderNav_right {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+  }
 }
-.oderNav > span {
-  width: 123px;
-  display: block;
-  text-align: center;
-}
-.oderNav > span:first-child {
-  flex: 1;
-  text-align: left;
-}
+
 .placeOdermiaoshu {
   display: flex;
   width: 1200px;
   height: 130px;
   background-color: #fffae8;
-  align-items: center;
   font-size: 14px;
+  padding-top: 28px;
+  >img {
+    width: 80px;
+    height: 80px;
+    margin: 0 10px 0 30px;
+    padding: 1px;
+    flex-shrink: 0;
+  }
+  .prodinfo {
+    flex-grow: 1;
+    .prodinfo_row1 {
+      display: flex;
+      >p {
+        height: 36px;
+        width: 236px;
+      }
+      .prodinfo_row1_right {
+        flex-grow: 1;
+        display: flex;
+        padding-right: 30px;
+        justify-content: space-between;
+        >span:nth-child(4) {
+          font-size: 18px;
+          color: #DD3232;
+        }
+      }
+    }
+    .prodinfo_row2 {
+      margin-top: 18px;
+    }
+
+  }
 }
-.placeOdermiaoshu > img {
-  width: 80px;
-  height: 80px;
-  margin: 0 10px 0 30px;
-  padding: 1px;
-}
-.placeOdermiaoshu > div {
-  height: 140px;
-  margin-top: 20px;
-}
-.placeOdermiaoshu > div > div:first-child {
-  width: 1050px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-}
-.placeOdermiaoshu > div > div:first-child > span {
-  display: block;
-  width: 123px;
-  text-align: center;
-}
-.placeOdermiaoshu > div > div:first-child > span:first-child {
-  display: block;
-  width: 190px;
-  text-align: left;
-  text-overflow: -o-ellipsis-lastline;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-.placeOdermiaoshu > div > div:first-child > .lpaceOderactualpayment {
-  color: #dd3232;
-  font-size: 18px;
-}
-.placeOdermiaoshu > div > div:last-child {
-  display: flex;
-  align-items: center;
-}
-.placeOdermiaoshu > div > div:last-child > span:first-child {
-  color: white;
-  background-color: #ffc90f;
-  font-size: 10px;
-  width: 18px;
-  height: 18px;
-  display: flex;
-  /* font-family: Source Han Sans CN;
-  font-weight: 500; */
-  justify-content: center;
-  padding: 0 1px 1px 0;
-  align-items: center;
-  margin-right: 6px;
-}
+
 .purchase_num {
   margin-top: 8px;
 }
@@ -414,6 +385,29 @@ export default {
   height: 430px;
   margin: 30px;
   font-size: 16px;
+  .deposit_money {
+    display: flex;
+    >span:first-child {
+      padding-left: 15px;
+      margin-right: 12px;
+    }
+    .deposit {
+      width: 96px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      border: 1px solid #F0F0F0;
+      margin-right: 14px;
+      cursor: pointer;
+    } 
+    .custom_ammount {
+      display: flex;
+      >span {
+        width: 100px;
+        line-height: 40px;
+      }
+    }
+  }
 }
 .placeOderInputs > form,
 .placeOderInputs > .deposit_money ,

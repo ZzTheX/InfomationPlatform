@@ -1,24 +1,23 @@
 <template>
    <div class="nav">
      <div class="center">
-        <div class="city_select" id='city_select'>
-          <el-cascader v-model="value" :options="options" placeholder="请选择地区">
-          </el-cascader>
-          <div class='me' v-if='isLogin'>
-            <span>{{nickname}}</span>
-            <div class='logout'>
-              <img src="../../assets/user_avatar2.png" class='avatar'>
-              <span @click='goToSetting'>账号设置</span>
-              <span>|</span>
-              <span @click='logout'>退出登录</span>
-            </div>
+          <div class="city_select" id='city_select'>
+            <span class='city_name'>四川成都</span>
+              <div class='me' >
+                  <span>{{'nickname'}}</span>
+                  <div class='logout'>
+                    <img src="../../assets/user_avatar2.png" class='avatar'>
+                    <span @click='goToSetting'>账号设置</span>
+                    <span>|</span>
+                    <span @click='logout'>退出登录</span>
+                  </div>
+              </div>
           </div>
-        </div>
-        <div class="navList">
-          <span v-for="(item, index) in navList" :key='index' @click='goToRouter(item.link)'>{{item.title}}</span>
-        </div>
+          <div class="navList">
+            <span v-for="(item, index) in navList" :key='index' @click='goToRouter(item.link)'>{{item.title}}</span>
+          </div>
       </div>
-  </div>
+   </div>
 </template>
 <script>
 export default {
@@ -45,13 +44,21 @@ export default {
     }
   },
   created () {
-    this.getCitiesList()
-    this.getPersonalInfo()
+    // this.getCitiesList()
+    // this.getPersonalInfo()
+    this.getCityInfo()
   },
   mounted () {
     // console.log(window.navigator.geolocation.getCurrentPosition())
   },
   methods: {
+    getCityInfo () {
+      // this.http.get('http://api.map.baidu.com/geocoder/v2/?ak=jqTBOGeKlMKZ6tvSGTeCEyAhUYk34Qcp&location=BBBBB&output=json&pois=1').then(res => {
+      //   console.log(res)
+      // })
+      let script = document.createElement('script')
+      script.src ='http://api.map.baidu.com/geocoder/v2/?ak=jqTBOGeKlMKZ6tvSGTeCEyAhUYk34Qcp&location=BBBBB&output=json&pois=1'
+    },
     hoverMe () {
       console.log('hoverme')
       this.isShow = true
@@ -74,7 +81,7 @@ export default {
             return {
               label: item.name,
               value: item.id,
-              children: (item.children || []).map((o, i) => {
+              children: item.children.map((o, i) => {
                 return {
                   label: o.name,
                   value: o.id
@@ -147,6 +154,11 @@ export default {
     }
     .city_select {
       display: flex;
+      height: 32px;
+      overflow: hidden;
+      .city_name {
+        margin-right: 30px;
+      }
       .me {
         position: relative;
         &:hover {

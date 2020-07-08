@@ -9,12 +9,12 @@
         <span>{{prodData.product_name}}</span>
       </p>
       <p class='store_info'>
-        <span class='store_number'>可售总数量: {{'undifined'}}</span>
+        <span class='store_number'>可售总数量: {{prodData.num}}</span>
         <span class='time'>{{dateFormat(prodData.release_time)}}</span>
       </p>
       <p class='price_info'>
         <span class='prod_price'>{{prodData.product_price | priceFilter}}</span>
-        <span class='prod_origin'>{{'undifined'}}</span>
+        <span class='prod_origin'>{{prodData.prod_origin}}</span>
       </p>
     </div>
   </div>
@@ -28,6 +28,7 @@ export default {
     }
   },
   created () {
+    console.log('prod-card:', this.prodData)
       setTimeout(() => {
           console.log(this.prodCardIndex)
       }, 1000)

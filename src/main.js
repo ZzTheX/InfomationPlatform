@@ -9,8 +9,6 @@ import './plugins/element.js'
 import './assets/css/public.css'
 import 'swiper/css/swiper.css'
 import http from './api/index.js'
-//  mockjs 模拟数据
-require('./mock/mock.js')
 Vue.config.productionTip = false
 Vue.use(VueAwesomeSwiper)
 Vue.use(ElementUI)

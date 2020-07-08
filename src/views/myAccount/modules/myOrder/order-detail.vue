@@ -9,7 +9,7 @@
                     <span>定金</span>
                     <span>小计</span>
                     <span>定金</span>
-                    <span>运费</span>
+                    <!-- <span>运费</span> -->
                     <span>实付</span>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                     <span>99999</span>
                     <span>5894</span>
                     <span>8048</span>
-                    <span>94085</span>
+                    <!-- <span>94085</span> -->
                     <span>7859</span>
                 </div>
             </div>
@@ -128,6 +128,20 @@
                 </div>
              </div>
          </div>
+         <!-- 更改收货地址弹窗 -->
+        <el-dialog
+            title="提示"
+            :visible.sync="isTrue"
+            >
+            <el-table 
+            :data="myAddressData"
+            highlight-current-row
+            @current-change="handleCurrentChange">
+                <el-table-column property="contact_person" label="姓名" width="150"></el-table-column>
+                <el-table-column property="address" label="地址" width="200"></el-table-column>
+                <el-table-column property="contact_mobile" label="电话"></el-table-column>
+            </el-table>
+        </el-dialog>
     </div>
 </template>
 
@@ -135,18 +149,34 @@
 export default{
     data () {
         return {
+            isTrue: true,
             isShowCancelOrder: false,
             isShoWModify: '',
             status: '',
             isShowDeliver: false,
             isShowRefuse: false,
-            isShowRefuseReason: false
+            isShowRefuseReason: false,
+            myAddressData: [
+                {
+                    name: 'wang ',
+                    adress: '759847',
+                    phone: '9825698693'
+                }
+            ]
         }
     },
     created () {
         this.status = this.$route.query.status
+        this.getMyAdressList()
     },
     methods: {
+        getMyAdressList () {
+            this.http.get('/api/address/getAddressList').then(res => {
+                if(res.data.code === 200) {
+                    this.myAddressData = res.data.result
+                }
+            })
+        },
         handleCancel () {
             this.isShoWModify = false
         },

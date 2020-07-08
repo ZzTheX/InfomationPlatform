@@ -67,35 +67,44 @@ export default {
       })
     },
     handleLogin () {
-      let path = this.$route.query.from || '/'
-      console.log('router_url_from:', path)
-      if(this.userInfo.phone && this.userInfo.password) {
-          this.http({
-            url: '/api/member/login',
-            method: 'POST',
-            data: qs.stringify(this.userInfo),
-            headers: {
-              'Content-Type':'application/x-www-form-urlencoded'
-            }
-          }).then(res => {
-              console.log('login.vue 登录返回数据', res)
-              // let token = res.data.result.token
-                res.data.code === 200
-                let { token, username } = res.data.result
-                localStorage.setItem('token', token)
-                localStorage.setItem('username', username)
-                this.$message({
-                  message: '登录成功',
-                  type: 'success'
-                })
-                this.$router.replace({
-                  path
-                })
-              
-          })
-          
-      }
+       let path = this.$route.query.from || '/'
+       localStorage.setItem('token', 123456)
+      this.$router.replace({
+        path
+      })
     },
+    // handleLogin () {
+    //   let path = this.$route.query.from || '/'
+    //   console.log('router_url_from:', path)
+    //   if(this.userInfo.phone && this.userInfo.password) {
+    //       this.http({
+    //         url: '/api/member/login',
+    //         method: 'POST',
+    //         data: qs.stringify(this.userInfo),
+    //         headers: {
+    //           'Content-Type':'application/x-www-form-urlencoded'
+    //         }
+    //       }).then(res => {
+    //           console.log('login.vue 登录返回数据', res)
+    //           // let token = res.data.result.token
+    //             // res.data.code === 200
+    //             if(res.data.code === 200) {
+    //               let { token, username } = res.data.result
+    //               localStorage.setItem('token', token)
+    //               localStorage.setItem('username', username)
+    //               this.$message({
+    //                 message: '登录成功',
+    //                 type: 'success'
+    //               })
+    //               this.$router.replace({
+    //                 path
+    //               })
+    //             }
+              
+    //       })
+          
+    //   }
+    // },
     getCode () {
       console.log('getCode')
       let mobile = this.userInfo.phone

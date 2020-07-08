@@ -99,29 +99,30 @@ export default {
       return true
     },
     handleRegister () {
-      let isFormCompleted = this.validateForm()
-      if(!isFormCompleted) { return }
-      this.registerData.address = this.registration_city.join(',')
-      this.http.post('/api/member/register', qs.stringify(this.registerData), {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      }).then(res => {
-        if(res.data.code === 200) {
-          this.$message({
-            message: '注册成功',
-            type: 'success'
-          })
-          console.log('注册成功返回数据:', res)
-          localStorage.setItem('token', res.data.result.token)
-          localStorage.setItem('username', res.data.result.username)
-          this.$router.replace(this.from)
-        } else {
-          this.$$message({
-            message: res.data.message,
-            type: 'warning'
-          })
-        }
-        
-
+      // let isFormCompleted = this.validateForm()
+      // if(!isFormCompleted) { return }
+      // this.registerData.address = this.registration_city.join(',')
+      // this.http.post('/api/member/register', qs.stringify(this.registerData), {
+      //   headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      // }).then(res => {
+      //   if(res.data.code === 200) {
+      //     this.$message({
+      //       message: '注册成功',
+      //       type: 'success'
+      //     })
+      //     console.log('注册成功返回数据:', res)
+      //     localStorage.setItem('token', res.data.result.token)
+      //     localStorage.setItem('username', res.data.result.username)
+      //     this.$router.replace(this.from)
+      //   } else {
+      //     this.$$message({
+      //       message: res.data.message,
+      //       type: 'warning'
+      //     })
+      //   }
+      // })
+      this.$router.repalce({
+        path: this.from
       })
     },
     getSMSCode () {

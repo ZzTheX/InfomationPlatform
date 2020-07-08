@@ -1,12 +1,12 @@
 <template>
   <div class='record'>
-    <div class='record_list' v-for='i in 3' :key='i'>
-      <p class='date'>03.14</p>
+    <!-- <div class='record_list' v-for='i in browsingList' :key='i'> -->
+      <!-- <p class='date'>{{i}}</p> -->
       <div class='goods_card_list'>
-        <mini-goods-card v-for='i in 6' :key='i'></mini-goods-card>
+        <mini-goods-card v-for='(item, index) in browsingList' :key='index' :prodData='item'></mini-goods-card>
       </div>
     </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -14,11 +14,26 @@ import miniGoodsCard from '../../../../components/goodsComponents/mini-goods-car
 export default {
   data () {
     return {
-
+      browsingList: []
     }
   },
   created () {
       this.$store.commit('changeLeftSideTabIndex', 4)
+      this.getBrowsingHistory()
+  },
+  methods: {
+    getBrowsingHistory () {
+      let data = {
+        page_no: this.page_no,
+        page_num: this.page_num
+      }
+      this.http.get('/api/member/history/getMemberBrowsingHistory').then(res => {
+        console.log('浏览记录', res)
+        if(res.data.code === 200) {
+          this.browsingList = res.data.result.rows
+        }
+      })
+    }
   },
   components: {
     miniGoodsCard

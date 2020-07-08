@@ -79,13 +79,54 @@ export default {
       isCheckAll: false,
       deposit: 5000,
       arr: [],
-      goodsList: [],
+      goodsList: [
+        {
+          merchant_name: '商家名字',
+          checked: false,
+          products: [
+            {
+              main_picture: require('../../../../assets/goods.png'),
+              product_name: '商品名字',
+              supply_and_marketing_price: 100,
+              available_inventory: 100,
+              quantity: 0
+            },
+            {
+              main_picture: require('../../../../assets/goods.png'),
+              product_name: '商品名字',
+              supply_and_marketing_price: 100,
+              available_inventory: 100,
+              quantity: 0
+            },
+            {
+              main_picture: require('../../../../assets/goods.png'),
+              product_name: '商品名字',
+              supply_and_marketing_price: 100,
+              available_inventory: 100,
+              quantity: 0
+            }
+          ]
+        },
+         {
+          merchant_name: '商家名字',
+          checked: false,
+          products: [
+            {
+              main_picture: require('../../../../assets/goods.png'),
+              product_name: '商品名字',
+              supply_and_marketing_price: 100,
+              available_inventory: 100,
+              quantity: 0
+            }
+          ]
+        }
+      ],
       num: 1
     }
   },
   created () {
     this.$store.commit('changeLeftSideTabIndex', 1)
-    this.getMyCartList()
+    // this.getMyCartList()
   },
   mounted () {
     
@@ -223,7 +264,6 @@ export default {
       })
     },
     handleChange () {
-
     },
     handleChooseDeposit (goods, value) {
      goods.downpayment = value
@@ -260,10 +300,7 @@ export default {
         return
       }
       this.$router.push({
-        name: 'orderDetail',
-        query: {
-          status: 1
-        }
+        name: 'orderNow'
       })
     }
   },

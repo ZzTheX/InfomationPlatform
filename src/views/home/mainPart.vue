@@ -15,7 +15,7 @@
 		  </div>
       <!-- 四个商品分类 -->
       <div class='prod_classify'>
-        <div class="prod_classify_card" v-for='(item, index) in categories' :key='index' @click='searchByCategory(item.category_id)'>
+        <div class="prod_classify_card" v-for='(item, index) in categories1' :key='index' @click='searchByCategory(item.category_id)'>
           <img :src="item.picture">
           <p>{{item.name}}</p>
         </div>
@@ -47,7 +47,7 @@
       <div class='best_sell'>
         <div class='best_sell_head'>
           <p class='best_sell_head_left'>热销产品</p>
-          <p class='best_sell_head_right'>查看更多 ></p>
+          <p class='best_sell_head_right' @click='goToProdList'>查看更多 ></p>
         </div>
         <div class='best_sell_cardsList'>
             <product-card v-for='(item, index) in hotProducts' :key='index' :prodData='item' :prodCardIndex='index'></product-card>
@@ -57,7 +57,7 @@
       <div class='recommand'>
         <div class='recommand_head'>
           <p class='recommand_head_left'>今日主推</p>
-          <p class='recommand_head_right'>查看更多 ></p>
+          <p class='recommand_head_right'  @click='goToProdList'>查看更多 ></p>
         </div>
         <img class='recommand_banner' :src="todayPush[0].picture">
         <div class='recommand_carousel'>
@@ -78,7 +78,7 @@
           >{{item.title}}</p>
         </div>
         <div class='best_in_season'>
-          <productCard v-for='(item, index) in currentSeasonHotProd' :key='index' :prodData='item' :prodCardIndex='index'></productCard>
+          <productCard v-for='(item, index) in hotProducts' :key='index' :prodData='item' :prodCardIndex='index'></productCard>
         </div>
         <div class='el_page'>
           <el-pagination
@@ -111,26 +111,120 @@ export default {
         {url: require('../../assets/index/banner.png')}
       ],
       bannerList: [
-       
+       {image: require('../../assets/index/banner.png')}
       ],
-      todayPush: [],
+      todayPush: [
+        {
+          picture: require('../../assets/index/recommand_banner.png')
+        },
+        {
+          picture: require('../../assets/index/carousel_left.png')
+        },
+        {
+          picture: require('../../assets/index/carousel_center.png')
+        },
+        {
+          picture: require('../../assets/index/carousel_right.png')
+        }
+      ],
       categories: [],
       categories1: [
         {name: '商品分类', picture: require('../../assets/index/category1.png')},
         {name: '商品分类', picture: require('../../assets/index/category2.png')},
         {name: '商品分类', picture: require('../../assets/index/category3.png')},
         {name: '商品分类', picture: require('../../assets/index/category3.png')},
-        {name: '', picture: require('../../assets/index/category5.png')}
+        {name: '商品分类', picture: require('../../assets/index/category5.png')}
       ],
       hotSaleList: [
-        {src: require('../../assets/index/hotsale1.png')},
-        {src: require('../../assets/index/hotsale2.png')},
-        {src: require('../../assets/index/hotsale3.png')},
-        {src: require('../../assets/index/hotsale1.png')},
-        {src: require('../../assets/index/hotsale2.png')},
-        {src: require('../../assets/index/hotsale3.png')}
+        {picture: require('../../assets/index/hotsale1.png')},
+        {picture: require('../../assets/index/hotsale2.png')},
+        {picture: require('../../assets/index/hotsale3.png')},
+        {picture: require('../../assets/index/hotsale1.png')},
+        {picture: require('../../assets/index/hotsale2.png')},
+        {picture: require('../../assets/index/hotsale3.png')}
       ],
-      hotProducts: [],
+      hotProducts: [
+        {
+          main_picture: require('../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          available_inventory: 99,
+          is_support_bulk_purchase: false,
+          num: 18,
+          product_price: 909,
+          prod_origin: '成都',
+          release_time: new Date()
+        },
+        {
+          main_picture: require('../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          available_inventory: 99,
+          is_support_bulk_purchase: false,
+          num: 18,
+          product_price: 909,
+          prod_origin: '成都',
+          release_time: new Date()
+        },
+        {
+          main_picture: require('../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          available_inventory: 99,
+          is_support_bulk_purchase: false,
+          num: 18,
+          product_price: 909,
+          prod_origin: '成都',
+          release_time: new Date()
+        },
+        {
+          main_picture: require('../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          available_inventory: 99,
+          is_support_bulk_purchase: false,
+          num: 18,
+          product_price: 909,
+          prod_origin: '成都',
+          release_time: new Date()
+        },
+        {
+          main_picture: require('../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          available_inventory: 99,
+          is_support_bulk_purchase: false,
+          num: 18,
+          product_price: 909,
+          prod_origin: '成都',
+          release_time: new Date()
+        },
+        {
+          main_picture: require('../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          available_inventory: 99,
+          is_support_bulk_purchase: false,
+          num: 18,
+          product_price: 909,
+          prod_origin: '成都',
+          release_time: new Date()
+        },
+        {
+          main_picture: require('../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          available_inventory: 99,
+          is_support_bulk_purchase: false,
+          num: 18,
+          product_price: 909,
+          prod_origin: '成都',
+          release_time: new Date()
+        },
+        {
+          main_picture: require('../../assets/index/bestsell.png'),
+          product_name: '商品名称',
+          available_inventory: 99,
+          is_support_bulk_purchase: false,
+          num: 18,
+          product_price: 909,
+          prod_origin: '成都',
+          release_time: new Date()
+        }
+      ],
       bestSellList: [
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'},
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'},
@@ -142,7 +236,12 @@ export default {
         {src: require('../../assets/index/bestsell.png'), brand: '商品名称', des: '商品描述', inventory: 100, time: '2020/05/07', price: 800, origin: '成都'}
       ],
       // 当季热门
-      currentSeasonHotProd: [],
+      currentSeasonHotProd: [
+        {
+          product_name: '商品名称',
+          available_inventory: 99,
+        }
+      ],
       swiperOptions: {
         pagination: {
           el: '.swiper-pagination'
@@ -159,8 +258,8 @@ export default {
     }
   },
   created () {
-   this.getAllHomePageData()
-   this.getCurrentSeasonHotProd()
+  //  this.getAllHomePageData()
+  //  this.getCurrentSeasonHotProd()
   },
   mounted () {
   },

@@ -3,7 +3,9 @@ import { Message } from 'element-ui'
 import Vue from 'Vue'
 Vue.use(Message)
 let http = axios.create({
-  baseURL: 'http://platform.taogoucloud.com',
+  // 线上测试
+  // baseURL: 'http://platform.taogoucloud.com',
+  baseURL: 'http://192.168.0.101:9090',
   withCredentials: true
 });
 //  请求拦截
@@ -25,6 +27,9 @@ http.interceptors.response.use(
       Vue.prototype.$message({
         type: 'warning',
         message: response.data.msg
+      })
+      this.$router.push({
+        name: 'error'
       })
     } else if(response.data.code === 4003) {
       Vue.prototype.$message({
